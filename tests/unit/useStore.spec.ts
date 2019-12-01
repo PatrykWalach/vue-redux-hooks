@@ -1,8 +1,8 @@
-import { AnyAction, Store, createStore } from 'redux'
 import CompositionApi, { createElement as h } from '@vue/composition-api'
 import VueReduxHooks from '../../src'
 import { createLocalVue } from '@vue/test-utils'
 import { createReducer } from '@reduxjs/toolkit'
+import { createStore } from 'redux'
 
 describe('useStore()', () => {
   it('returns store', () => {
@@ -13,21 +13,24 @@ describe('useStore()', () => {
 
     const { useStore } = VueReduxHooks(localVue, store)
 
-    let injectedStore: Store<number, AnyAction>
-
-    new localVue({
+    const vm = new localVue({
       components: {
         child: {
+          render: () => h('div'),
           setup() {
-            injectedStore = useStore()
+            const injectedStore = useStore()
 
-            return () => h('div')
+            return { injectedStore }
           },
         },
       },
       setup: () => () => h('child'),
     }).$mount()
 
-    expect(injectedStore).toStrictEqual(store)
+    const child = (vm.$children[0] as unknown) as {
+      injectedStore: typeof store
+    }
+
+    expect(child.injectedStore).toStrictEqual(store)
   })
 })

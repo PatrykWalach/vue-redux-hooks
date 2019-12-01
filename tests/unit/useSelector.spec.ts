@@ -1,11 +1,11 @@
-import CompositionApi, { Ref, createElement as h } from '@vue/composition-api'
+import { AnyAction, Dispatch, createStore } from 'redux'
+import CompositionApi, { createElement as h } from '@vue/composition-api'
 import VueReduxHooks from '../../src'
 import { createLocalVue } from '@vue/test-utils'
 import { createReducer } from '@reduxjs/toolkit'
-import { createStore } from 'redux'
 
-describe('useDispatch()', () => {
-  it('can dispatch an action', () => {
+describe('useSelector()', () => {
+  it('is reactive', () => {
     const localVue = createLocalVue()
 
     localVue.use(CompositionApi)
@@ -17,36 +17,30 @@ describe('useDispatch()', () => {
 
     const { useDispatch, useSelector } = VueReduxHooks(localVue, store)
 
-    let child: {
-      INCREMENT(): {
-        type: string
-      }
-      state: Ref<number>
-    }
-
-    new localVue({
+    const vm = new localVue({
       components: {
         child: {
+          render: () => h('div'),
           setup() {
             const dispatch = useDispatch()
-
             const state = useSelector(state => state)
 
-            const INCREMENT = () =>
-              dispatch({
-                type: 'INCREMENT',
-              })
-
-            child = { INCREMENT, state }
-            return () => h('div')
+            return { dispatch, state }
           },
         },
       },
       setup: () => () => h('child'),
     }).$mount()
 
-    expect(child.state.value).toStrictEqual(0)
-    child.INCREMENT()
-    expect(child.state.value).toStrictEqual(1)
+    const child = (vm.$children[0] as unknown) as {
+      dispatch: Dispatch<AnyAction>
+      state: number
+    }
+
+    expect(child.state).toStrictEqual(0)
+    child.dispatch({
+      type: 'INCREMENT',
+    })
+    expect(child.state).toStrictEqual(1)
   })
 })
