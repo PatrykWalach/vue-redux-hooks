@@ -1,0 +1,62 @@
+{
+  "name": "vue-redux-hooks",
+  "version": "0.1.0",
+  "description": "Redux hooks for Vue",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rollup -c && tsc",
+    "coverage": "jest --collect-coverage",
+    "lint": "eslint --fix src/**/*.ts{,x}",
+    "test": "jest",
+    "watch": "jest --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PatrykWalach/vue-redux-hooks.git"
+  },
+  "keywords": [
+    "vue",
+    "composition-api",
+    "redux",
+    "hooks",
+    "typescript"
+  ],
+  "author": "Patryk Wałach",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/PatrykWalach/vue-redux-hooks/issues"
+  },
+  "homepage": "https://github.com/PatrykWalach/vue-redux-hooks#readme",
+  "sideEffects": false,
+  "peerDependencies": {
+    "@vue/composition-api": "^0.3.2",
+    "redux": "^4.0.4",
+    "vue": "^2.6.10"
+  },
+  "devDependencies": {
+    "@reduxjs/toolkit": "^1.0.4",
+    "@types/jest": "^24.0.23",
+    "@types/node": "^12.12.12",
+    "@typescript-eslint/eslint-plugin": "^2.9.0",
+    "@typescript-eslint/parser": "^2.9.0",
+    "@vue/composition-api": "^0.3.2",
+    "@vue/test-utils": "^1.0.0-beta.29",
+    "eslint": "^6.7.2",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "jest": "^24.9.0",
+    "prettier": "^1.19.1",
+    "redux": "^4.0.4",
+    "rollup": "^1.27.6",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^5.1.2",
+    "rollup-plugin-typescript2": "^0.25.2",
+    "ts-jest": "^24.2.0",
+    "typescript": "^3.7.2",
+    "vue": "^2.6.10",
+    "vue-template-compiler": "^2.6.10"
+  }
+}

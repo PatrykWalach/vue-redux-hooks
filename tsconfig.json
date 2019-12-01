@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "strict": true,
+    "outDir": "dist",
+    "module": "esnext",
+    "target": "esnext",
+    "moduleResolution": "node",
+    "esModuleInterop":true,
+    "noImplicitAny":true,
+    "types": [
+      "node",
+      "jest"
+    ],
+    "lib": [
+      "esnext",
+      "dom"
+    ]
+  },
+  "include": [
+    "src/**/*.ts", "src/vue.d.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
