@@ -25,6 +25,8 @@ jobs:
       - persist_to_workspace:
           root: ~/repo
           paths: .
+      - store_artifacts:
+          path: /coverage
   build:
     <<: *defaults
     steps:
@@ -32,14 +34,16 @@ jobs:
           at: ~/repo
       - run: npm run build
       - persist_to_workspace:
-          root: ~/repo/publish
-          paths: dist/*
+          root: ~/repo
+          paths: .
+      - store_artifacts:
+          path: /dist
   deploy:
     <<: *defaults
     steps:
       - attach_workspace:
-          at: ~/repo/publish
-      - run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/repo/publish/.npmrc
+          at: ~/repo
+      - run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/repo/.npmrc
       - run: npm publish
 
   install:
