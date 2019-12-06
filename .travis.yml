@@ -11,6 +11,7 @@ script:
 - npm run build
 deploy:
   skip_cleanup: true
+  edge: true
   provider: npm
   email: patryk_walach@outlook.com
   api_key:
