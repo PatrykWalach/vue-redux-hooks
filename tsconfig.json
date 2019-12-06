@@ -18,7 +18,7 @@
     ]
   },
   "include": [
-    "src/**/*.ts", "src/vue.d.ts"
+    "src/**/*.ts", "src/vue.d.ts", "src/connect.ts"
   ],
   "exclude": [
     "node_modules"

@@ -1,12 +1,14 @@
 import { Ref, computed, onUnmounted, ref } from '@vue/composition-api'
-
-import { Store } from 'redux'
+import { useStore } from './useStore'
 
 export type Selector<S, R> = (state: S) => R
 
 export const useSelector = <S = any, R = any>(
-  useStore: () => Store<S>,
   select: Selector<S, R>,
+  equalityFn: (nextState: R, currentState: R) => boolean = (
+    nextState,
+    currentState,
+  ) => nextState !== currentState,
 ) => {
   const { subscribe, getState } = useStore()
 
@@ -17,7 +19,7 @@ export const useSelector = <S = any, R = any>(
   const unsubscribe = subscribe(() => {
     const nextState = select(getState())
 
-    if (nextState !== currentState) {
+    if (equalityFn(nextState, currentState)) {
       currentState = nextState
       selector.value = currentState
     }

@@ -1,6 +1,6 @@
 import { AnyAction, Dispatch, createStore } from 'redux'
 import CompositionApi, { createElement as h } from '@vue/composition-api'
-import VueReduxHooks from '../../src'
+import VueReduxHooks, { useDispatch, useSelector } from '../../src'
 import { createLocalVue } from '@vue/test-utils'
 import { createReducer } from '@reduxjs/toolkit'
 
@@ -15,7 +15,7 @@ describe('useSelector()', () => {
       }),
     )
 
-    const { useDispatch, useSelector } = VueReduxHooks(localVue, store)
+    localVue.use(VueReduxHooks, store)
 
     const vm = new localVue({
       components: {

@@ -12,7 +12,7 @@ describe('install()', () => {
     const store = createStore(createReducer(0, {}))
 
     expect(() => {
-      VueReduxHooks(localVue, store)
+      localVue.use(VueReduxHooks, store)
     }).not.toThrow()
   })
 })

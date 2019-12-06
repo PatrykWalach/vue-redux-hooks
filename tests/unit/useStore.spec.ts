@@ -1,5 +1,5 @@
 import CompositionApi, { createElement as h } from '@vue/composition-api'
-import VueReduxHooks from '../../src'
+import VueReduxHooks, { useStore } from '../../src'
 import { createLocalVue } from '@vue/test-utils'
 import { createReducer } from '@reduxjs/toolkit'
 import { createStore } from 'redux'
@@ -11,7 +11,7 @@ describe('useStore()', () => {
     localVue.use(CompositionApi)
     const store = createStore(createReducer(0, {}))
 
-    const { useStore } = VueReduxHooks(localVue, store)
+    localVue.use(VueReduxHooks, store)
 
     const vm = new localVue({
       components: {
