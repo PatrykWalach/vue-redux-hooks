@@ -32,14 +32,14 @@ jobs:
           at: ~/repo
       - run: npm run build
       - persist_to_workspace:
-          root: ~/publish
+          root: ~/repo/publish
           paths: dist/*
   deploy:
     <<: *defaults
     steps:
       - attach_workspace:
-          at: ~/publish
-      - run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/publish/.npmrc
+          at: ~/repo/publish
+      - run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/repo/publish/.npmrc
       - run: npm publish
 
   install:
