@@ -1,5 +1,5 @@
-import { inject } from '@vue/composition-api'
 import { Store } from 'redux'
+import { inject } from '@vue/composition-api'
 import { key } from '../install'
 
-export const useStore = () => inject(key) as Store
+export const useStore = <S extends Store = Store>() => inject(key) as S
