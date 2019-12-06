@@ -44,11 +44,20 @@ workflows:
   version: 2
   main:
     jobs:
-      - install
+      - install:
+          filters:
+            tags:
+              only: /.*/
       - build:
+          filters:
+            tags:
+              only: /.*/
           requires:
             - install
       - test:
+          filters:
+            tags:
+              only: /.*/
           requires:
             - install
       - deploy:
