@@ -10,7 +10,6 @@ jobs:
       - attach_workspace:
           at: ~/repo
       - run: npm run coverage
-      - run: codecov
   build:
     <<: *defaults
     steps:
@@ -33,8 +32,7 @@ jobs:
           keys:
             - v1-dependencies-{{ checksum "package.json" }}
             - v1-dependencies-
-      - run: npm install
-      - run: npm i codecov -g
+      - run: npm ci
       - save_cache:
           paths:
             - node_modules
@@ -52,7 +50,7 @@ workflows:
             - install
       - test:
           requires:
-            - build
+            - install
       - deploy:
           requires:
             - test
