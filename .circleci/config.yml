@@ -11,6 +11,12 @@ jobs:
           at: ~/repo
       - run: npm run coverage
       - run: codecov
+  build:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run: npm run build
   deploy:
     <<: *defaults
     steps:
@@ -19,7 +25,7 @@ jobs:
       - run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/repo/.npmrc
       - run: npm publish
 
-  build:
+  install:
     <<: *defaults
     steps:
       - checkout
@@ -33,20 +39,24 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-      - run: npm run build
       - persist_to_workspace:
           root: ~/repo
           paths: .
 workflows:
   version: 2
-  test-deploy:
+  main:
     jobs:
+      - install
+      - build:
+          requires:
+            - install
       - test:
           requires:
             - build
       - deploy:
           requires:
             - test
+            - build
           filters:
             tags:
               only: /^v.*/
