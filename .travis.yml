@@ -1,5 +1,5 @@
 language: node_js
-sudo: false
+os: linux
 node_js:
 - '12.13'
 install:
@@ -10,11 +10,10 @@ script:
 - codecov
 - npm run build
 deploy:
-  skip_cleanup: true
   edge: true
   provider: npm
   email: patryk_walach@outlook.com
-  api_key:
+  api_token:
     secure: Lzp4Wej5kivr5X+AuFLrgMsg+xbEFX4mgaSbbE+AMUr55883sNhRyMjMZC1OrBLyRPhnfDWcrXF4C4ntAXmmBw9zFEYqiWV/3oCRjsdsrINCIsxLAGVCC0A6kGZ1cf47EihEz2vuGrVq7XifodpuYIjNYnEa+v9ekBSX+oQ1Sm/XTnGHRIuoScZ03EOh5lRVIP8M2alSBuA1T/8KIFfi5SH+ab95zvn5copn0nQdyX2164o0XA8I/5cmJnwogYyOhRSk4sdWUMJhtiQqJUsF8N0Tp0/03rXE/jmYWKRUezZunC7tSavQNdqpmf5j37/kCpPxrHc6KG2D6El9FgMTh5EbsAjCca0hEHjZ9R5GpLjp4tBKwtz5r7HhZqjFxvj4f3+dhUnTYd9kwzdWBIhxRC1rXWlNgUUBrbvA1TjcZfHcpbDC2Q0vi6cwpMPfat5cfIUjblu9pnSot6GZZK/TZIWyzWsGhRSl5E9FpsSEDcVpLo93evPeuO2CRqg4VNI16CUmH0AnnEVaxijJ1pOWmcL8CY+EF782ZYvgtqoaLsUKkJA9RueWTjngRm/r60NuqsZZ1UeGImhuRSwJPrRWgi1hrdSYrbFXBSrrRMXcLODyIVg0k0GRy+I4Ah+46vGSBMYdUR0vRvCwQHmiU7usfM9s/884iAsQjcWGB6v6Iu0=
   on:
     tags: true
