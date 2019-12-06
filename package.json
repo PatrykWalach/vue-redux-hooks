@@ -1,13 +1,14 @@
 {
   "name": "vue-redux-hooks",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Redux hooks for Vue",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "rollup -c && tsc",
-    "coverage": "jest --collect-coverage && codecov",
+    "coverage": "jest --collect-coverage",
+    "codecov": "codecov",
     "lint": "eslint --fix src/**/*.ts{,x}",
     "test": "jest",
     "watch": "jest --watch"

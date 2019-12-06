@@ -9,13 +9,31 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/repo
+      - run: npm run test
+  codecov:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run: npm run codecov
+  coverage:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
       - run: npm run coverage
+      - persist_to_workspace:
+          root: ~/repo
+          paths: .
   build:
     <<: *defaults
     steps:
       - attach_workspace:
           at: ~/repo
       - run: npm run build
+      - persist_to_workspace:
+          root: ~/repo
+          paths: .
   deploy:
     <<: *defaults
     steps:
@@ -60,6 +78,18 @@ workflows:
               only: /.*/
           requires:
             - install
+      - coverage:
+          filters:
+            tags:
+              only: /.*/
+          requires:
+            - install
+      - codecov:
+          filters:
+            tags:
+              only: /.*/
+          requires:
+            - coverage
       - deploy:
           requires:
             - test
