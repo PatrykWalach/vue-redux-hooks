@@ -1,4 +1,5 @@
 import { install } from './install'
+export { key } from './install'
 export { useSelector } from './hooks/useSelector'
 export { useStore } from './hooks/useStore'
 export { useDispatch } from './hooks/useDispatch'
