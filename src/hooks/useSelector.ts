@@ -8,7 +8,7 @@ export const useSelector = <S = any, R = any>(
   equalityFn: (nextState: R, currentState: R) => boolean = (
     nextState,
     currentState,
-  ) => nextState !== currentState,
+  ) => nextState === currentState,
 ) => {
   const { subscribe, getState } = useStore()
 
@@ -19,7 +19,7 @@ export const useSelector = <S = any, R = any>(
   const unsubscribe = subscribe(() => {
     const nextState = select(getState())
 
-    if (equalityFn(nextState, currentState)) {
+    if (!equalityFn(nextState, currentState)) {
       currentState = nextState
       selector.value = currentState
     }
