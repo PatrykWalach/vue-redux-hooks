@@ -6,21 +6,11 @@
     "module": "esnext",
     "target": "esnext",
     "moduleResolution": "node",
-    "esModuleInterop":true,
-    "noImplicitAny":true,
-    "types": [
-      "node",
-      "jest"
-    ],
-    "lib": [
-      "esnext",
-      "dom"
-    ]
+    "esModuleInterop": true,
+    "noImplicitAny": true,
+    "types": ["node", "jest"],
+    "lib": ["esnext", "dom"]
   },
-  "include": [
-    "src/**/*.ts", "src/vue.d.ts", "src/connect.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
 }

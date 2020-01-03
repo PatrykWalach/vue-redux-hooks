@@ -1,4 +1,4 @@
-import { Ref, computed, onUnmounted, ref } from '@vue/composition-api'
+import { Ref, computed, onUnmounted, ref } from 'vue'
 import { useStore } from './useStore'
 
 export type Selector<S, R> = (state: S) => R
