@@ -26,9 +26,9 @@ describe('useStore()', () => {
 
     const vm: any = localVue.mount('')
 
-    const child = vm.$children[0] as {
+    const [child] = vm.$children as {
       injectedStore: typeof store
-    }
+    }[]
 
     expect(child.injectedStore).toStrictEqual(store)
   })

@@ -26,10 +26,10 @@ describe('useSelector()', () => {
 
     const vm: any = localVue.mount('')
 
-    const child = vm.$children[0] as {
+    const [child] = vm.$children as {
       dispatch(): void
       state: number
-    }
+    }[]
 
     expect(child.state).toStrictEqual(0)
     child.dispatch()
