@@ -1,27 +1,16 @@
-import { ReduxStore, useStore } from '../../src'
-import { createApp, h, provide } from 'vue'
-
+import { createLocalVue } from './utils'
 import { createStore } from 'redux'
+import { useStore } from '../../src'
 
 describe('useStore()', () => {
   it('returns store', () => {
     const reducer = (state = 0) => state + 1
     const store = createStore(reducer)
 
-    const Child = {
-      render: () => h('div'),
-      setup() {
-        const injectedStore = useStore()
+    const localVue = createLocalVue(store, () => {
+      const injectedStore = useStore()
 
-        return { injectedStore }
-      },
-    }
-
-    const localVue = createApp({
-      setup: () => {
-        provide(ReduxStore, store)
-        return () => h(Child)
-      },
+      return { injectedStore }
     })
 
     const vm: any = localVue.mount('')

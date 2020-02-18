@@ -1,5 +1,5 @@
-import { ReduxStore, useDispatch, useSelector } from '../../src'
-import { createApp, h, provide } from 'vue'
+import { useDispatch, useSelector } from '../../src'
+import { createLocalVue } from './utils'
 import { createStore } from 'redux'
 
 describe('useSelector()', () => {
@@ -7,21 +7,11 @@ describe('useSelector()', () => {
     const reducer = (state = 0) => state + 1
     const store = createStore(reducer)
 
-    const Child = {
-      render: () => h('div'),
-      setup() {
-        const dispatch = useDispatch()
-        const state = useSelector((state: number) => state)
+    const localVue = createLocalVue(store, () => {
+      const dispatch = useDispatch()
+      const state = useSelector((state: number) => state)
 
-        return { dispatch, state }
-      },
-    }
-
-    const localVue = createApp({
-      setup: () => {
-        provide(ReduxStore, store)
-        return () => h(Child)
-      },
+      return { dispatch, state }
     })
 
     const vm: any = localVue.mount('')

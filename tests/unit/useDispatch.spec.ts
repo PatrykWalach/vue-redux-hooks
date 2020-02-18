@@ -1,27 +1,16 @@
-import { ReduxStore, useDispatch } from '../../src'
-import { h, provide } from 'vue'
-import { createApp } from 'vue'
+import { createLocalVue } from './utils'
 import { createStore } from 'redux'
+import { useDispatch } from '../../src'
 
 describe('useDispatch()', () => {
   it('can dispatch an action', () => {
     const reducer = (state = 0) => state + 1
     const store = createStore(reducer)
 
-    const Child = {
-      render: () => h('div'),
-      setup() {
-        const dispatch = useDispatch()
+    const localVue = createLocalVue(store, () => {
+      const dispatch = useDispatch()
 
-        return { dispatch }
-      },
-    }
-
-    const localVue = createApp({
-      setup: () => {
-        provide(ReduxStore, store)
-        return () => h(Child)
-      },
+      return { dispatch }
     })
 
     const vm: any = localVue.mount('')
