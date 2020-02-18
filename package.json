@@ -1,6 +1,6 @@
 {
   "name": "vue-redux-hooks",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Redux hooks for Vue",
   "main": "dist/index.js",
   "unpkg": "dist/index.umd.js",
