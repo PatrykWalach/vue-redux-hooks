@@ -32,10 +32,10 @@ describe('useSelector()', () => {
       setup: () => () => h('child'),
     }).$mount()
 
-    const child = (vm.$children[0] as unknown) as {
+    const [child] = (vm.$children as unknown) as {
       dispatch: Dispatch<AnyAction>
       state: number
-    }
+    }[]
 
     expect(child.state).toStrictEqual(0)
     child.dispatch({

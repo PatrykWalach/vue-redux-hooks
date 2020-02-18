@@ -31,9 +31,9 @@ describe('useDispatch()', () => {
       setup: () => () => h('child'),
     }).$mount()
 
-    const child = (vm.$children[0] as unknown) as {
+    const [child] = (vm.$children as unknown) as {
       dispatch: Dispatch<AnyAction>
-    }
+    }[]
 
     expect(store.getState()).toStrictEqual(0)
     child.dispatch({

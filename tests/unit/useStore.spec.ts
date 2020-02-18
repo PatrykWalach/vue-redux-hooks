@@ -27,9 +27,9 @@ describe('useStore()', () => {
       setup: () => () => h('child'),
     }).$mount()
 
-    const child = (vm.$children[0] as unknown) as {
+    const [child] = (vm.$children as unknown) as {
       injectedStore: typeof store
-    }
+    }[]
 
     expect(child.injectedStore).toStrictEqual(store)
   })
