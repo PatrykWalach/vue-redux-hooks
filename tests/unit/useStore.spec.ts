@@ -17,6 +17,7 @@ describe('useStore()', () => {
 
     app.mount(document.createElement('template'))
 
+
     expect(fn).toBeCalledWith(store)
   })
 })
