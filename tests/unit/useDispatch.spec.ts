@@ -1,26 +1,19 @@
-import { createLocalVue } from './utils'
-import { createStore } from 'redux'
+import { createLocalVue, createTestStore } from './utils'
 import { useDispatch } from '../../src'
 
 describe('useDispatch()', () => {
   it('can dispatch an action', () => {
-    const reducer = (state = 0) => state + 1
-    const store = createStore(reducer)
-
-    const localVue = createLocalVue(store, () => {
-      const dispatch = useDispatch()
-
-      return { dispatch }
-    })
-
-    const vm: any = localVue.mount('')
-
-    const [child] = vm.$children as {
-      dispatch(): void
-    }[]
+    const [store, INCREMENT] = createTestStore()
 
     expect(store.getState()).toStrictEqual(0)
-    child.dispatch()
+
+    const app = createLocalVue(store, () => {
+      const dispatch = useDispatch()
+      dispatch({ type: INCREMENT })
+      return { dispatch }
+    })
+    app.mount(document.createElement('template'))
+
     expect(store.getState()).toStrictEqual(1)
   })
 })

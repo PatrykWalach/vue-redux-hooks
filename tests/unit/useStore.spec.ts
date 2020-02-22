@@ -7,18 +7,16 @@ describe('useStore()', () => {
     const reducer = (state = 0) => state + 1
     const store = createStore(reducer)
 
-    const localVue = createLocalVue(store, () => {
-      const injectedStore = useStore()
+    const fn = jest.fn()
 
+    const app = createLocalVue(store, () => {
+      const injectedStore = useStore()
+      fn(injectedStore)
       return { injectedStore }
     })
 
-    const vm: any = localVue.mount('')
+    app.mount(document.createElement('template'))
 
-    const [child] = vm.$children as {
-      injectedStore: typeof store
-    }[]
-
-    expect(child.injectedStore).toStrictEqual(store)
+    expect(fn).toBeCalledWith(store)
   })
 })

@@ -1,4 +1,4 @@
-import { Ref, computed, onUnmounted, ref } from 'vue'
+import { computed, onBeforeUnmount, ref } from 'vue'
 import { useStore } from './useStore'
 
 export type Selector<S, R> = (state: S) => R
@@ -12,7 +12,7 @@ export const useSelector = <S = any, R = any>(
 ) => {
   const { subscribe, getState } = useStore()
 
-  const selector: Ref<R> = ref(select(getState()))
+  const selector = ref(select(getState()))
 
   let currentState: R
 
@@ -25,7 +25,7 @@ export const useSelector = <S = any, R = any>(
     }
   })
 
-  onUnmounted(unsubscribe)
+  onBeforeUnmount(unsubscribe)
 
   return computed(() => selector.value)
 }

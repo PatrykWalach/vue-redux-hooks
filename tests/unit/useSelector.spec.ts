@@ -1,28 +1,28 @@
-import { useDispatch, useSelector } from '../../src'
-import { createLocalVue } from './utils'
-import { createStore } from 'redux'
+import { createLocalVue, createTestStore } from './utils'
+import { useSelector } from '../../src'
+import { watchEffect } from 'vue'
 
 describe('useSelector()', () => {
   it('is reactive', () => {
-    const reducer = (state = 0) => state + 1
-    const store = createStore(reducer)
+    const [store, INCREMENT] = createTestStore()
 
-    const localVue = createLocalVue(store, () => {
-      const dispatch = useDispatch()
+    const fn = jest.fn()
+
+    const app = createLocalVue(store, () => {
       const state = useSelector((state: number) => state)
 
-      return { dispatch, state }
+      watchEffect(() => {
+        fn(state.value)
+      })
+
+      store.dispatch({ type: INCREMENT })
+
+      return { state }
     })
 
-    const vm: any = localVue.mount('')
+    app.mount(document.createElement('template'))
 
-    const [child] = vm.$children as {
-      dispatch(): void
-      state: number
-    }[]
-
-    expect(child.state).toStrictEqual(0)
-    child.dispatch()
-    expect(child.state).toStrictEqual(1)
+    expect(fn).toHaveBeenNthCalledWith(1, 0)
+    expect(fn).toHaveBeenNthCalledWith(2, 1)
   })
 })

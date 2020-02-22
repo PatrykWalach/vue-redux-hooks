@@ -1,22 +1,30 @@
-import { createApp, defineComponent, h, provide } from 'vue'
+import { AnyAction, Store, createStore } from 'redux'
+import { createApp, h } from 'vue'
 import { ReduxStore } from '../../src'
-import { Store } from 'redux'
 type Setup = () => any
-export const createRootComponent = (store: Store<any, any>, setup: Setup) =>
-  defineComponent({
-    setup: () => {
-      provide(ReduxStore, store)
-      return () => h(createChild(setup))
-    },
-  })
 
+export const createTestStore = (): [Store<number, AnyAction>, string] => {
+  const INCREMENT = 'INCREMENT'
+  const reducer = (state = 0, { type }: AnyAction) => {
+    switch (type) {
+      case INCREMENT:
+        return state + 1
+      default:
+        return state
+    }
+  }
+  const store = createStore(reducer)
+
+  return [store, INCREMENT]
+}
 export const createLocalVue = (store: Store<any, any>, setup: Setup) => {
-  const rootComponent = createRootComponent(store, setup)
-  return createApp(rootComponent)
+  const rootComponent = createRootComponent(setup)
+  const app = createApp(rootComponent).provide(ReduxStore, store)
+
+  return app
 }
 
-export const createChild = (setup: Setup) =>
-  defineComponent({
-    render: () => h('div'),
-    setup,
-  })
+export const createRootComponent = (setup: Setup) => ({
+  render: () => h('div'),
+  setup,
+})
