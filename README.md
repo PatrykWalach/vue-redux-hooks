@@ -1,4 +1,6 @@
-# vue-redux-hooks [![CircleCI](https://circleci.com/gh/PatrykWalach/vue-redux-hooks.svg?style=svg)](https://circleci.com/gh/PatrykWalach/vue-redux-hooks) [![codecov](https://codecov.io/gh/PatrykWalach/vue-redux-hooks/branch/master/graph/badge.svg)](https://codecov.io/gh/PatrykWalach/vue-redux-hooks)
+# vue-redux-hooks [![CircleCI](https://circleci.com/gh/PatrykWalach/vue-redux-hooks.svg?style=svg)](https://circleci.com/gh/PatrykWalach/vue-redux-hooks) [![codecov](https://codecov.io/gh/PatrykWalach/vue-redux-hooks/branch/master/graph/badge.svg)](https://codecov.io/gh/PatrykWalach/vue-redux-hooks) ![](https://img.shields.io/npm/v/vue-redux-hooks)
+
+g
 
 ## Table of Contents
 
@@ -12,11 +14,16 @@
 
 ## Install
 
-Make sure you've installed:
-[redux](https://github.com/reduxjs/redux), [vue](https://github.com/vuejs/vue), [@vue/composition-api](https://github.com/vuejs/composition-api).
+### Vue 3
 
 ```sh
-npm i vue-redux-hooks
+npm i redux vue-redux-hooks
+```
+
+### Vue 2
+
+```sh
+npm i redux vue-redux-hooks@0 @vue/composition-api
 ```
 
 ## API
@@ -43,10 +50,12 @@ Vue.use(VueReduxHooks, store)
 export type Store = typeof store
 export type State = ReturnType<typeof todos>
 ```
+
 ### Hooks
+
 #### `useStore`
 
-```typescript
+```tsx
 import { useStore } from 'vue-redux-hooks'
 
 export default {
@@ -76,6 +85,15 @@ export default {
     return { todos, lastTodo }
   },
 }
+```
+
+You can provide an equality function. In the example below todos will update only if it's length changes
+
+```tsx
+const todos = useSelector(
+  (state: string[]) => state,
+  (nextState, prevState) => nextState.length === prevState.length,
+)
 ```
 
 #### `useDispatch`

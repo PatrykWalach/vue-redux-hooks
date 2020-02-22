@@ -1,36 +1,23 @@
-import CompositionApi, { createElement as h } from '@vue/composition-api'
-import VueReduxHooks, { useStore } from '../../src'
-import { createLocalVue } from '@vue/test-utils'
-import { createReducer } from '@reduxjs/toolkit'
+import { createLocalVue } from './utils'
 import { createStore } from 'redux'
+import { useStore } from '../../src'
 
 describe('useStore()', () => {
   it('returns store', () => {
-    const localVue = createLocalVue()
+    const reducer = (state = 0) => state + 1
+    const store = createStore(reducer)
 
-    localVue.use(CompositionApi)
-    const store = createStore(createReducer(0, {}))
+    const fn = jest.fn()
 
-    localVue.use(VueReduxHooks, store)
+    const app = createLocalVue(store, () => {
+      const injectedStore = useStore()
+      fn(injectedStore)
+      return { injectedStore }
+    })
 
-    const vm = new localVue({
-      components: {
-        child: {
-          render: () => h('div'),
-          setup() {
-            const injectedStore = useStore()
+    app.mount(document.createElement('template'))
 
-            return { injectedStore }
-          },
-        },
-      },
-      setup: () => () => h('child'),
-    }).$mount()
 
-    const [child] = (vm.$children as unknown) as {
-      injectedStore: typeof store
-    }[]
-
-    expect(child.injectedStore).toStrictEqual(store)
+    expect(fn).toBeCalledWith(store)
   })
 })

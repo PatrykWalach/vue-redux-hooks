@@ -1,46 +1,29 @@
-import { AnyAction, Dispatch, createStore } from 'redux'
-import CompositionApi, { createElement as h } from '@vue/composition-api'
-import VueReduxHooks, { useDispatch, useSelector } from '../../src'
-import { createLocalVue } from '@vue/test-utils'
-import { createReducer } from '@reduxjs/toolkit'
+import { createLocalVue, createTestStore } from './utils'
+import { useSelector } from '../../src'
+import { watchEffect } from 'vue'
 
 describe('useSelector()', () => {
   it('is reactive', () => {
-    const localVue = createLocalVue()
 
-    localVue.use(CompositionApi)
-    const store = createStore(
-      createReducer(0, {
-        INCREMENT: state => state + 1,
-      }),
-    )
+    const [store, INCREMENT] = createTestStore()
 
-    localVue.use(VueReduxHooks, store)
+    const fn = jest.fn()
 
-    const vm = new localVue({
-      components: {
-        child: {
-          render: () => h('div'),
-          setup() {
-            const dispatch = useDispatch()
-            const state = useSelector(state => state)
+    const app = createLocalVue(store, () => {
+      const state = useSelector((state: number) => state)
 
-            return { dispatch, state }
-          },
-        },
-      },
-      setup: () => () => h('child'),
-    }).$mount()
+      watchEffect(() => {
+        fn(state.value)
+      })
 
-    const [child] = (vm.$children as unknown) as {
-      dispatch: Dispatch<AnyAction>
-      state: number
-    }[]
+      store.dispatch({ type: INCREMENT })
 
-    expect(child.state).toStrictEqual(0)
-    child.dispatch({
-      type: 'INCREMENT',
+      return { state }
     })
-    expect(child.state).toStrictEqual(1)
+
+    app.mount(document.createElement('template'))
+
+    expect(fn).toHaveBeenNthCalledWith(1, 0)
+    expect(fn).toHaveBeenNthCalledWith(2, 1)
   })
 })
