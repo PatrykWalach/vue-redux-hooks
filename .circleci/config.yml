@@ -37,15 +37,14 @@ jobs:
           root: ~/repo
           paths: .
       - store_artifacts:
-          path: /dist
+          path: /pkg
   deploy:
     <<: *defaults
     steps:
       - attach_workspace:
           at: ~/repo
-      - run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/repo/.npmrc
-      - run: npm publish
-
+      - run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/repo/pkg/.npmrc
+      - run: cd pkg && npm publish
   install:
     <<: *defaults
     steps:
