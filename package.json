@@ -24,7 +24,7 @@
     ]
   },
   "scripts": {
-    "build": "npx @pika/pack",
+    "build": "pika build",
     "coverage": "jest --collect-coverage",
     "codecov": "codecov",
     "lint": "eslint --fix src/**/*.ts{,x}",
