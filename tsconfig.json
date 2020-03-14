@@ -1,16 +1,12 @@
 {
   "compilerOptions": {
-    "declaration": true,
     "strict": true,
-    "outDir": "dist",
     "module": "esnext",
-    "target": "esnext",
-    "moduleResolution": "node",
     "esModuleInterop": true,
-    "noImplicitAny": true,
-    "types": ["node", "jest"],
-    "lib": ["esnext", "dom"]
+    "moduleResolution": "node",
+    "target": "esnext",
+    "types": ["node", "jest"]
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": ["src/index.ts"],
+  "exclude": ["node_modules", "**/__tests__/*"]
 }

@@ -9,18 +9,7 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/no-use-before-define': 'off',
-    '@typescript-eslint/no-this-alias': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
-    'sort-imports': [
-      'warn',
-      {
-        ignoreCase: false,
-        ignoreDeclarationSort: false,
-        ignoreMemberSort: false,
-        memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
-      },
-    ],
-    'sort-keys': 'warn',
   },
   parserOptions: {
     parser: '@typescript-eslint/parser',
