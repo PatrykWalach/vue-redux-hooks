@@ -4,7 +4,6 @@ import { watchEffect } from 'vue'
 
 describe('useSelector()', () => {
   it('is reactive', () => {
-
     const [store, INCREMENT] = createTestStore()
 
     const fn = jest.fn()
