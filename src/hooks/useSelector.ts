@@ -14,14 +14,11 @@ export const useSelector = <S = any, R = any>(
 
   const selector = ref(select(getState()))
 
-  let currentState: R
-
   const unsubscribe = subscribe(() => {
     const nextState = select(getState())
 
-    if (!equalityFn(nextState, currentState)) {
-      currentState = nextState
-      selector.value = currentState
+    if (!equalityFn(nextState, selector.value)) {
+      selector.value = nextState
     }
   })
 
