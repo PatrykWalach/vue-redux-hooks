@@ -1,5 +1,5 @@
 import { AnyAction, Store, createStore } from 'redux'
-import { createApp, h } from 'vue'
+import { createApp, h, App } from 'vue'
 import { ReduxStore } from '../../src'
 type Setup = () => any
 
@@ -28,3 +28,6 @@ export const createRootComponent = (setup: Setup) => ({
   render: () => h('div'),
   setup,
 })
+
+export const mount = (app: App<Element>) =>
+  app.mount(document.createElement('template'))

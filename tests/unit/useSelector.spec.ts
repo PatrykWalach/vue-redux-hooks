@@ -1,4 +1,4 @@
-import { createLocalVue, createTestStore } from './utils'
+import { createLocalVue, createTestStore, mount } from './utils'
 import { useSelector } from '../../src'
 import { watchEffect } from 'vue'
 
@@ -20,7 +20,7 @@ describe('useSelector()', () => {
       return { state }
     })
 
-    app.mount(document.createElement('template'))
+    mount(app)
 
     expect(fn).toHaveBeenNthCalledWith(1, 0)
     expect(fn).toHaveBeenNthCalledWith(2, 1)

@@ -1,4 +1,4 @@
-import { createLocalVue } from './utils'
+import { createLocalVue, mount } from './utils'
 import { createStore } from 'redux'
 import { useStore } from '../../src'
 
@@ -15,7 +15,7 @@ describe('useStore()', () => {
       return { injectedStore }
     })
 
-    app.mount(document.createElement('template'))
+    mount(app)
 
     expect(fn).toBeCalledWith(store)
   })

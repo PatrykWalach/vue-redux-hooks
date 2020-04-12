@@ -1,4 +1,4 @@
-import { createLocalVue, createTestStore } from './utils'
+import { createLocalVue, createTestStore, mount } from './utils'
 import { useDispatch } from '../../src'
 
 describe('useDispatch()', () => {
@@ -12,7 +12,8 @@ describe('useDispatch()', () => {
       dispatch({ type: INCREMENT })
       return { dispatch }
     })
-    app.mount(document.createElement('template'))
+
+    mount(app)
 
     expect(store.getState()).toStrictEqual(1)
   })
