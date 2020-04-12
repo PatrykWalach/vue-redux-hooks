@@ -1,28 +1,21 @@
-import { computed, onBeforeUnmount, ref } from 'vue'
+import { readonly, onBeforeUnmount, ref } from 'vue'
 import { useStore } from './useStore'
+import { Store } from 'redux'
 
 export type Selector<S, R> = (state: S) => R
 
-export const useSelector = <S = any, R = any>(
-  select: Selector<S, R>,
-  equalityFn: (nextState: R, currentState: R) => boolean = (
-    nextState,
-    currentState,
-  ) => nextState === currentState,
-) => {
-  const { subscribe, getState } = useStore()
+export const useSelector = <S = any, R = any>(select: Selector<S, R>) => {
+  const { subscribe, getState } = useStore<Store<S>>()
 
   const selector = ref(select(getState()))
 
   const unsubscribe = subscribe(() => {
     const nextState = select(getState())
 
-    if (!equalityFn(nextState, selector.value)) {
-      selector.value = nextState
-    }
+    selector.value = nextState
   })
 
   onBeforeUnmount(unsubscribe)
 
-  return computed(() => selector.value)
+  return readonly(selector)
 }
