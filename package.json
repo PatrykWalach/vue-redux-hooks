@@ -59,28 +59,29 @@
     "@pika/plugin-build-types": "^0.9.2",
     "@pika/plugin-build-web": "^0.9.2",
     "@pika/plugin-standard-pkg": "^0.9.2",
-    "@types/jest": "^25.2.1",
-    "@types/node": "^13.11.1",
-    "@typescript-eslint/eslint-plugin": "^2.27.0",
-    "@typescript-eslint/parser": "^2.27.0",
-    "codecov": "^3.6.5",
-    "eslint": "^6.8.0",
-    "eslint-config-prettier": "^6.10.1",
-    "eslint-plugin-prettier": "^3.1.2",
-    "jest": "^25.3.0",
-    "prettier": "^2.0.4",
+    "@reduxjs/toolkit": "^1.3.6",
+    "@types/jest": "^25.2.3",
+    "@types/node": "^13.13.10",
+    "@typescript-eslint/eslint-plugin": "^2.34.0",
+    "@typescript-eslint/parser": "^2.34.0",
+    "codecov": "^3.7.0",
+    "eslint": "^7.2.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.3",
+    "jest": "^25.5.4",
+    "lint-staged": "^10.2.9",
+    "prettier": "^2.0.5",
     "redux": "^4.0.5",
-    "ts-jest": "^25.2.1",
-    "typescript": "^3.8.3",
-    "vue": "^3.0.0-alpha.12"
+    "ts-jest": "^25.5.1",
+    "typescript": "^3.9.5",
+    "vue": "^3.0.0-beta.14"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
   },
   "lint-staged": {
     "*.{js,jsx,vue,ts,tsx}": [
-      "npm lint",
-      "git add"
+      "npm lint"
     ]
   }
 }
