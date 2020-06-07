@@ -1,7 +1,9 @@
-import { Store } from 'redux'
+import { Dispatch, AnyAction } from 'redux'
 import { useStore } from './useStore'
 
-export const useDispatch = <S extends Store = Store>() => {
-  const { dispatch } = useStore<S>()
-  return dispatch
+export const useDispatch = <
+  D extends Dispatch<AnyAction> = Dispatch<AnyAction>
+>() => {
+  const { dispatch } = useStore()
+  return dispatch as D
 }
