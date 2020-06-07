@@ -1,6 +1,6 @@
 {
   "name": "vue-redux-hooks",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Redux hooks for Vue",
   "@pika/pack": {
     "pipeline": [
