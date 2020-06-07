@@ -1,36 +1,46 @@
 import { AnyAction, Dispatch, createStore } from 'redux'
 import CompositionApi, { createElement as h } from '@vue/composition-api'
+import { Slice, createSlice } from '@reduxjs/toolkit'
 import VueReduxHooks, { useDispatch, useSelector } from '../../src'
+import { VueConstructor } from 'vue'
 import { createLocalVue } from '@vue/test-utils'
-import { createReducer } from '@reduxjs/toolkit'
+import { mount } from './util'
 
 describe('useSelector()', () => {
-  it('is reactive', () => {
-    const localVue = createLocalVue()
+  let counter: Slice<
+    number,
+    {
+      INCREMENT: (state: number) => number
+    }
+  >
+  let localVue: VueConstructor<Vue>
 
+  beforeEach(() => {
+    localVue = createLocalVue()
     localVue.use(CompositionApi)
-    const store = createStore(
-      createReducer(0, {
-        INCREMENT: state => state + 1,
-      }),
-    )
+
+    counter = createSlice({
+      initialState: 0,
+      name: 'counter',
+      reducers: { INCREMENT: state => state + 1 },
+    })
+  })
+
+  it('is reactive', () => {
+    const store = createStore(counter.reducer)
 
     localVue.use(VueReduxHooks, store)
 
-    const vm = new localVue({
-      components: {
-        child: {
-          render: () => h('div'),
-          setup() {
-            const dispatch = useDispatch()
-            const state = useSelector(state => state)
+    const vm = mount(
+      localVue,
+      () => {
+        const dispatch = useDispatch()
+        const state = useSelector(state => state)
 
-            return { dispatch, state }
-          },
-        },
+        return { dispatch, state }
       },
-      setup: () => () => h('child'),
-    }).$mount()
+      () => h('div'),
+    )
 
     const [child] = (vm.$children as unknown) as {
       dispatch: Dispatch<AnyAction>
@@ -38,9 +48,25 @@ describe('useSelector()', () => {
     }[]
 
     expect(child.state).toStrictEqual(0)
-    child.dispatch({
-      type: 'INCREMENT',
-    })
+    child.dispatch(counter.actions.INCREMENT())
     expect(child.state).toStrictEqual(1)
+  })
+
+  it('can be typed', () => {
+    const store = createStore(counter.reducer)
+
+    localVue.use(VueReduxHooks, store)
+
+    type State = ReturnType<typeof store.getState>
+
+    expect(() =>
+      mount(localVue, () => {
+        const state = useSelector((state: State) => state)
+
+        1 + state.value
+
+        return () => null
+      }),
+    ).not.toThrow()
   })
 })

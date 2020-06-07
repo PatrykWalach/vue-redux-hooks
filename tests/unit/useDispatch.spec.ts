@@ -1,44 +1,65 @@
-import { AnyAction, Dispatch, createStore } from 'redux'
-import CompositionApi, { createElement as h } from '@vue/composition-api'
+import { Slice, configureStore, createSlice } from '@reduxjs/toolkit'
 import VueReduxHooks, { useDispatch } from '../../src'
+import CompositionApi from '@vue/composition-api'
+import { VueConstructor } from 'vue'
 import { createLocalVue } from '@vue/test-utils'
-import { createReducer } from '@reduxjs/toolkit'
+import { createStore } from 'redux'
+import { mount } from './util'
 
 describe('useDispatch()', () => {
-  it('can dispatch an action', () => {
-    const localVue = createLocalVue()
+  let counter: Slice<
+    number,
+    {
+      INCREMENT: (state: number) => number
+    }
+  >
+  let localVue: VueConstructor<Vue>
 
+  beforeEach(() => {
+    localVue = createLocalVue()
     localVue.use(CompositionApi)
-    const store = createStore(
-      createReducer(0, {
-        INCREMENT: state => state + 1,
-      }),
-    )
 
+    counter = createSlice({
+      initialState: 0,
+      name: 'counter',
+      reducers: { INCREMENT: state => state + 1 },
+    })
+  })
+
+  it('can dispatch an action', () => {
+    const store = createStore(counter.reducer)
     localVue.use(VueReduxHooks, store)
 
-    const vm = new localVue({
-      components: {
-        child: {
-          render: () => h('div'),
-          setup() {
-            const dispatch = useDispatch()
+    expect(store.getState()).toStrictEqual(0)
 
-            return { dispatch }
-          },
-        },
-      },
-      setup: () => () => h('child'),
-    }).$mount()
+    mount(localVue, () => {
+      const dispatch = useDispatch()
 
-    const [child] = (vm.$children as unknown) as {
-      dispatch: Dispatch<AnyAction>
-    }[]
+      dispatch(counter.actions.INCREMENT())
+
+      return () => null
+    })
+
+    expect(store.getState()).toStrictEqual(1)
+  })
+
+  it('can by typed', () => {
+    const store = configureStore({
+      reducer: counter.reducer,
+    })
+    localVue.use(VueReduxHooks, store)
+
+    type AppDispatch = typeof store.dispatch
 
     expect(store.getState()).toStrictEqual(0)
-    child.dispatch({
-      type: 'INCREMENT',
+
+    mount(localVue, () => {
+      const dispatch = useDispatch<AppDispatch>()
+
+      dispatch(dispatch => dispatch(counter.actions.INCREMENT()))
+      return () => null
     })
+
     expect(store.getState()).toStrictEqual(1)
   })
 })

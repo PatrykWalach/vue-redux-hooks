@@ -1,36 +1,78 @@
 import CompositionApi, { createElement as h } from '@vue/composition-api'
 import VueReduxHooks, { useStore } from '../../src'
 import { createLocalVue } from '@vue/test-utils'
-import { createReducer } from '@reduxjs/toolkit'
+import {
+  Slice,
+  configureStore,
+  createReducer,
+  createSlice,
+} from '@reduxjs/toolkit'
 import { createStore } from 'redux'
+import { VueConstructor } from 'vue'
+import { mount } from './util'
 
 describe('useStore()', () => {
-  it('returns store', () => {
-    const localVue = createLocalVue()
+  let counter: Slice<
+    number,
+    {
+      INCREMENT: (state: number) => number
+    }
+  >
+  let localVue: VueConstructor<Vue>
 
+  beforeEach(() => {
+    localVue = createLocalVue()
     localVue.use(CompositionApi)
-    const store = createStore(createReducer(0, {}))
+
+    counter = createSlice({
+      initialState: 0,
+      name: 'counter',
+      reducers: { INCREMENT: state => state + 1 },
+    })
+  })
+
+  it('returns store', () => {
+    const store = createStore(counter.reducer)
 
     localVue.use(VueReduxHooks, store)
 
-    const vm = new localVue({
-      components: {
-        child: {
-          render: () => h('div'),
-          setup() {
-            const injectedStore = useStore()
+    const vm = mount(
+      localVue,
 
-            return { injectedStore }
-          },
-        },
+      () => {
+        const injectedStore = useStore()
+
+        return { injectedStore }
       },
-      setup: () => () => h('child'),
-    }).$mount()
+      () => h('div'),
+    )
 
     const [child] = (vm.$children as unknown) as {
       injectedStore: typeof store
     }[]
 
     expect(child.injectedStore).toStrictEqual(store)
+  })
+
+  it('can by typed', () => {
+    const store = configureStore({ reducer: counter.reducer })
+    type Store = typeof store
+    localVue.use(VueReduxHooks, store)
+
+    expect(() =>
+      mount(
+        localVue,
+        () => {
+          const injectedStore = useStore<Store>()
+
+          injectedStore.dispatch(dispatch => {
+            dispatch(counter.actions.INCREMENT())
+          })
+
+          return { injectedStore }
+        },
+        () => h('div'),
+      ),
+    ).not.toThrow()
   })
 })
