@@ -1,28 +1,40 @@
-import { createLocalVue, createTestStore, mount } from './utils'
+import { createLocalVue, mount, createCounter, Counter } from './utils'
 import { useSelector } from '../../src'
 import { watchEffect } from 'vue'
+import { createStore } from '@reduxjs/toolkit'
 
-describe('useSelector()', () => {
-  it('is reactive', () => {
-    const [store, INCREMENT] = createTestStore()
+describe('useSelector.ts', () => {
+  describe('useSelector', () => {
+    let counter: Counter
+    let fn: jest.Mock<any, any>
 
-    const fn = jest.fn()
+    beforeEach(() => {
+      fn = jest.fn()
 
-    const app = createLocalVue(store, () => {
-      const state = useSelector((state: number) => state)
-
-      watchEffect(() => {
-        fn(state.value)
-      })
-
-      store.dispatch({ type: INCREMENT })
-
-      return { state }
+      counter = createCounter()
     })
 
-    mount(app)
+    it('is reactive', () => {
+      const store = createStore(counter.reducer)
 
-    expect(fn).toHaveBeenNthCalledWith(1, 0)
-    expect(fn).toHaveBeenNthCalledWith(2, 1)
+      type State = ReturnType<typeof store.getState>
+
+      const app = createLocalVue(store, () => {
+        const state = useSelector((state: State) => state)
+
+        watchEffect(() => {
+          fn(state.value)
+        })
+
+        store.dispatch(counter.actions.INCREMENT())
+
+        return { state }
+      })
+
+      mount(app)
+
+      expect(fn).toHaveBeenNthCalledWith(1, 0)
+      expect(fn).toHaveBeenNthCalledWith(2, 1)
+    })
   })
 })
