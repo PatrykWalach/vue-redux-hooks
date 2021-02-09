@@ -1,4 +1,4 @@
-import { readonly, onBeforeUnmount, ref, UnwrapRef } from 'vue'
+import { computed, onBeforeUnmount, ref, UnwrapRef } from 'vue'
 import { useStore } from './useStore'
 import { Store } from 'redux'
 
@@ -17,5 +17,5 @@ export const useSelector = <S = any, R = any>(select: Selector<S, R>) => {
 
   onBeforeUnmount(unsubscribe)
 
-  return readonly(selector)
+  return computed(() => selector.value)
 }
