@@ -1,12 +1,10 @@
-# vue-redux-hooks [![CircleCI](https://circleci.com/gh/PatrykWalach/vue-redux-hooks.svg?style=svg)](https://circleci.com/gh/PatrykWalach/vue-redux-hooks) [![codecov](https://codecov.io/gh/PatrykWalach/vue-redux-hooks/branch/master/graph/badge.svg)](https://codecov.io/gh/PatrykWalach/vue-redux-hooks) ![](https://img.shields.io/npm/v/vue-redux-hooks)
-
-g
+# vue-redux-hooks [![CircleCI](https://circleci.com/gh/PatrykWalach/vue-redux-hooks.svg?style=svg)](https://circleci.com/gh/PatrykWalach/vue-redux-hooks) [![codecov](https://codecov.io/gh/PatrykWalach/vue-redux-hooks/branch/master/graph/badge.svg)](https://codecov.io/gh/PatrykWalach/vue-redux-hooks) [![](https://img.shields.io/npm/v/vue-redux-hooks)](https://www.npmjs.com/package/vue-redux-hooks) [![](https://img.shields.io/bundlephobia/minzip/vue-redux-hooks)](https://bundlephobia.com/result?p=vue-redux-hooks) ![](https://img.shields.io/npm/dependency-version/vue-redux-hooks/peer/vue) ![](https://img.shields.io/npm/dependency-version/vue-redux-hooks/peer/redux)
 
 ## Table of Contents
 
 - [Install](#install)
 - [API](#api)
-  - [Default](#default)
+  - [ReduxStore](#ReduxStore)
   - [Hooks](#hooks)
     - [useStore](#useStore)
     - [useDispatch](#useDispatch)
@@ -14,27 +12,23 @@ g
 
 ## Install
 
-### Vue 3
-
 ```sh
 npm i redux vue-redux-hooks
 ```
 
-### Vue 2
-
 ```sh
-npm i redux vue-redux-hooks@0 @vue/composition-api
+yarn add redux vue-redux-hooks
 ```
 
 ## API
 
-### `default`
+### `ReduxStore`
 
 ```typescript
-import VueReduxHooks from 'vue-redux-hooks'
-import { createStore } from 'redux'
+// store.ts
+import { createStore, AnyAction } from 'redux'
 
-const todos = (state = [], action) => {
+function todos(state: string[] = [], action: AnyAction) {
   switch (action.type) {
     case 'ADD_TODO':
       return state.concat([action.text])
@@ -43,12 +37,19 @@ const todos = (state = [], action) => {
   }
 }
 
-const store = createStore(todos, ['Use Redux'])
-
-Vue.use(VueReduxHooks, store)
+export const store = createStore(todos, ['Use Redux'])
 
 export type Store = typeof store
 export type State = ReturnType<typeof todos>
+```
+
+```typescript
+// main.ts
+import { createApp } from 'vue'
+import { ReduxStore } from 'vue-redux-hooks'
+import { store } from './store'
+
+createApp(App).provide(ReduxStore, store).mount('#app')
 ```
 
 ### Hooks
@@ -87,15 +88,6 @@ export default {
 }
 ```
 
-You can provide an equality function. In the example below todos will update only if it's length changes
-
-```tsx
-const todos = useSelector(
-  (state: string[]) => state,
-  (nextState, prevState) => nextState.length === prevState.length,
-)
-```
-
 #### `useDispatch`
 
 ```tsx
@@ -105,13 +97,13 @@ export default {
   setup() {
     const dispatch = useDispatch<Store>()
 
-    const ADD_TODO = (text: string) =>
+    const addTodo = (text: string) =>
       dispatch({
         type: 'ADD_TODO',
         text,
       })
 
-    return { ADD_TODO }
+    return { addTodo }
   },
 }
 ```
