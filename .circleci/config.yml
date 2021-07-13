@@ -10,23 +10,14 @@ jobs:
       - attach_workspace:
           at: ~/repo
       - run: npm run test
+      - store_artifacts:
+          path: /coverage
   codecov:
     <<: *defaults
     steps:
       - attach_workspace:
           at: ~/repo
       - run: npm run codecov
-  coverage:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: ~/repo
-      - run: npm run coverage
-      - persist_to_workspace:
-          root: ~/repo
-          paths: .
-      - store_artifacts:
-          path: /coverage
   build:
     <<: *defaults
     steps:
@@ -81,18 +72,12 @@ workflows:
               only: /.*/
           requires:
             - install
-      - coverage:
-          filters:
-            tags:
-              only: /.*/
-          requires:
-            - install
       - codecov:
           filters:
             tags:
               only: /.*/
           requires:
-            - coverage
+            - test
       - deploy:
           requires:
             - test
