@@ -1,4 +1,4 @@
-import { Ref } from 'vue'
+import { Ref } from 'vue-demi'
 
 export type Reactive<T> = Ref<T> | T
 

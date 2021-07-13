@@ -6,7 +6,7 @@ import type {
   QueryDefinition,
 } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
 import { skipToken, SkipToken } from '@reduxjs/toolkit/query'
-import { onBeforeUnmount, reactive, shallowRef, toRef } from 'vue'
+import { onBeforeUnmount, reactive, shallowRef, toRef } from 'vue-demi'
 import { computed, watch } from 'vue-demi'
 import { useDispatch } from '../hooks/useDispatch'
 import { Reactive, ReactiveRecord } from './util'

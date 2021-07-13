@@ -9,7 +9,7 @@ import type {
   Override,
 } from '@reduxjs/toolkit/dist/query/tsHelpers'
 import { QueryStatus, skipToken, SkipToken } from '@reduxjs/toolkit/query'
-import { computed, reactive, Ref } from 'vue-demi'
+import { computed, reactive } from 'vue-demi'
 import { useSelector } from '../hooks/useSelector'
 import { Reactive, ReactiveRecord } from './util'
 

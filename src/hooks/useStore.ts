@@ -1,6 +1,6 @@
 import { ReduxStore } from '../key'
 import { Store } from 'redux'
-import { inject } from 'vue'
+import { inject } from 'vue-demi'
 
 export const useStore = <S extends Store = Store>() => {
   const store = inject<S>(ReduxStore)

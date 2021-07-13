@@ -3,7 +3,7 @@ import type {
   QueryDefinition,
 } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
 import { SkipToken } from '@reduxjs/toolkit/query'
-import { reactive, toRefs } from 'vue'
+import { reactive, toRefs } from 'vue-demi'
 import {
   createUseQueryState,
   UseQueryStateDefaultResult,

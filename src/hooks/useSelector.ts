@@ -1,4 +1,4 @@
-import { computed, onBeforeUnmount, shallowRef } from 'vue'
+import { computed, onBeforeUnmount, shallowRef } from 'vue-demi'
 import { useStore } from './useStore'
 import { Store } from 'redux'
 
