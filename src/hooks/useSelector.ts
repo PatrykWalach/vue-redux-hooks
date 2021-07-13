@@ -7,15 +7,15 @@ export type Selector<S, R> = (state: S) => R
 export const useSelector = <S = any, R = any>(select: Selector<S, R>) => {
   const { subscribe, getState } = useStore<Store<S>>()
 
-  const selector = shallowRef(select(getState()))
+  const state = shallowRef(getState())
 
   const unsubscribe = subscribe(() => {
-    const nextState = select(getState())
+    const nextState = getState()
 
-    selector.value = nextState
+    state.value = nextState
   })
 
   onBeforeUnmount(unsubscribe)
 
-  return computed(() => selector.value)
+  return computed(() => select(state.value))
 }
