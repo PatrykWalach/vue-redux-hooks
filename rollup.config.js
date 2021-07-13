@@ -23,14 +23,14 @@ export default [
       //   name: 'VueReduxHooks',
       //   sourcemap: true,
       //   globals: {
-      //     'vue': 'Vue',
+      //     'vue-demi': 'VueDemi',
       //   },
       // },
     ],
 
     plugins: [typescript()],
 
-    external: ['vue', '@reduxjs/toolkit', '@reduxjs/toolkit/query'],
+    external: ['vue-demi', '@reduxjs/toolkit', '@reduxjs/toolkit/query'],
   },
   {
     input: './dist/dts/index.d.ts',
