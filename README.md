@@ -1,15 +1,5 @@
 # vue-redux-hooks [![CircleCI](https://circleci.com/gh/PatrykWalach/vue-redux-hooks.svg?style=svg)](https://circleci.com/gh/PatrykWalach/vue-redux-hooks) [![codecov](https://codecov.io/gh/PatrykWalach/vue-redux-hooks/branch/master/graph/badge.svg)](https://codecov.io/gh/PatrykWalach/vue-redux-hooks) [![](https://img.shields.io/npm/v/vue-redux-hooks)](https://www.npmjs.com/package/vue-redux-hooks) [![](https://img.shields.io/bundlephobia/minzip/vue-redux-hooks)](https://bundlephobia.com/result?p=vue-redux-hooks) ![](https://img.shields.io/npm/dependency-version/vue-redux-hooks/peer/vue) ![](https://img.shields.io/npm/dependency-version/vue-redux-hooks/peer/redux)
 
-## Table of Contents
-
-- [Install](#install)
-- [API](#api)
-  - [ReduxStore](#ReduxStore)
-  - [Hooks](#hooks)
-    - [useStore](#useStore)
-    - [useDispatch](#useDispatch)
-    - [useSelector](#useSelector)
-
 ## Install
 
 ```sh
@@ -41,6 +31,7 @@ export const store = createStore(todos, ['Use Redux'])
 
 export type Store = typeof store
 export type State = ReturnType<typeof todos>
+export type Dispatch = typeof store.dispatch
 ```
 
 ```typescript
@@ -56,7 +47,8 @@ createApp(App).provide(ReduxStore, store).mount('#app')
 
 #### `useStore`
 
-```tsx
+```ts
+// api.ts
 import { useStore } from 'vue-redux-hooks'
 
 export default {
@@ -72,7 +64,8 @@ export default {
 
 #### `useSelector`
 
-```tsx
+```ts
+// api.ts
 import { useSelector } from 'vue-redux-hooks'
 
 export default {
@@ -81,7 +74,7 @@ export default {
 
     const todosLength = useSelector((state: State) => state.length)
 
-    const lastTodo = computed(() => todos.value[todosLength.value])
+    const lastTodo = computed(() => todos.value[todosLength.value - 1])
 
     return { todos, lastTodo }
   },
@@ -90,12 +83,13 @@ export default {
 
 #### `useDispatch`
 
-```tsx
+```ts
+// api.ts
 import { useDispatch } from 'vue-redux-hooks'
 
 export default {
   setup() {
-    const dispatch = useDispatch<Store>()
+    const dispatch = useDispatch<Dispatch>()
 
     const addTodo = (text: string) =>
       dispatch({
@@ -104,6 +98,54 @@ export default {
       })
 
     return { addTodo }
+  },
+}
+```
+
+### RTK Query
+
+### `createApi`
+
+```ts
+// pokemonApi.ts
+// Need to use the Vue-specific entry point to allow generating Vue hooks
+import { createApi } from 'vue-redux-hooks'
+import { fetchBaseQuery } from '@reduxjs/toolkit/query'
+import type { Pokemon } from './types'
+
+// Define a service using a base URL and expected endpoints
+export const pokemonApi = createApi({
+  reducerPath: 'pokemonApi',
+  baseQuery: fetchBaseQuery({ baseUrl: 'https://pokeapi.co/api/v2/' }),
+  endpoints: (builder) => ({
+    getPokemonByName: builder.query<Pokemon, string>({
+      query: (name) => `pokemon/${name}`,
+    }),
+  }),
+})
+
+// Export hooks for usage in function components, which are
+// auto-generated based on the defined endpoints
+export const { useGetPokemonByNameQuery } = pokemonApi
+```
+
+```ts
+// App.vue
+import { toRefs, ref } from 'vue'
+import { useGetPokemonByNameQuery } from './pokemonApi'
+
+export default {
+  setup() {
+    const name = ref('Pikachu')
+
+    const skip = ref(false)
+
+    const query = useGetPokemonByNameQuery(name, {
+      refetchOnReconnect: true,
+      skip,
+    })
+
+    return { name, skip, ...toRefs(query) }
   },
 }
 ```

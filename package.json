@@ -25,7 +25,9 @@
     "composition-api",
     "redux",
     "hooks",
-    "typescript"
+    "typescript",
+    "rtk-query",
+    "query"
   ],
   "author": "Patryk Wałach",
   "license": "MIT",
