@@ -13,6 +13,6 @@ export const useStore = <S extends Store = Store>() => {
 
 function assert(condition: any, message: string): asserts condition {
   if (!condition) {
-    console.error(message)
+    throw message
   }
 }
