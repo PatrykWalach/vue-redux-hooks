@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "declaration": true,
+    "declarationDir": "dist/dts",
     "strict": true,
     "module": "esnext",
     "esModuleInterop": true,
