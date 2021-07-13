@@ -11,7 +11,7 @@ import type {
 import { QueryStatus, skipToken, SkipToken } from '@reduxjs/toolkit/query'
 import { computed, reactive } from 'vue-demi'
 import { useSelector } from '../hooks/useSelector'
-import { Reactive, ReactiveRecord } from './util'
+import { Reactive, ReactiveRecord, refToReactive } from './util'
 
 export type UseQueryStateBaseResult<
   D extends QueryDefinition<any, any, any, any>,
@@ -119,13 +119,12 @@ export const createUseQueryState =
   <D extends QueryDefinition<any, any, any, any>>(
     endpoint: any,
   ): UseQueryState<D> =>
-  (variables, { skip = false } = {}) => {
-    const options = reactive({ skip, variables })
+  (arg, { skip = false } = {}) => {
+    const options = reactive({ skip, arg })
 
-    const variablesOrToken = computed(() =>
-      options.skip ? skipToken : options.variables,
-    )
-    const selector = computed(() => endpoint.select(variablesOrToken.value))
+    const stableArg = computed(() => (options.skip ? skipToken : options.arg))
+
+    const selector = computed(() => endpoint.select(stableArg.value))
 
     const result = useSelector((state) => selector.value(state))
 
@@ -144,11 +143,3 @@ export const createUseQueryState =
       'endpointName',
     ])
   }
-
-function refToReactive<O, K extends keyof O>(result: Ref<O>, keys: K[]): O {
-  return reactive(
-    Object.fromEntries(
-      keys.map((key) => [key, computed(() => result.value[key])]),
-    ),
-  ) as O
-}

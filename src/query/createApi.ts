@@ -4,12 +4,15 @@ import type {
   MutationDefinition,
   QueryDefinition,
 } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
+import type { CoreModule } from '@reduxjs/toolkit/dist/query/core/module'
 import {
   BaseQueryFn,
   buildCreateApi,
   coreModule,
   Module,
+  CreateApi,
 } from '@reduxjs/toolkit/query'
+import { createUseMutation, UseMutation } from './useMutation'
 import { createUseQuery, UseQuery } from './useQuery'
 import { createUseQueryState, UseQueryState } from './useQueryState'
 import {
@@ -45,7 +48,7 @@ type QueryHooks<D extends QueryDefinition<any, any, any, any, any>> = {
 }
 
 type MutationHooks<D extends MutationDefinition<any, any, any, any, any>> = {
-  // useMutation: UseMutation<D>
+  useMutation: UseMutation<D>
 }
 
 export type HooksWithUniqueNames<Definitions extends EndpointDefinitions> =
@@ -58,19 +61,18 @@ export type HooksWithUniqueNames<Definitions extends EndpointDefinitions> =
             >
           }
         : // &
-          //   {
-          //     [K in Keys as `useLazy${Capitalize<K>}Query`]: UseLazyQuery<
-          //       Extract<Definitions[K], QueryDefinition<any, any, any, any>>
-          //     >
-          //   }
-          // Definitions[Keys] extends { type: DefinitionType.mutation }
-          // ? {
-          //     [K in Keys as `use${Capitalize<K>}Mutation`]: UseMutation<
-          //       Extract<Definitions[K], MutationDefinition<any, any, any, any>>
-          //     >
-          //   }
-          // :
-          never
+        //   {
+        //     [K in Keys as `useLazy${Capitalize<K>}Query`]: UseLazyQuery<
+        //       Extract<Definitions[K], QueryDefinition<any, any, any, any>>
+        //     >
+        //   }
+        Definitions[Keys] extends { type: DefinitionType.mutation }
+        ? {
+            [K in Keys as `use${Capitalize<K>}Mutation`]: UseMutation<
+              Extract<Definitions[K], MutationDefinition<any, any, any, any>>
+            >
+          }
+        : never
       : never
     : never
 
@@ -128,14 +130,14 @@ const vueHooksModule = (): Module<typeof vueHooksModuleName> => ({
         }
 
         if (isMutationDefinition(definition)) {
-          // const useMutation = createUseMutation(endpoint)
-          // Object.assign(endpoint, {
-          //   useMutation,
-          // })
+          const useMutation = createUseMutation(endpoint)
+          Object.assign(endpoint, {
+            useMutation,
+          })
 
-          // Object.assign(api, {
-          // [`use${capitalizedEndpointName}Mutation`] : useMutation
-          // })
+          Object.assign(api, {
+            [`use${capitalizedEndpointName}Mutation`]: useMutation,
+          })
           return
         }
       },
@@ -143,10 +145,8 @@ const vueHooksModule = (): Module<typeof vueHooksModuleName> => ({
   },
 })
 
-export const createApi = /* @__PURE__ */ buildCreateApi(
-  coreModule(),
-  vueHooksModule(),
-)
+export const createApi: CreateApi<typeof vueHooksModuleName | CoreModule> =
+  buildCreateApi(coreModule(), vueHooksModule())
 
 const createQueryHooks = <D extends QueryDefinition<any, any, any, any>>(
   endpoint: unknown,
