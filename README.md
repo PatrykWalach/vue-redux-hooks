@@ -29,18 +29,76 @@ function todos(state: string[] = [], action: AnyAction) {
 
 export const store = createStore(todos, ['Use Redux'])
 
-export type Store = typeof store
-export type State = ReturnType<typeof todos>
-export type Dispatch = typeof store.dispatch
+// after augmenting ComponentCustomProperties all other typings are not required
+declare module 'vue' {
+  interface ComponentCustomProperties {
+    $redux: typeof store
+    $reduxState: ReturnType<typeof store.getState>
+  }
+}
 ```
 
 ```typescript
 // main.ts
 import { createApp } from 'vue'
-import { ReduxStore } from 'vue-redux-hooks'
+import { install } from 'vue-redux-hooks'
 import { store } from './store'
 
-createApp(App).provide(ReduxStore, store).mount('#app')
+createApp(App).use(install(store)).mount('#app')
+```
+
+### Options
+
+## `mapState`
+
+```ts
+// App.vue
+import { mapState } from 'vue-redux-hooks'
+
+export default {
+  data() {
+    return {
+      search: 'Today',
+    }
+  },
+  computed: {
+    ...mapState({
+      filteredTodos(this: { search: string }, todos: State) {
+        return todos.filter((todo) => todo.includes(this.search))
+      },
+    }),
+    // or
+    filteredTodos() {
+      return this.$reduxState.filter((todo) => todo.includes(this.search))
+    },
+  },
+}
+```
+
+## `mapDispatch`
+
+```ts
+// App.vue
+import { mapDispatch } from 'vue-redux-hooks'
+
+export default {
+  methods: {
+    ...mapDispatch({
+      addTodo: (dispatch: Dispatch, text: string) =>
+        dispatch({
+          type: 'ADD_TODO',
+          text,
+        }),
+    }),
+    // or
+    addTodo(text: string) {
+      return this.$store.dispatch({
+        type: 'ADD_TODO',
+        text,
+      })
+    },
+  },
+}
 ```
 
 ### Hooks
@@ -48,7 +106,7 @@ createApp(App).provide(ReduxStore, store).mount('#app')
 #### `useStore`
 
 ```ts
-// api.ts
+// App.vue
 import { useStore } from 'vue-redux-hooks'
 
 export default {
@@ -62,21 +120,43 @@ export default {
 }
 ```
 
+#### `useState`
+
+```ts
+// App.vue
+import { useState } from 'vue-redux-hooks'
+import { computed, ref } from 'vue'
+
+export default {
+  setup() {
+    const search = ref('Today')
+
+    const todos = useState<State>()
+
+    const filteredTodos = computed(() =>
+      todos.value.filter((todo) => todo.includes(search.value)),
+    )
+
+    return { filteredTodos }
+  },
+}
+```
+
 #### `useSelector`
 
 ```ts
-// api.ts
+// App.vue
 import { useSelector } from 'vue-redux-hooks'
 
 export default {
   setup() {
-    const todos = useSelector((state: State) => state)
+    const search = ref('Today')
 
-    const todosLength = useSelector((state: State) => state.length)
+    const filteredTodos = useSelector((todos: State) =>
+      todos.filter((todo) => todo.includes(search.value)),
+    )
 
-    const lastTodo = computed(() => todos.value[todosLength.value - 1])
-
-    return { todos, lastTodo }
+    return { filteredTodos }
   },
 }
 ```
@@ -84,7 +164,7 @@ export default {
 #### `useDispatch`
 
 ```ts
-// api.ts
+// App.vue
 import { useDispatch } from 'vue-redux-hooks'
 
 export default {
@@ -108,6 +188,7 @@ export default {
 
 ```ts
 // pokemonApi.ts
+
 // Need to use the Vue-specific entry point to allow generating Vue hooks
 import { createApi } from 'vue-redux-hooks'
 import { fetchBaseQuery } from '@reduxjs/toolkit/query'
