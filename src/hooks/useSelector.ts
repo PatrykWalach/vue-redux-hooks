@@ -1,21 +1,19 @@
-import { computed, onBeforeUnmount, shallowRef } from 'vue-demi'
-import { useStore } from './useStore'
-import { Store } from 'redux'
+import { ComponentCustomProperties, computed } from 'vue-demi'
+import { useState } from './useStore'
 
 export type Selector<S, R> = (state: S) => R
 
-export const useSelector = <S = any, R = any>(select: Selector<S, R>) => {
-  const { subscribe, getState } = useStore<Store<S>>()
-
-  const state = shallowRef(getState())
-
-  const unsubscribe = subscribe(() => {
-    const nextState = getState()
-
-    state.value = nextState
-  })
-
-  onBeforeUnmount(unsubscribe)
+export const useSelector = <
+  S = ComponentCustomProperties extends {
+    $reduxState: infer U
+  }
+    ? U
+    : any,
+  R = any,
+>(
+  select: Selector<S, R>,
+) => {
+  const state = useState<S>()
 
   return computed(() => select(state.value))
 }
