@@ -1,13 +1,11 @@
-export const mapState = <
+export function mapState<
   S = ComponentCustomProperties extends {
     $reduxState: infer U
   }
     ? U
     : any,
   M extends Record<string, ((this: any, state: S) => unknown) | keyof M> = any,
->(
-  map: M,
-) => {
+>(map: M) {
   return Object.fromEntries(
     Object.entries(map).map(([key, value]) => {
       const computed =
@@ -34,19 +32,19 @@ export const mapState = <
 import { AnyAction, Dispatch } from 'redux'
 import { ComponentCustomProperties } from 'vue-demi'
 
-export const mapDispatch = <
+export function mapDispatch<
   D extends Dispatch<AnyAction> = ComponentCustomProperties extends {
     $redux: { dispatch: infer U }
   }
-    ? U
+    ? U extends Dispatch<AnyAction>
+      ? U
+      : Dispatch<AnyAction>
     : Dispatch<AnyAction>,
   M extends Record<
     string,
     (this: any, dispatch: D, ...arg: unknown[]) => unknown
   > = any,
->(
-  map: M,
-) => {
+>(map: M) {
   return Object.fromEntries(
     Object.entries(map).map(([key, value]) => {
       const computed =

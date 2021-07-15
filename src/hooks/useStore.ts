@@ -2,7 +2,7 @@ import { ReduxState, ReduxStore } from '../install'
 import { Store } from 'redux'
 import { inject, Ref, ComponentCustomProperties } from 'vue-demi'
 
-export const useStore = <
+export function useStore<
   S extends Store = ComponentCustomProperties extends {
     $redux: infer U
   }
@@ -10,7 +10,7 @@ export const useStore = <
       ? U
       : Store
     : Store,
->() => {
+>() {
   const store = inject<S>(ReduxStore)
   assert(
     store,
@@ -19,13 +19,13 @@ export const useStore = <
   return store
 }
 
-export const useState = <
+export function useState<
   S = ComponentCustomProperties extends {
     $reduxState: infer U
   }
     ? U
     : any,
->() => {
+>() {
   const state = inject<Ref<S>>(ReduxState)
   assert(
     state,
