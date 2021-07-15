@@ -2,7 +2,8 @@ import { mount } from '@cypress/vue'
 import { configureStore } from '@reduxjs/toolkit'
 import { fetchBaseQuery, setupListeners } from '@reduxjs/toolkit/query'
 import { defineComponent, h, ref } from 'vue-demi'
-import { ReduxStore, createApi } from '../'
+import { createApi } from '../'
+import { install } from '../install'
 
 interface Post {
   id: number
@@ -129,9 +130,7 @@ describe('createApi', () => {
 
     mount(App, {
       global: {
-        provide: {
-          [ReduxStore]: store,
-        },
+        plugins: [install(store)],
       },
     })
 

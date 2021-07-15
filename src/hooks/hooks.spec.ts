@@ -1,8 +1,7 @@
 import { mount } from '@cypress/vue'
 import { configureStore, createSlice, EnhancedStore } from '@reduxjs/toolkit'
 import { defineComponent, h, ref } from 'vue-demi'
-import { ReduxStore, useDispatch, useSelector } from '../../'
-import { useStore } from './useStore'
+import { install, useDispatch, useSelector, useStore } from '../'
 
 export const createCounter = (i: number) =>
   createSlice({
@@ -52,12 +51,10 @@ const App = defineComponent(() => {
 })
 
 describe('hooks', () => {
-  it('query and mutation', () => {
+  it('select and dispatch', () => {
     mount(App, {
       global: {
-        provide: {
-          [ReduxStore]: store,
-        },
+        plugins: [install(store)],
       },
     })
 
