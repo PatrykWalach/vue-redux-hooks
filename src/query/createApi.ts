@@ -1,17 +1,22 @@
+import type { CoreModule } from '@reduxjs/toolkit/dist/query/core/module'
 import type {
   EndpointDefinition,
   EndpointDefinitions,
   MutationDefinition,
   QueryDefinition,
 } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
-import type { CoreModule } from '@reduxjs/toolkit/dist/query/core/module'
 import {
   BaseQueryFn,
   buildCreateApi,
   coreModule,
-  Module,
   CreateApi,
+  Module,
 } from '@reduxjs/toolkit/query'
+import { UseLazyQuery } from './useLazyQuery'
+import {
+  createUseLazyQuerySubscription,
+  UseLazyQuerySubscription,
+} from './useLazyQuerySubscription'
 import { createUseMutation, UseMutation } from './useMutation'
 import { createUseQuery, UseQuery } from './useQuery'
 import { createUseQueryState, UseQueryState } from './useQueryState'
@@ -41,9 +46,9 @@ const vueHooksModuleName = Symbol('vueHooksModule')
 
 type QueryHooks<D extends QueryDefinition<any, any, any, any, any>> = {
   useQuery: UseQuery<D>
-  // useLazyQuery: UseLazyQuery<D>
+  useLazyQuery: UseLazyQuery<D>
   useQuerySubscription: UseQuerySubscription<D>
-  // useLazyQuerySubscription: UseLazyQuerySubscription<D>
+  useLazyQuerySubscription: UseLazyQuerySubscription<D>
   useQueryState: UseQueryState<D>
 }
 
@@ -103,6 +108,16 @@ declare module '@reduxjs/toolkit/dist/query/apiTypes' {
           ? MutationHooks<Definitions[K]>
           : never
       }
+      /**
+       * A hook that accepts a string endpoint name, and provides a callback that when called, pre-fetches the data for that endpoint.
+       */
+      // usePrefetch<EndpointName extends QueryKeys<Definitions>>(
+      //   endpointName: EndpointName,
+      //   options?: PrefetchOptions,
+      // ): (
+      //   arg: QueryArgFrom<Definitions[EndpointName]>,
+      //   options?: PrefetchOptions,
+      // ) => void
     } & HooksWithUniqueNames<Definitions>
   }
 }
@@ -123,7 +138,7 @@ const vueHooksModule = (): Module<typeof vueHooksModuleName> => ({
           Object.assign(endpoint, queryHooks)
           Object.assign(api, {
             [`use${capitalizedEndpointName}Query`]: queryHooks.useQuery,
-            // [`useLazy${capitalizedEndpointName}Query`]:  queryHooks.useLazyQuery
+            [`useLazy${capitalizedEndpointName}Query`]: queryHooks.useLazyQuery,
           })
 
           return
@@ -154,4 +169,6 @@ const createQueryHooks = <D extends QueryDefinition<any, any, any, any>>(
   useQueryState: createUseQueryState(endpoint),
   useQuery: createUseQuery(endpoint),
   useQuerySubscription: createUseQuerySubscription(endpoint),
+  useLazyQuerySubscription: createUseLazyQuerySubscription(endpoint),
+  useLazyQuery: createUseLazyQuerySubscription(endpoint),
 })
