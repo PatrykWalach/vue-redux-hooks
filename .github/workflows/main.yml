@@ -29,4 +29,6 @@ jobs:
           install-command: pnpm install
           build: pnpm run build
           command: pnpm test
+          
+      - uses: codecov/codecov-action@v2
 
