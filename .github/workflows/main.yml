@@ -23,10 +23,13 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: pnpm
 
-      - name: Install dependencies 📦, build app 🏗 and run Component tests 🧪
+      - name: Install dependencies 📦
+        run: pnpm install --frozen-lockfile	
+
+      - name: Build app 🏗 and run Component tests 🧪
         uses: cypress-io/github-action@v2
         with:
-          install-command: pnpm install
+          install: false	
           build: pnpm run build
           command: pnpm test
           
