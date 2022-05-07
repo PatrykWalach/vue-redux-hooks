@@ -8,8 +8,8 @@ export type GetAction = ComponentCustomProperties extends {
   ? U
   : AnyAction
 
-export function useDispatch<TDispatch = Dispatch<GetAction>>(): TDispatch
 export function useDispatch<A extends Action = GetAction>(): Dispatch<A>
+export function useDispatch<TDispatch = Dispatch<GetAction>>(): TDispatch
 export function useDispatch() {
   return useStore().dispatch
 }
