@@ -32,17 +32,14 @@ export function mapState<This, S = GetState>() {
 }
 
 import { AnyAction, Dispatch } from 'redux'
-import { GetDispatch } from './hooks/useDispatch'
+import { GetAction } from './hooks/useDispatch'
 import { GetState } from './hooks/useSelector'
 
-export function mapDispatch<
-  This,
-  D extends Dispatch<AnyAction> = GetDispatch,
->() {
+export function mapDispatch<This, A extends AnyAction = GetAction>() {
   return <
     M extends Record<
       string,
-      (this: This, dispatch: D, ...arg: unknown[]) => unknown
+      (this: This, dispatch: Dispatch<A>, ...arg: unknown[]) => unknown
     > = any,
   >(
     map: M,
@@ -60,7 +57,7 @@ export function mapDispatch<
     ) as {
       [K in keyof M]: M[K] extends (
         this: any,
-        d: D,
+        dispatch: any,
         ...args: infer A
       ) => infer R
         ? (this: This, ...args: A) => R
