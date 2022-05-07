@@ -17,10 +17,12 @@ specifiers:
   eslint: ^8.14.0
   eslint-plugin-prettier: ^4.0.0
   eslint-plugin-vue: ^8.7.1
+  gentype: ^4.3.0
   husky: ^4.3.8
   lint-staged: 12.4.1
   prettier: ^2.6.2
   redux: ^4.2.0
+  rescript: ^9.1.4
   rimraf: ^3.0.2
   rollup: ^2.72.0
   rollup-plugin-dts: ^4.2.1
@@ -50,10 +52,12 @@ devDependencies:
   eslint: 8.14.0
   eslint-plugin-prettier: 4.0.0_eslint@8.14.0+prettier@2.6.2
   eslint-plugin-vue: 8.7.1_eslint@8.14.0
+  gentype: 4.3.0
   husky: 4.3.8
   lint-staged: 12.4.1
   prettier: 2.6.2
   redux: 4.2.0
+  rescript: 9.1.4
   rimraf: 3.0.2
   rollup: 2.72.0
   rollup-plugin-dts: 4.2.1_rollup@2.72.0+typescript@4.6.4
@@ -3689,6 +3693,12 @@ packages:
     engines: {node: '>=6.9.0'}
     dev: true
 
+  /gentype/4.3.0:
+    resolution: {integrity: sha512-lqkc1ZS/Iog4uslRD4De47OV54Hu61vEBsirMKxRlgHIRvm8u6RqsdKxJ7JdJdrzmtKgPNvq1He69SozzW+6dQ==}
+    hasBin: true
+    requiresBuild: true
+    dev: true
+
   /get-assigned-identifiers/1.2.0:
     resolution: {integrity: sha512-mBBwmeGTrxEMO4pMaaf/uUEFHnYtwr8FTe8Y/mer4rcV/bye0qGm6pw1bGZFGStxC5O76c5ZAVBGnqHmOaJpdQ==}
     dev: true
@@ -5258,6 +5268,12 @@ packages:
 
   /require-main-filename/2.0.0:
     resolution: {integrity: sha512-NKN5kMDylKuldxYLSUfrbo5Tuzh4hd+2E8NPPX02mZtn1VuREQToYe/ZdlJy+J3uCpfaiGF05e7B8W0iXbQHmg==}
+    dev: true
+
+  /rescript/9.1.4:
+    resolution: {integrity: sha512-aXANK4IqecJzdnDpJUsU6pxMViCR5ogAxzuqS0mOr8TloMnzAjJFu63fjD6LCkWrKAhlMkFFzQvVQYaAaVkFXw==}
+    hasBin: true
+    requiresBuild: true
     dev: true
 
   /reselect/4.1.5:
