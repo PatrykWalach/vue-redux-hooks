@@ -32,14 +32,14 @@ const App = defineComponent({
     return { index }
   },
   computed: {
-    ...mapState({
+    ...mapState<{ index: keyof State }>()({
       state(state: State) {
-        return state[this.index as keyof State]
+        return state[this.index]
       },
     }),
   },
   methods: {
-    ...mapDispatch({
+    ...mapDispatch()({
       increment0: (dispatch: Dispatch) =>
         dispatch(counter0.actions.INCREMENT()),
       increment1: (dispatch: Dispatch) =>
