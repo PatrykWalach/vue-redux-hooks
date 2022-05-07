@@ -34,7 +34,6 @@ export type UseMutationResult<D extends AnyMutDef> = {
   readonly isLoading: ComputedRef<boolean>
   readonly isSuccess: ComputedRef<boolean>
   readonly isUninitialized: ComputedRef<boolean>
-  readonly originalArgs: ComputedRef<null | undefined | QueryArgFrom<D>>
   readonly startedTimeStamp: ComputedRef<null | undefined | number>
 }
 
@@ -78,7 +77,6 @@ export const createUseMutation =
     return [
       triggerMutation,
       {
-        originalArgs: computed(() => currentState.value.originalArgs),
         data: computed(() => currentState.value.data),
         error: computed(() => currentState.value.error),
         endpointName: computed(() => currentState.value.endpointName),
