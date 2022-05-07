@@ -4,7 +4,7 @@ specifiers:
   '@cypress/code-coverage': ^3.9.12
   '@cypress/vite-dev-server': ^2.2.2
   '@cypress/vue': ^3.1.2
-  '@reduxjs/toolkit': ~1.8.1
+  '@reduxjs/toolkit': 1.6.2
   '@rollup/plugin-typescript': ^8.3.2
   '@types/node': ^17.0.31
   '@typescript-eslint/eslint-plugin': ^5.22.0
@@ -37,7 +37,7 @@ devDependencies:
   '@cypress/code-coverage': 3.9.12_cypress@9.6.0
   '@cypress/vite-dev-server': 2.2.2_vite@2.9.8
   '@cypress/vue': 3.1.2_cypress@9.6.0+vue@3.2.33
-  '@reduxjs/toolkit': 1.8.1
+  '@reduxjs/toolkit': 1.6.2
   '@rollup/plugin-typescript': 8.3.2_rollup@2.72.0+typescript@4.6.4
   '@types/node': 17.0.31
   '@typescript-eslint/eslint-plugin': 5.22.0_5b52bb1e77494a9627aef8db6adb10bc
@@ -1493,11 +1493,11 @@ packages:
       fastq: 1.13.0
     dev: true
 
-  /@reduxjs/toolkit/1.8.1:
-    resolution: {integrity: sha512-Q6mzbTpO9nOYRnkwpDlFOAbQnd3g7zj7CtHAZWz5SzE5lcV97Tf8f3SzOO8BoPOMYBFgfZaqTUZqgGu+a0+Fng==}
+  /@reduxjs/toolkit/1.6.2:
+    resolution: {integrity: sha512-HbfI/hOVrAcMGAYsMWxw3UJyIoAS9JTdwddsjlr5w3S50tXhWb+EMyhIw+IAvCVCLETkzdjgH91RjDSYZekVBA==}
     peerDependencies:
-      react: ^16.9.0 || ^17.0.0 || ^18
-      react-redux: ^7.2.1 || ^8.0.0-beta
+      react: ^16.14.0 || ^17.0.0
+      react-redux: ^7.2.1
     peerDependenciesMeta:
       react:
         optional: true
