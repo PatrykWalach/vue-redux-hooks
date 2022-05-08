@@ -124,7 +124,7 @@ const vueHooksModule = (): Module<typeof vueHooksModuleName> => ({
         }
 
         if (definition.type === DefinitionType.mutation) {
-          const useMutation = createUseMutation(endpoint)
+          const useMutation = createUseMutation(api, endpoint)
           Object.assign(endpoint, {
             useMutation,
           })
