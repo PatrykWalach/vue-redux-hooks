@@ -159,7 +159,7 @@ describe('useMutation', () => {
         expectType<string>(res.requestId)
         expectType<() => void>(res.abort)
         expectType<() => Promise<{ name: string }>>(res.unwrap)
-        // expectType<() => void>(res.reset)
+        expectType<() => void>(res.reset)
         expectType<() => void>(res.unsubscribe)
 
         // abort the mutation immediately to force an error
@@ -232,9 +232,9 @@ describe('useMutation', () => {
               ? 'isSuccess'
               : 'other'}
           </span>
-          {/* <span>{result.originalArgs.value?.name}</span> */}
+          <span>{result.originalArgs.value?.name}</span>
           <button onClick={() => updateUser({ name: 'Yay' })}>trigger</button>
-          {/* <button onClick={result.reset}>reset</button> */}
+          <button onClick={result.reset}>reset</button>
         </>
       )
     })
@@ -244,21 +244,21 @@ describe('useMutation', () => {
       },
     })
     cy.contains(/isUninitialized/i)
-    // cy.contains('Yay').should('not.exist')
+    cy.contains('Yay').should('not.exist')
 
     expect(Object.keys(store.getState().api.mutations)).to.have.lengthOf(0)
 
     cy.contains('trigger').click()
     cy.contains(/isSuccess/i)
-    // cy.contains('Yay')
+    cy.contains('Yay')
 
     expect(Object.keys(store.getState().api.mutations)).to.have.lengthOf(1)
 
-    // cy.contains('reset').click()
+    cy.contains('reset').click()
 
     cy.contains(/isUninitialized/i)
 
-    // cy.contains('Yay').should('not.exist')
-    // expect(Object.keys(store.getState().api.mutations)).to.have.lengthOf(0)
+    cy.contains('Yay').should('not.exist')
+    expect(Object.keys(store.getState().api.mutations)).to.have.lengthOf(0)
   })
 })

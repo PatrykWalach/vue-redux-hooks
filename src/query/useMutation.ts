@@ -11,7 +11,7 @@ import type {
   MutationDefinition,
   QueryArgFrom,
 } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
-import { skipToken } from '@reduxjs/toolkit/query'
+import { Api } from '@reduxjs/toolkit/query'
 import { computed, ComputedRef, shallowRef, watchEffect } from 'vue-demi'
 import { useDispatch } from '../hooks/useDispatch'
 import { useSelector } from '../hooks/useSelector'
@@ -27,6 +27,8 @@ export type MutationError<D> =
 
 export type UseMutationResult<D extends AnyMutDef> = {
   readonly data: ComputedRef<null | undefined | QueryArgFrom<D>>
+  readonly originalArgs: ComputedRef<null | undefined | QueryArgFrom<D>>
+  readonly reset: () => void
   readonly endpointName: ComputedRef<null | undefined | string>
   readonly error: ComputedRef<null | undefined | MutationError<D>>
   readonly fulfilledTimeStamp: ComputedRef<null | undefined | number>
@@ -37,18 +39,22 @@ export type UseMutationResult<D extends AnyMutDef> = {
   readonly startedTimeStamp: ComputedRef<null | undefined | number>
 }
 
-export type UseMutation<D extends AnyMutDef> = () => readonly [
-  MutationTrigger<D>,
-  UseMutationResult<D>,
-]
+export type UseMutationOptions<D> = {
+  readonly fixedCacheKey?: string
+}
+
+export type UseMutation<D extends AnyMutDef> = (
+  options?: UseMutationOptions<D>,
+) => readonly [MutationTrigger<D>, UseMutationResult<D>]
 
 export type AnyMutDef = MutationDefinition<any, any, any, any>
 
 export const createUseMutation =
   <D extends AnyMutDef>(
+    api: Api<any, EndpointDefinitions, any, any>,
     endpoint: ApiEndpointMutation<D, EndpointDefinitions>,
   ): UseMutation<D> =>
-  () => {
+  ({ fixedCacheKey } = {}) => {
     const dispatch = useDispatch<ThunkDispatch<any, any, AnyAction>>()
 
     const promiseRef = shallowRef<MutationActionCreatorResult<D>>()
@@ -56,12 +62,14 @@ export const createUseMutation =
     watchEffect((onCleanup) => {
       const promise = promiseRef.value
       onCleanup(() => {
-        promise?.unsubscribe()
+        if (!promise?.arg.fixedCacheKey) {
+          promise?.reset()
+        }
       })
     })
 
     const triggerMutation = (arg: QueryArgFrom<D>) => {
-      const promise = dispatch(endpoint.initiate(arg))
+      const promise = dispatch(endpoint.initiate(arg, { fixedCacheKey }))
       promiseRef.value = promise
       return promise
     }
@@ -69,14 +77,37 @@ export const createUseMutation =
     const requestId = computed(() => promiseRef.value?.requestId)
 
     const mutationSelector = computed(() =>
-      endpoint.select(requestId.value || skipToken),
+      endpoint.select({
+        fixedCacheKey,
+        requestId: requestId.value,
+      }),
     )
 
     const currentState = useSelector(mutationSelector)
 
+    const originalArgs = computed(() =>
+      fixedCacheKey == null ? promiseRef.value?.arg.originalArgs : undefined,
+    )
+    const reset = () => {
+      const promise = promiseRef.value
+      if (promise) {
+        promiseRef.value = undefined
+      }
+      if (fixedCacheKey) {
+        dispatch(
+          api.internalActions.removeMutationResult({
+            requestId: requestId.value,
+            fixedCacheKey,
+          }),
+        )
+      }
+    }
+
     return [
       triggerMutation,
       {
+        originalArgs,
+        reset,
         data: computed(() => currentState.value.data),
         error: computed(() => currentState.value.error),
         endpointName: computed(() => currentState.value.endpointName),
