@@ -1,3 +1,9 @@
+import { mount } from '@cypress/vue'
+import { configureStore, SerializedError } from '@reduxjs/toolkit'
+
+import { defineComponent, onUpdated, ref, watchEffect } from 'vue'
+import { install } from './install'
+import { createApi } from './query/createApi'
 let amount = 0
 
 function expectType<T>(value: T): T {
@@ -6,7 +12,7 @@ function expectType<T>(value: T): T {
 
 const api = createApi({
   baseQuery: async (arg: any) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await fetch('/request')
     if (arg?.body && 'amount' in arg.body) {
       amount += 1
     }
@@ -70,20 +76,14 @@ afterEach(() => {
   store = getStore()
 })
 
-import { mount } from '@cypress/vue'
-import { configureStore, SerializedError } from '@reduxjs/toolkit'
-import { defineComponent, ref } from 'vue'
-import { install } from './install'
-import { createApi } from './query/createApi'
-
 describe('useMutation', () => {
-  test('useMutation hook sets and unsets the isLoading flag when running', async () => {
+  it('useMutation hook sets and unsets the isLoading flag when running', () => {
     const User = defineComponent(() => {
       const [updateUser, { isLoading }] = api.endpoints.updateUser.useMutation()
 
       return () => (
         <div>
-          <div id="isLoading">{String(isLoading)}</div>
+          <div id="isLoading">{String(isLoading.value)}</div>
           <button onClick={() => updateUser({ name: 'Banana' })}>
             Update User
           </button>
@@ -97,19 +97,22 @@ describe('useMutation', () => {
       },
     })
 
+    cy.intercept('/request', { delay: 150 }).as('request')
+
     cy.get('#isLoading').contains('false')
     cy.contains('Update User').click()
     cy.get('#isLoading').contains('true')
+    cy.wait('@request')
     cy.get('#isLoading').contains('false')
   })
 
-  test('useMutation hook sets data to the resolved response on success', async () => {
+  it('useMutation hook sets data to the resolved response on success', () => {
     const User = defineComponent(() => {
       const [updateUser, { data }] = api.endpoints.updateUser.useMutation()
 
       return () => (
         <div>
-          <div id="result">{JSON.stringify(data)}</div>
+          <div id="result">{JSON.stringify(data.value)}</div>
           <button onClick={() => updateUser({ name: 'Banana' })}>
             Update User
           </button>
@@ -127,14 +130,14 @@ describe('useMutation', () => {
     cy.get('#result').contains(JSON.stringify({ name: 'Banana' }))
   })
 
-  test('useMutation hook callback returns various properties to handle the result', async () => {
+  it('useMutation hook callback returns various properties to handle the result', () => {
     const User = defineComponent(() => {
       const [updateUser] = api.endpoints.updateUser.useMutation()
       const successMsg = ref('')
       const errMsg = ref('')
       const isAborted = ref(false)
 
-      const handleClick = async () => {
+      const handleClick = () => {
         const res = updateUser({ name: 'Banana' })
 
         // no-op simply for clearer type assertions
@@ -181,9 +184,9 @@ describe('useMutation', () => {
       return () => (
         <div>
           <button onClick={handleClick}>Update User and abort</button>
-          <div>{successMsg}</div>
-          <div>{errMsg}</div>
-          <div>{isAborted ? 'Request was aborted' : ''}</div>
+          <div>{successMsg.value}</div>
+          <div>{errMsg.value}</div>
+          <div>{isAborted.value ? 'Request was aborted' : ''}</div>
         </div>
       )
     })
@@ -206,21 +209,7 @@ describe('useMutation', () => {
     cy.contains('Request was aborted')
   })
 
-  // test('useMutation return value contains originalArgs', async () => {
-  //   const { result } = renderHook(api.endpoints.updateUser.useMutation, {
-  //     wrapper: storeRef.wrapper,
-  //   })
-  //   const arg = { name: 'Foo' }
-
-  //   const firstRenderResult = result.current
-  //   expect(firstRenderResult[1].originalArgs).toBe(undefined)
-  //   act(() => void firstRenderResult[0](arg))
-  //   const secondRenderResult = result.current
-  //   expect(firstRenderResult[1].originalArgs).toBe(undefined)
-  //   expect(secondRenderResult[1].originalArgs).toBe(arg)
-  // })
-
-  test('`reset` sets state back to original state', async () => {
+  it('`reset` sets state back to original state', () => {
     const User = defineComponent(() => {
       const [updateUser, result] = api.endpoints.updateUser.useMutation()
       return () => (
@@ -238,24 +227,28 @@ describe('useMutation', () => {
         </>
       )
     })
+
     mount(User, {
       global: {
         plugins: [install(store)],
       },
     })
+
+    cy.intercept('/request', { delay: 150 }).as('request')
+
     cy.contains(/isUninitialized/i)
     cy.contains('Yay').should('not.exist')
 
     expect(Object.keys(store.getState().api.mutations)).to.have.lengthOf(0)
 
     cy.contains('trigger').click()
+    cy.wait('@request').then(() => {
+      expect(Object.keys(store.getState().api.mutations)).to.have.lengthOf(1)
+    })
     cy.contains(/isSuccess/i)
     cy.contains('Yay')
 
-    expect(Object.keys(store.getState().api.mutations)).to.have.lengthOf(1)
-
     cy.contains('reset').click()
-
     cy.contains(/isUninitialized/i)
 
     cy.contains('Yay').should('not.exist')
