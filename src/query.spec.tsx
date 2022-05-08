@@ -73,8 +73,8 @@ afterEach(() => {
 import { mount } from '@cypress/vue'
 import { configureStore, SerializedError } from '@reduxjs/toolkit'
 import { defineComponent, ref } from 'vue'
-import { install } from '../install'
-import { createApi } from './createApi'
+import { install } from './install'
+import { createApi } from './query/createApi'
 
 describe('useMutation', () => {
   test('useMutation hook sets and unsets the isLoading flag when running', async () => {
