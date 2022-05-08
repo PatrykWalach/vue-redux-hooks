@@ -49,7 +49,7 @@ setupListeners(store.dispatch)
 const App = defineComponent({
   setup() {
     const fresh = ref(true)
-    const query = api.useGetPostsQuery(fresh)
+    const { isLoading, data } = api.useGetPostsQuery(fresh)
     const [addPost, mutation] = api.useAddPostMutation()
 
     const post = ref('New post')
@@ -85,17 +85,17 @@ const App = defineComponent({
               post.value = newPost
             }
           },
-          disabled: mutation.isLoading,
+          disabled: mutation.isLoading.value,
         },
         'Add post',
       ),
 
-      query.isLoading
+      isLoading.value
         ? h('div', { class: 'loading' }, 'Loading...')
-        : // : query.isError
+        : // : isError
         // ? h('div')
-        query.data && query.data.length
-        ? query.data.map(({ body, id }) =>
+        data.value?.length
+        ? data.value?.map(({ body, id }) =>
             h('div', { class: 'post', key: id }, body),
           )
         : h('div', { class: 'no-results' }, 'No results'),

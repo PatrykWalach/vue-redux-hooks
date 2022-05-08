@@ -11,8 +11,9 @@ module.exports = (on, config) => {
     const { startDevServer } = require('@cypress/vite-dev-server')
     const vue = require('@vitejs/plugin-vue')
     const istanbul = require('vite-plugin-istanbul')
-
- 
+    /**
+     * @type {import('vite').UserConfig}
+     */
     const viteConfig = {
       plugins: [vue(), istanbul()],
     }

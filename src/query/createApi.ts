@@ -3,7 +3,6 @@ import type {
   CoreModule,
 } from '@reduxjs/toolkit/dist/query/core/module'
 import type {
-  EndpointDefinition,
   EndpointDefinitions,
   MutationDefinition,
   QueryDefinition,
