@@ -2,7 +2,7 @@ export function mapState<This, S = GetState>() {
   return <
     M extends Record<
       string,
-      ((this: This, state: S) => unknown) | keyof M
+      ((this: This, state: S) => unknown) | keyof S
     > = any,
   >(
     map: M,
@@ -49,7 +49,7 @@ export function mapDispatch<This, A extends AnyAction = GetAction>() {
         const computed =
           typeof value === 'function'
             ? function (this: any, ...args: unknown[]) {
-                return value.call(this, this.$redux.dispatch, ...args)
+                return value.call(this, this.$redux.store.dispatch, ...args)
               }
             : undefined
         return [key, computed]
