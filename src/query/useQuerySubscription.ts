@@ -108,7 +108,7 @@ export const createUseQuerySubscription =
         }
 
         const lastSubscriptionOptions = lastPromise?.subscriptionOptions
-        if (lastPromise?.arg !== stableArg) {
+        if (!lastPromise || lastPromise.arg !== stableArg) {
           lastPromise?.unsubscribe()
           const promise = dispatch(
             endpoint.initiate(stableArg, {
