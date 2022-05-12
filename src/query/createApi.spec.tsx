@@ -49,56 +49,45 @@ setupListeners(store.dispatch)
 const App = defineComponent({
   setup() {
     const fresh = ref(true)
-    const { isLoading, data } = api.useGetPostsQuery(fresh)
+    const { isFetching, data } = api.useGetPostsQuery(fresh)
     const [addPost, mutation] = api.useAddPostMutation()
 
     const post = ref('New post')
 
     return () => [
-      h(
-        'button',
-        {
-          class: 'toggle',
-          onClick() {
-            fresh.value = !fresh.value
-          },
-        },
-        'Show fresh',
+      <button class="toggle" onClick={() => (fresh.value = !fresh.value)}>
+        Show fresh
+      </button>,
+      <hr />,
+      <input type="text" v-model={post.value} />,
+      <button
+        class="add"
+        onClick={async () => {
+          const newPost = post.value
+          post.value = ''
+          try {
+            await addPost(newPost).unwrap()
+          } catch {
+            post.value = newPost
+          }
+        }}
+        disabled={mutation.isLoading.value}
+      >
+        Add post
+      </button>,
+      isFetching.value ? (
+        <div class="loading">Loading...</div>
+      ) : // : isError
+      // ? h('div')
+      data.value?.length ? (
+        data.value?.map(({ body, id }) => (
+          <div class="post" key={id}>
+            {body}
+          </div>
+        ))
+      ) : (
+        <div class="no-results">No results</div>
       ),
-      h('hr'),
-      h('input', {
-        value: post.value,
-        onChange(event: any) {
-          post.value = event.target.value
-        },
-      }),
-      h(
-        'button',
-        {
-          class: 'add',
-          async onClick() {
-            const newPost = post.value
-            post.value = ''
-            try {
-              await addPost(newPost).unwrap()
-            } catch {
-              post.value = newPost
-            }
-          },
-          disabled: mutation.isLoading.value,
-        },
-        'Add post',
-      ),
-
-      isLoading.value
-        ? h('div', { class: 'loading' }, 'Loading...')
-        : // : isError
-        // ? h('div')
-        data.value?.length
-        ? data.value?.map(({ body, id }) =>
-            h('div', { class: 'post', key: id }, body),
-          )
-        : h('div', { class: 'no-results' }, 'No results'),
     ]
   },
 })
