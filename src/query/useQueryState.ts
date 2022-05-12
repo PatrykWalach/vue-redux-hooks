@@ -8,7 +8,15 @@ import type {
   ResultTypeFrom,
 } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
 import { QueryStatus, SkipToken, skipToken } from '@reduxjs/toolkit/query'
-import { computed, ComputedRef, unref } from 'vue-demi'
+import {
+  computed,
+  ComputedRef,
+  ref,
+  shallowRef,
+  unref,
+  watch,
+  watchEffect,
+} from 'vue-demi'
 import { useSelector } from '../hooks/useSelector'
 import { Reactive, ReactiveRecord } from './util'
 
@@ -23,9 +31,11 @@ export type QueryError<D> =
 export type UseQueryStateResult<D extends AnyQueryDef> = {
   readonly isUninitialized: ComputedRef<boolean>
   readonly isLoading: ComputedRef<boolean>
+  readonly isFetching: ComputedRef<boolean>
   readonly isSuccess: ComputedRef<boolean>
   readonly isError: ComputedRef<boolean>
   readonly data: ComputedRef<ResultTypeFrom<D> | null | undefined>
+  readonly currentData: ComputedRef<ResultTypeFrom<D> | null | undefined>
   readonly error: ComputedRef<QueryError<D> | null | undefined>
   readonly status: ComputedRef<QueryStatus>
   readonly startedTimeStamp: ComputedRef<number | null | undefined>
@@ -44,6 +54,21 @@ export type UseQueryState<D extends AnyQueryDef> = (
   options?: ReactiveRecord<UseQueryStateOptions<D>>,
 ) => UseQueryStateResult<D>
 
+export function eagerComputed<T>(fn: () => T) {
+  const result = shallowRef(fn())
+
+  watchEffect(
+    () => {
+      result.value = fn()
+    },
+    {
+      flush: 'sync', // needed so updates are immediate.
+    },
+  )
+
+  return computed(() => result.value)
+}
+
 export const createUseQueryState =
   <D extends AnyQueryDef>(
     endpoint: ApiEndpointQuery<D, EndpointDefinitions>,
@@ -55,12 +80,27 @@ export const createUseQueryState =
 
     const result = useSelector(selector)
 
+    const isFetching = eagerComputed(() => result.value.isLoading)
+    const data = ref(result.value.data)
+
+    watch(result, (result) => {
+      if (result.isSuccess) {
+        data.value = result.data
+      }
+    })
+
+    const hasData = computed(() => data.value !== undefined)
+
     return {
+      data: computed(() => data.value),
+      currentData: computed(() => result.value.data),
+      isLoading: eagerComputed(() => !hasData.value && isFetching.value),
+      isFetching: isFetching,
+      isSuccess: computed(
+        () => result.value.isSuccess || (isFetching.value && hasData.value),
+      ),
       isUninitialized: computed(() => result.value.isUninitialized),
-      isLoading: computed(() => result.value.isLoading),
-      isSuccess: computed(() => result.value.isSuccess),
       isError: computed(() => result.value.isError),
-      data: computed(() => result.value.data),
       error: computed(() => result.value.error),
       status: computed(() => result.value.status),
       startedTimeStamp: computed(() => result.value.startedTimeStamp),
