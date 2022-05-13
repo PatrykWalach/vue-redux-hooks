@@ -10,15 +10,13 @@ export function mapState<This, S = GetState>() {
     return Object.fromEntries(
       Object.entries(map).map(([key, value]) => {
         const computed =
-          typeof value === 'string'
-            ? function (this: any) {
-                return this.$redux.state[value]
-              }
-            : typeof value === 'function'
+          typeof value === 'function'
             ? function (this: any) {
                 return value.call(this, this.$redux.state)
               }
-            : undefined
+            : function (this: any) {
+                return this.$redux.state[value]
+              }
         return [key, computed]
       }),
     ) as {
@@ -36,22 +34,19 @@ import { GetAction } from './hooks/useDispatch'
 import { GetState } from './hooks/useSelector'
 
 export function mapDispatch<This, A extends AnyAction = GetAction>() {
-  return <
-    M extends Record<
-      string,
-      (this: This, dispatch: Dispatch<A>, ...arg: unknown[]) => unknown
-    > = any,
-  >(
+  return <M extends Record<string, (...args: unknown[]) => A> = any>(
     map: M,
   ) => {
     return Object.fromEntries(
       Object.entries(map).map(([key, value]) => {
-        const computed =
-          typeof value === 'function'
-            ? function (this: any, ...args: unknown[]) {
-                return value.call(this, this.$redux.store.dispatch, ...args)
-              }
-            : undefined
+        if (typeof value !== 'function') {
+          throw new TypeError('mapDispatch must be a function')
+        }
+
+        const computed = function (this: any, ...args: unknown[]) {
+          return this.$redux.store.dispatch(value.call(this, ...args))
+        }
+
         return [key, computed]
       }),
     ) as {

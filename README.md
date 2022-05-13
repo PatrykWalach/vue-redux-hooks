@@ -32,8 +32,7 @@ export const store = createStore(todos, ['Use Redux'])
 // after augmenting ComponentCustomProperties all other typings are not required
 declare module 'vue' {
   interface ComponentCustomProperties {
-    $redux: typeof store
-    $reduxState: ReturnType<typeof store.getState>
+    $redux: { store: typeof store; state: ReturnType<typeof store.getState> }
   }
 }
 ```
@@ -116,28 +115,6 @@ export default {
     const initialState = store.getState()
 
     return { initialState }
-  },
-}
-```
-
-#### `useState`
-
-```ts
-// App.vue
-import { useState } from 'vue-redux-hooks'
-import { computed, ref } from 'vue'
-
-export default {
-  setup() {
-    const search = ref('Today')
-
-    const todos = useState<State>()
-
-    const filteredTodos = computed(() =>
-      todos.value.filter((todo) => todo.includes(search.value)),
-    )
-
-    return { filteredTodos }
   },
 }
 ```
@@ -226,7 +203,7 @@ export default {
       skip,
     })
 
-    return { name, skip, ...toRefs(query) }
+    return { name, skip, ...query }
   },
 }
 ```
