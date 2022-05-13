@@ -61,14 +61,14 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      filteredTodos(this: { search: string }, todos: State) {
+    ...mapState<{ search: string }>()({
+      filteredTodos(todos: State) {
         return todos.filter((todo) => todo.includes(this.search))
       },
     }),
     // or
     filteredTodos() {
-      return this.$reduxState.filter((todo) => todo.includes(this.search))
+      return this.$redux.state.filter((todo) => todo.includes(this.search))
     },
   },
 }
@@ -82,16 +82,15 @@ import { mapDispatch } from 'vue-redux-hooks'
 
 export default {
   methods: {
-    ...mapDispatch({
-      addTodo: (dispatch: Dispatch, text: string) =>
-        dispatch({
-          type: 'ADD_TODO',
-          text,
-        }),
+    ...mapDispatch()({
+      addTodo: (text: string) => ({
+        type: 'ADD_TODO',
+        text,
+      }),
     }),
     // or
     addTodo(text: string) {
-      return this.$store.dispatch({
+      return this.$redux.store.dispatch({
         type: 'ADD_TODO',
         text,
       })
