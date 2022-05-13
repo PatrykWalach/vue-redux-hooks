@@ -358,7 +358,7 @@ describe('useQuery', () => {
     // Being that nothing has changed in the args, this should never fire.
 
     cy.get('#isFetching').should('contain', 'false')
-    cy.get('#count').should('contain', '3') // even though there was no request, the button click updates the state so this is an expected render
+    cy.get('#count').should('contain', '4') // even though there was no request, the button click updates the state so this is an expected render
   })
 
   it('useQuery hook sets isLoading=true only on initial request', () => {
@@ -456,7 +456,7 @@ describe('useQuery', () => {
     cy.get('#isLoading').should('contain', 'false')
     cy.get('#isFetching').should('contain', 'false')
 
-    cy.get('#count').should('contain', '4')
+    cy.get('#count').should('contain', '3')
     cy.contains('Increment value').click()
     // Being that we already have data and changing the value doesn't trigger a new request, only the button click should impact the render
 
@@ -535,8 +535,14 @@ describe('useQuery', () => {
     cy.get('.status')
       .should('contain', '2')
       .then(() => {
-        expect(loadingHist).to.have.ordered.members([true, false])
-        expect(fetchingHist).to.have.ordered.members([true, false, true, false])
+        expect(loadingHist).to.have.ordered.members([true, false, false])
+        expect(fetchingHist).to.have.ordered.members([
+          true,
+          false,
+          false,
+          true,
+          false,
+        ])
       })
   })
 
