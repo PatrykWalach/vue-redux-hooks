@@ -27,49 +27,41 @@ export type State = ReturnType<typeof store.getState>
 export type Dispatch = typeof store.dispatch
 
 const App = defineComponent({
-  data() {
-    const index: keyof State = 'counter0'
+  data(): { index: keyof State } {
+    const index = 'counter0'
     return { index }
   },
   computed: {
-    ...mapState({
+    ...mapState<{ index: keyof State }>()({
       state(state: State) {
-        return state[this.index as keyof State]
+        return state[this.index]
       },
     }),
   },
   methods: {
-    ...mapDispatch({
-      increment0: (dispatch: Dispatch) =>
-        dispatch(counter0.actions.INCREMENT()),
-      increment1: (dispatch: Dispatch) =>
-        dispatch(counter1.actions.INCREMENT()),
+    ...mapDispatch()({
+      increment0: counter0.actions.INCREMENT,
+      increment1: counter1.actions.INCREMENT,
     }),
   },
 
   render() {
     return [
-      h(
-        'button',
-        {
-          onClick: () => {
-            this.index = this.index === 'counter0' ? 'counter1' : 'counter0'
-          },
-          class: 'change',
-        },
-        'Change counter',
-      ),
-      h(
-        'button',
-        { onClick: this.increment0, class: 'increment0' },
-        'Increment0',
-      ),
-      h(
-        'button',
-        { onClick: this.increment1, class: 'increment1' },
-        'Increment1',
-      ),
-      h('div', {}, `Current count: ${this.state}`),
+      <button
+        class="change"
+        onClick={() => {
+          this.index = this.index === 'counter0' ? 'counter1' : 'counter0'
+        }}
+      >
+        Change counter
+      </button>,
+      <button class="increment0" onClick={this.increment0}>
+        Increment 0
+      </button>,
+      <button class="increment1" onClick={this.increment1}>
+        Increment 1
+      </button>,
+      <div>Current count: {this.state}</div>,
     ]
   },
 })
@@ -92,9 +84,12 @@ describe('hooks', () => {
     cy.get('div').contains('Current count: 2')
   })
 
-  //   it('useStore throws if store not provided', () => {
-  //     expect(() => {
-  //       useStore()
-  //     }).to.throw()
-  //   })
+  it('mapDispatch type error', () => {
+    expect(() => {
+      mapDispatch()({
+        // @ts-expect-error - wrong arg type
+        a: 1,
+      })
+    }).to.throw()
+  })
 })

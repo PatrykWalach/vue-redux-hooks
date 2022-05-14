@@ -1,14 +1,15 @@
 import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit'
 import type { SubscriptionOptions } from '@reduxjs/toolkit/dist/query/core/apiState'
 import type { QueryActionCreatorResult } from '@reduxjs/toolkit/dist/query/core/buildInitiate'
+import { ApiEndpointQuery } from '@reduxjs/toolkit/dist/query/core/module'
 import type {
+  EndpointDefinitions,
   QueryArgFrom,
-  QueryDefinition,
 } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
 import { skipToken, SkipToken } from '@reduxjs/toolkit/query'
-import { onBeforeUnmount, reactive, shallowRef, toRef } from 'vue-demi'
-import { computed, watch } from 'vue-demi'
+import { computed, onBeforeUnmount, shallowRef, unref, watch } from 'vue-demi'
 import { useDispatch } from '../hooks/useDispatch'
+import { AnyQueryDef } from './useQueryState'
 import { Reactive, ReactiveRecord } from './util'
 
 export interface UseQuerySubscriptionOptions extends SubscriptionOptions {
@@ -44,7 +45,7 @@ export interface UseQuerySubscriptionOptions extends SubscriptionOptions {
    * };
    * ```
    */
-  skip?: boolean
+  readonly skip?: boolean
   /**
    * Defaults to `false`. This setting allows you to control whether if a cached result is already available, RTK Query will only serve a cached result, or if it should `refetch` when set to `true` or if an adequate amount of time has passed since the last successful query result.
    * - `false` - Will not cause a query to be performed _unless_ it does not exist yet.
@@ -53,39 +54,37 @@ export interface UseQuerySubscriptionOptions extends SubscriptionOptions {
    *
    * If you specify this option alongside `skip: true`, this **will not be evaluated** until `skip` is false.
    */
-  refetchOnMountOrArgChange?: boolean | number
+  readonly refetchOnMountOrArgChange?: boolean | number
 }
 
-export type UseQuerySubscription<
-  D extends QueryDefinition<any, any, any, any>,
-> = (
+export type UseQuerySubscriptionResult<D extends AnyQueryDef> = {
+  readonly refetch: () => void
+}
+
+export type UseQuerySubscription<D extends AnyQueryDef> = (
   arg: Reactive<QueryArgFrom<D> | SkipToken>,
   options?: ReactiveRecord<UseQuerySubscriptionOptions>,
-) => Pick<QueryActionCreatorResult<D>, 'refetch'>
+) => UseQuerySubscriptionResult<D>
 
 export const createUseQuerySubscription =
-  <D extends QueryDefinition<any, any, any, any>>(
-    endpoint: any,
+  <D extends AnyQueryDef>(
+    endpoint: ApiEndpointQuery<D, EndpointDefinitions>,
   ): UseQuerySubscription<D> =>
-  (arg, { skip = false, pollingInterval = 0, ...otherOptions } = {}) => {
-    const options = reactive({
-      skip,
-      arg,
-      pollingInterval,
-      ...otherOptions,
-    })
-
-    const stableArg = computed(() => (options.skip ? skipToken : options.arg))
-
-    const refetchOnMountOrArgChange = toRef(
-      options,
-      'refetchOnMountOrArgChange',
-    )
+  (
+    arg,
+    {
+      skip = false,
+      pollingInterval = 0,
+      refetchOnMountOrArgChange,
+      ...options
+    } = {},
+  ) => {
+    const stableArg = computed(() => (unref(skip) ? skipToken : unref(arg)))
 
     const stableSubscriptionOptions = computed(() => ({
-      refetchOnReconnect: options.refetchOnReconnect,
-      refetchOnFocus: options.refetchOnFocus,
-      pollingInterval: options.pollingInterval,
+      refetchOnReconnect: unref(options.refetchOnReconnect),
+      refetchOnFocus: unref(options.refetchOnFocus),
+      pollingInterval: unref(pollingInterval),
     }))
 
     const promiseRef = shallowRef<undefined | QueryActionCreatorResult<D>>(
@@ -95,19 +94,22 @@ export const createUseQuerySubscription =
     const dispatch = useDispatch<ThunkDispatch<any, any, AnyAction>>()
 
     watch(
-      [stableArg, refetchOnMountOrArgChange, stableSubscriptionOptions],
+      [
+        stableArg,
+        computed(() => unref(refetchOnMountOrArgChange)),
+        stableSubscriptionOptions,
+      ],
       ([stableArg, forceRefetch, subscriptionOptions], _, onCleanup) => {
         const lastPromise = promiseRef.value
         if (stableArg === skipToken) {
-          lastPromise && lastPromise.unsubscribe()
+          lastPromise?.unsubscribe()
           promiseRef.value = undefined
           return
         }
 
-        const lastSubscriptionOptions =
-          lastPromise && lastPromise.subscriptionOptions
+        const lastSubscriptionOptions = lastPromise?.subscriptionOptions
         if (!lastPromise || lastPromise.arg !== stableArg) {
-          lastPromise && lastPromise.unsubscribe()
+          lastPromise?.unsubscribe()
           const promise = dispatch(
             endpoint.initiate(stableArg, {
               subscriptionOptions,
@@ -126,12 +128,12 @@ export const createUseQuerySubscription =
     )
 
     onBeforeUnmount(() => {
-      promiseRef.value && promiseRef.value.unsubscribe()
+      promiseRef.value?.unsubscribe()
     })
 
     return {
       refetch() {
-        promiseRef.value && promiseRef.value.refetch()
+        promiseRef.value?.refetch()
       },
     }
   }

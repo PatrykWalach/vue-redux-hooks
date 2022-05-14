@@ -1,7 +1,4 @@
 /* eslint-disable @typescript-eslint/no-var-requires*/
-const { startDevServer } = require('@cypress/webpack-dev-server')
-const webpackConfig = require('@vue/cli-service/webpack.config.js')
-
 /// <reference types="cypress" />
 
 /**
@@ -10,12 +7,26 @@ const webpackConfig = require('@vue/cli-service/webpack.config.js')
 module.exports = (on, config) => {
   require('@cypress/code-coverage/task')(on, config)
 
-  on('dev-server:start', (options) =>
-    startDevServer({
-      options,
-      webpackConfig,
-    }),
-  )
+  if (config.testingType === 'component') {
+    const { startDevServer } = require('@cypress/vite-dev-server')
+    const vue = require('@vitejs/plugin-vue')
+    const jsx = require('@vitejs/plugin-vue-jsx')
+    const istanbul = require('vite-plugin-istanbul')
+    /**
+     * @type {import('vite').UserConfig}
+     */
+    const viteConfig = {
+      plugins: [
+        vue({
+          reactivityTransform: true,
+        }),
+        jsx(),
+        istanbul(),
+      ],
+    }
+
+    on('dev-server:start', (options) => startDevServer({ options, viteConfig }))
+  }
 
   return config
 }

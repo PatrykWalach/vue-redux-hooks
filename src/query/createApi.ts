@@ -1,6 +1,9 @@
 import type { CoreModule } from '@reduxjs/toolkit/dist/query/core/module'
 import type {
-  EndpointDefinition,
+  ApiEndpointQuery,
+  CoreModule,
+} from '@reduxjs/toolkit/dist/query/core/module'
+import type {
   EndpointDefinitions,
   MutationDefinition,
   QueryDefinition,
@@ -19,7 +22,11 @@ import {
 } from './useLazyQuerySubscription'
 import { createUseMutation, UseMutation } from './useMutation'
 import { createUseQuery, UseQuery } from './useQuery'
-import { createUseQueryState, UseQueryState } from './useQueryState'
+import {
+  AnyQueryDef,
+  createUseQueryState,
+  UseQueryState,
+} from './useQueryState'
 import {
   createUseQuerySubscription,
   UseQuerySubscription,
@@ -30,19 +37,7 @@ export enum DefinitionType {
   mutation = 'mutation',
 }
 
-export function isQueryDefinition(
-  e: EndpointDefinition<any, any, any, any>,
-): e is QueryDefinition<any, any, any, any> {
-  return e.type === DefinitionType.query
-}
-
-export function isMutationDefinition(
-  e: EndpointDefinition<any, any, any, any>,
-): e is MutationDefinition<any, any, any, any> {
-  return e.type === DefinitionType.mutation
-}
-
-const vueHooksModuleName = Symbol('vueHooksModule')
+export const vueHooksModuleName = Symbol('vueHooksModule')
 
 type QueryHooks<D extends QueryDefinition<any, any, any, any, any>> = {
   useQuery: UseQuery<D>
@@ -122,17 +117,17 @@ declare module '@reduxjs/toolkit/dist/query/apiTypes' {
   }
 }
 
-const capitalize = (str: string) => str[0].toUpperCase() + str.substr(1)
+const capitalize = (str: string) => str[0]?.toUpperCase() + str.substring(1)
 
 const vueHooksModule = (): Module<typeof vueHooksModuleName> => ({
   name: vueHooksModuleName,
   init(api) {
     return {
       injectEndpoint(endpointName, definition) {
-        const endpoint = api.endpoints[endpointName]
+        const endpoint: any = api.endpoints[endpointName]
         const capitalizedEndpointName = capitalize(endpointName)
 
-        if (isQueryDefinition(definition)) {
+        if (definition.type === DefinitionType.query) {
           const queryHooks = createQueryHooks(endpoint)
 
           Object.assign(endpoint, queryHooks)
@@ -144,8 +139,8 @@ const vueHooksModule = (): Module<typeof vueHooksModuleName> => ({
           return
         }
 
-        if (isMutationDefinition(definition)) {
-          const useMutation = createUseMutation(endpoint)
+        if (definition.type === DefinitionType.mutation) {
+          const useMutation = createUseMutation(api, endpoint)
           Object.assign(endpoint, {
             useMutation,
           })
@@ -163,8 +158,8 @@ const vueHooksModule = (): Module<typeof vueHooksModuleName> => ({
 export const createApi: CreateApi<typeof vueHooksModuleName | CoreModule> =
   buildCreateApi(coreModule(), vueHooksModule())
 
-const createQueryHooks = <D extends QueryDefinition<any, any, any, any>>(
-  endpoint: unknown,
+const createQueryHooks = <D extends AnyQueryDef>(
+  endpoint: ApiEndpointQuery<D, EndpointDefinitions>,
 ): QueryHooks<D> => ({
   useQueryState: createUseQueryState(endpoint),
   useQuery: createUseQuery(endpoint),

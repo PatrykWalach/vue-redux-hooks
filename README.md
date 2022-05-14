@@ -1,4 +1,4 @@
-# vue-redux-hooks [![CircleCI](https://circleci.com/gh/PatrykWalach/vue-redux-hooks.svg?style=svg)](https://circleci.com/gh/PatrykWalach/vue-redux-hooks) [![codecov](https://codecov.io/gh/PatrykWalach/vue-redux-hooks/branch/master/graph/badge.svg)](https://codecov.io/gh/PatrykWalach/vue-redux-hooks) [![](https://img.shields.io/npm/v/vue-redux-hooks)](https://www.npmjs.com/package/vue-redux-hooks) [![](https://img.shields.io/bundlephobia/minzip/vue-redux-hooks)](https://bundlephobia.com/result?p=vue-redux-hooks) ![](https://img.shields.io/npm/dependency-version/vue-redux-hooks/peer/vue) ![](https://img.shields.io/npm/dependency-version/vue-redux-hooks/peer/redux)
+# vue-redux-hooks [![codecov](https://codecov.io/gh/PatrykWalach/vue-redux-hooks/branch/master/graph/badge.svg)](https://codecov.io/gh/PatrykWalach/vue-redux-hooks) [![](https://img.shields.io/npm/v/vue-redux-hooks)](https://www.npmjs.com/package/vue-redux-hooks) [![](https://img.shields.io/bundlephobia/minzip/vue-redux-hooks)](https://bundlephobia.com/result?p=vue-redux-hooks) ![](https://img.shields.io/npm/dependency-version/vue-redux-hooks/peer/vue) ![](https://img.shields.io/npm/dependency-version/vue-redux-hooks/peer/redux)
 
 ## Install
 
@@ -32,8 +32,7 @@ export const store = createStore(todos, ['Use Redux'])
 // after augmenting ComponentCustomProperties all other typings are not required
 declare module 'vue' {
   interface ComponentCustomProperties {
-    $redux: typeof store
-    $reduxState: ReturnType<typeof store.getState>
+    $redux: { store: typeof store; state: ReturnType<typeof store.getState> }
   }
 }
 ```
@@ -62,14 +61,14 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      filteredTodos(this: { search: string }, todos: State) {
+    ...mapState<{ search: string }>()({
+      filteredTodos(todos: State) {
         return todos.filter((todo) => todo.includes(this.search))
       },
     }),
     // or
     filteredTodos() {
-      return this.$reduxState.filter((todo) => todo.includes(this.search))
+      return this.$redux.state.filter((todo) => todo.includes(this.search))
     },
   },
 }
@@ -83,16 +82,15 @@ import { mapDispatch } from 'vue-redux-hooks'
 
 export default {
   methods: {
-    ...mapDispatch({
-      addTodo: (dispatch: Dispatch, text: string) =>
-        dispatch({
-          type: 'ADD_TODO',
-          text,
-        }),
+    ...mapDispatch()({
+      addTodo: (text: string) => ({
+        type: 'ADD_TODO',
+        text,
+      }),
     }),
     // or
     addTodo(text: string) {
-      return this.$store.dispatch({
+      return this.$redux.store.dispatch({
         type: 'ADD_TODO',
         text,
       })
@@ -116,28 +114,6 @@ export default {
     const initialState = store.getState()
 
     return { initialState }
-  },
-}
-```
-
-#### `useState`
-
-```ts
-// App.vue
-import { useState } from 'vue-redux-hooks'
-import { computed, ref } from 'vue'
-
-export default {
-  setup() {
-    const search = ref('Today')
-
-    const todos = useState<State>()
-
-    const filteredTodos = computed(() =>
-      todos.value.filter((todo) => todo.includes(search.value)),
-    )
-
-    return { filteredTodos }
   },
 }
 ```
@@ -226,7 +202,7 @@ export default {
       skip,
     })
 
-    return { name, skip, ...toRefs(query) }
+    return { name, skip, ...query }
   },
 }
 ```

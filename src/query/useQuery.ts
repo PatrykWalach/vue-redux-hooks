@@ -1,41 +1,39 @@
+import { ApiEndpointQuery } from '@reduxjs/toolkit/dist/query/core/module'
 import type {
+  EndpointDefinitions,
   QueryArgFrom,
-  QueryDefinition,
 } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
 import { SkipToken } from '@reduxjs/toolkit/query'
-import { reactive, toRefs } from 'vue-demi'
 import {
+  AnyQueryDef,
   createUseQueryState,
-  UseQueryStateDefaultResult,
   UseQueryStateOptions,
   UseQueryStateResult,
 } from './useQueryState'
 import {
   createUseQuerySubscription,
-  UseQuerySubscription,
   UseQuerySubscriptionOptions,
+  UseQuerySubscriptionResult,
 } from './useQuerySubscription'
 import { Reactive, ReactiveRecord } from './util'
 
-export type UseQuery<D extends QueryDefinition<any, any, any, any>> = <
-  R extends Record<string, any> = UseQueryStateDefaultResult<D>,
->(
+export type UseQuery<D extends AnyQueryDef> = (
   arg: Reactive<QueryArgFrom<D> | SkipToken>,
   options?: ReactiveRecord<
-    UseQuerySubscriptionOptions & UseQueryStateOptions<D, R>
+    UseQuerySubscriptionOptions & UseQueryStateOptions<D>
   >,
-) => UseQueryStateResult<D, R> & ReturnType<UseQuerySubscription<D>>
+) => UseQueryStateResult<D> & UseQuerySubscriptionResult<D>
 
-export const createUseQuery = <D extends QueryDefinition<any, any, any, any>>(
-  endpoint: any,
+export const createUseQuery = <D extends AnyQueryDef>(
+  endpoint: ApiEndpointQuery<D, EndpointDefinitions>,
 ): UseQuery<D> => {
   const useQueryState = createUseQueryState(endpoint)
   const useQuerySubscription = createUseQuerySubscription(endpoint)
 
   return (arg, options) => {
-    return reactive({
-      ...toRefs(useQueryState(arg, options)),
+    return {
+      ...useQueryState(arg, options),
       ...useQuerySubscription(arg, options),
-    }) as any
+    }
   }
 }

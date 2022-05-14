@@ -1,145 +1,89 @@
-import type { QuerySubState } from '@reduxjs/toolkit/dist/query/core/apiState'
+import { SerializedError } from '@reduxjs/toolkit'
+import { BaseQueryError } from '@reduxjs/toolkit/dist/query/baseQueryTypes'
+import { ApiEndpointQuery } from '@reduxjs/toolkit/dist/query/core/module'
 import type {
+  EndpointDefinitions,
   QueryArgFrom,
   QueryDefinition,
+  ResultTypeFrom,
 } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
-import type {
-  Id,
-  NoInfer,
-  Override,
-} from '@reduxjs/toolkit/dist/query/tsHelpers'
-import { QueryStatus, skipToken, SkipToken } from '@reduxjs/toolkit/query'
-import { computed, reactive } from 'vue-demi'
+import { QueryStatus, SkipToken, skipToken } from '@reduxjs/toolkit/query'
+import { computed, ComputedRef, ref, unref, watch } from 'vue-demi'
 import { useSelector } from '../hooks/useSelector'
-import { Reactive, ReactiveRecord, refToReactive } from './util'
+import { Reactive, ReactiveRecord } from './util'
 
-export type UseQueryStateBaseResult<
-  D extends QueryDefinition<any, any, any, any>,
-> = QuerySubState<D> & {
-  /**
-   * Query has not started yet.
-   */
-  isUninitialized: false
-  /**
-   * Query is currently loading for the first time. No data yet.
-   */
-  isLoading: false
-  /**
-   * Query is currently fetching, but might have data from an earlier request.
-   */
-  isFetching: false
-  /**
-   * Query has data from a successful load.
-   */
-  isSuccess: false
-  /**
-   * Query is currently in "error" state.
-   */
-  isError: false
+export type AnyQueryDef = QueryDefinition<any, any, any, any>
+
+export type QueryError<D> =
+  | SerializedError
+  | (D extends QueryDefinition<any, infer BaseQuery, any, any>
+      ? BaseQueryError<BaseQuery>
+      : never)
+
+export type UseQueryStateResult<D extends AnyQueryDef> = {
+  readonly isUninitialized: ComputedRef<boolean>
+  readonly isLoading: ComputedRef<boolean>
+  readonly isFetching: ComputedRef<boolean>
+  readonly isSuccess: ComputedRef<boolean>
+  readonly isError: ComputedRef<boolean>
+  readonly data: ComputedRef<ResultTypeFrom<D> | null | undefined>
+  readonly currentData: ComputedRef<ResultTypeFrom<D> | null | undefined>
+  readonly error: ComputedRef<QueryError<D> | null | undefined>
+  readonly status: ComputedRef<QueryStatus>
+  readonly startedTimeStamp: ComputedRef<number | null | undefined>
+  readonly requestId: ComputedRef<string | null | undefined>
+  readonly originalArgs: ComputedRef<QueryArgFrom<D> | null | undefined>
+  readonly fulfilledTimeStamp: ComputedRef<number | null | undefined>
+  readonly endpointName: ComputedRef<string | null | undefined>
 }
 
-export type UseQueryStateDefaultResult<
-  D extends QueryDefinition<any, any, any, any>,
-> = Id<
-  | Override<
-      Extract<
-        UseQueryStateBaseResult<D>,
-        { status: QueryStatus.uninitialized }
-      >,
-      { isUninitialized: true }
-    >
-  | Override<
-      UseQueryStateBaseResult<D>,
-      | { isLoading: true; isFetching: boolean; data: undefined }
-      | ({
-          isSuccess: true
-          isFetching: boolean
-          error: undefined
-        } & Required<
-          Pick<UseQueryStateBaseResult<D>, 'data' | 'fulfilledTimeStamp'>
-        >)
-      | ({ isError: true } & Required<
-          Pick<UseQueryStateBaseResult<D>, 'error'>
-        >)
-    >
->
-
-export type UseQueryStateOptions<
-  D extends QueryDefinition<any, any, any, any>,
-  R extends Record<string, any>,
-> = {
-  /**
-   * Prevents a query from automatically running.
-   *
-   * @remarks
-   * When skip is true:
-   *
-   * - **If the query has cached data:**
-   *   * The cached data **will not be used** on the initial load, and will ignore updates from any identical query until the `skip` condition is removed
-   *   * The query will have a status of `uninitialized`
-   *   * If `skip: false` is set after skipping the initial load, the cached result will be used
-   * - **If the query does not have cached data:**
-   *   * The query will have a status of `uninitialized`
-   *   * The query will not exist in the state when viewed with the dev tools
-   *   * The query will not automatically fetch on mount
-   *   * The query will not automatically run when additional components with the same query are added that do run
-   *
-   * @example
-   * ```ts
-   * // codeblock-meta title="Skip example"
-   * const Pokemon = ({ name, skip }: { name: string; skip: boolean }) => {
-   *   const { data, error, status } = useGetPokemonByNameQuery(name, {
-   *     skip,
-   *   });
-   *
-   *   return (
-   *     <div>
-   *       {name} - {status}
-   *     </div>
-   *   );
-   * };
-   * ```
-   */
-  skip?: boolean
+export type UseQueryStateOptions<D extends AnyQueryDef> = {
+  readonly skip?: boolean
 }
 
-export type UseQueryState<D extends QueryDefinition<any, any, any, any>> = <
-  R = UseQueryStateDefaultResult<D>,
->(
+export type UseQueryState<D extends AnyQueryDef> = (
   arg: Reactive<QueryArgFrom<D> | SkipToken>,
-  options?: ReactiveRecord<UseQueryStateOptions<D, R>>,
-) => UseQueryStateResult<D, R>
-
-export type UseQueryStateResult<
-  _ extends QueryDefinition<any, any, any, any>,
-  R,
-> = NoInfer<R>
+  options?: ReactiveRecord<UseQueryStateOptions<D>>,
+) => UseQueryStateResult<D>
 
 export const createUseQueryState =
-  <D extends QueryDefinition<any, any, any, any>>(
-    endpoint: any,
+  <D extends AnyQueryDef>(
+    endpoint: ApiEndpointQuery<D, EndpointDefinitions>,
   ): UseQueryState<D> =>
   (arg, { skip = false } = {}) => {
-    const options = reactive({ skip, arg })
-
-    const stableArg = computed(() => (options.skip ? skipToken : options.arg))
+    const stableArg = computed(() => (unref(skip) ? skipToken : unref(arg)))
 
     const selector = computed(() => endpoint.select(stableArg.value))
 
-    const result = useSelector((state) => selector.value(state))
+    const result = useSelector(selector)
 
-    return refToReactive(result, [
-      'isUninitialized',
-      'isLoading',
-      'isSuccess',
-      'isError',
-      'data',
-      'error',
-      'status',
-      'startedTimeStamp',
-      'requestId',
-      'originalArgs',
-      'fulfilledTimeStamp',
-      'endpointName',
-    ])
+    const isFetching = computed(() => result.value.isLoading)
+    const data = ref(result.value.data)
+
+    watch(result, (result) => {
+      if (result.isSuccess) {
+        data.value = result.data
+      }
+    })
+
+    const hasData = computed(() => data.value !== undefined)
+
+    return {
+      data: computed(() => data.value),
+      currentData: computed(() => result.value.data),
+      isLoading: computed(() => !hasData.value && isFetching.value),
+      isFetching: isFetching,
+      isSuccess: computed(
+        () => result.value.isSuccess || (isFetching.value && hasData.value),
+      ),
+      isUninitialized: computed(() => result.value.isUninitialized),
+      isError: computed(() => result.value.isError),
+      error: computed(() => result.value.error),
+      status: computed(() => result.value.status),
+      startedTimeStamp: computed(() => result.value.startedTimeStamp),
+      requestId: computed(() => result.value.requestId),
+      originalArgs: computed(() => result.value.originalArgs),
+      fulfilledTimeStamp: computed(() => result.value.fulfilledTimeStamp),
+      endpointName: computed(() => result.value.endpointName),
+    }
   }
