@@ -1,26 +1,25 @@
 import type { AnyAction, ThunkDispatch } from '@reduxjs/toolkit'
 import type { SubscriptionOptions } from '@reduxjs/toolkit/dist/query/core/apiState'
 import type { QueryActionCreatorResult } from '@reduxjs/toolkit/dist/query/core/buildInitiate'
-import type {
-  QueryArgFrom,
-  QueryDefinition,
-} from '@reduxjs/toolkit/dist/query/endpointDefinitions'
+import type { QueryArgFrom } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
 import {
   UninitializedValue,
   UNINITIALIZED_VALUE,
 } from '@reduxjs/toolkit/dist/query/react/constants'
-import { Ref, ToRefs, unref, watchEffect, ref, computed } from 'vue-demi'
+import {
+  computed,
+  ComputedRef,
+  ref,
+  unref,
+  UnwrapRef,
+  watchEffect,
+} from 'vue-demi'
 import { useDispatch } from '../hooks/useDispatch'
+import { AnyQueryDef } from './useQueryState'
 import { ReactiveRecord } from './util'
 
-export type UseLazyQueryLastPromiseInfo<
-  D extends QueryDefinition<any, any, any, any>,
-> = ToRefs<{
-  lastArg: QueryArgFrom<D>
-}>
-
 /**
- * A React hook similar to [`useQuerySubscription`](#usequerysubscription), but with manual control over when the data fetching occurs.
+ * A Vue hook similar to [`useQuerySubscription`](#usequerysubscription), but with manual control over when the data fetching occurs.
  *
  * Note that this hook does not return a request status or cached data. For that use-case, see [`useLazyQuery`](#uselazyquery).
  *
@@ -30,18 +29,15 @@ export type UseLazyQueryLastPromiseInfo<
  * - 'Subscribes' the component to keep cached data in the store, and 'unsubscribes' when the component unmounts
  * - Accepts polling/re-fetching options to trigger automatic re-fetches when the corresponding criteria is met and the fetch has been manually called at least once
  */
-export type UseLazyQuerySubscription<
-  D extends QueryDefinition<any, any, any, any>,
-> = (
+export type UseLazyQuerySubscription<D extends AnyQueryDef> = (
   options?: ReactiveRecord<SubscriptionOptions>,
-) => [
-  trigger: (arg: QueryArgFrom<D>) => void,
-  lastArg: Ref<QueryArgFrom<D> | UninitializedValue>,
+) => readonly [
+  trigger: (arg: UnwrapRef<QueryArgFrom<D>>) => void,
+  lastArg: ComputedRef<QueryArgFrom<D> | UninitializedValue>,
 ]
+
 export const createUseLazyQuerySubscription =
-  <D extends QueryDefinition<any, any, any, any>>({
-    initiate,
-  }: any): UseLazyQuerySubscription<D> =>
+  <D extends AnyQueryDef>({ initiate }: any): UseLazyQuerySubscription<D> =>
   ({ refetchOnReconnect, refetchOnFocus, pollingInterval = 0 } = {}) => {
     const dispatch = useDispatch<ThunkDispatch<any, any, AnyAction>>()
 
@@ -69,7 +65,10 @@ export const createUseLazyQuerySubscription =
       }
     })
 
-    const trigger = function (nextArg: any, preferCacheValue = false) {
+    const trigger = (
+      nextArg: UnwrapRef<QueryArgFrom<D>>,
+      preferCacheValue = false,
+    ) => {
       promiseRef = dispatch(
         initiate(nextArg, {
           subscriptionOptions: stableSubscriptionOptions,
@@ -81,10 +80,11 @@ export const createUseLazyQuerySubscription =
 
     /* if "cleanup on unmount" was triggered from a fast refresh, we want to reinstate the query */
     watchEffect(() => {
-      if (arg.value !== UNINITIALIZED_VALUE && !promiseRef.value) {
-        trigger(arg.value, true)
+      const argValue = arg.value
+      if (argValue !== UNINITIALIZED_VALUE && !promiseRef.value) {
+        trigger(argValue, true)
       }
     })
 
-    return [trigger, arg] as any
+    return [trigger, computed(() => arg.value)] as const
   }

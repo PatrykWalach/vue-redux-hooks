@@ -1,4 +1,3 @@
-import type { CoreModule } from '@reduxjs/toolkit/dist/query/core/module'
 import type {
   ApiEndpointQuery,
   CoreModule,
@@ -15,7 +14,7 @@ import {
   CreateApi,
   Module,
 } from '@reduxjs/toolkit/query'
-import { UseLazyQuery } from './useLazyQuery'
+import { createUseLazyQuery, UseLazyQuery } from './useLazyQuery'
 import {
   createUseLazyQuerySubscription,
   UseLazyQuerySubscription,
@@ -59,14 +58,12 @@ export type HooksWithUniqueNames<Definitions extends EndpointDefinitions> =
             [K in Keys as `use${Capitalize<K>}Query`]: UseQuery<
               Extract<Definitions[K], QueryDefinition<any, any, any, any>>
             >
+          } & {
+            [K in Keys as `useLazy${Capitalize<K>}Query`]: UseLazyQuery<
+              Extract<Definitions[K], QueryDefinition<any, any, any, any>>
+            >
           }
-        : // &
-        //   {
-        //     [K in Keys as `useLazy${Capitalize<K>}Query`]: UseLazyQuery<
-        //       Extract<Definitions[K], QueryDefinition<any, any, any, any>>
-        //     >
-        //   }
-        Definitions[Keys] extends { type: DefinitionType.mutation }
+        : Definitions[Keys] extends { type: DefinitionType.mutation }
         ? {
             [K in Keys as `use${Capitalize<K>}Mutation`]: UseMutation<
               Extract<Definitions[K], MutationDefinition<any, any, any, any>>
@@ -165,5 +162,5 @@ const createQueryHooks = <D extends AnyQueryDef>(
   useQuery: createUseQuery(endpoint),
   useQuerySubscription: createUseQuerySubscription(endpoint),
   useLazyQuerySubscription: createUseLazyQuerySubscription(endpoint),
-  useLazyQuery: createUseLazyQuerySubscription(endpoint),
+  useLazyQuery: createUseLazyQuery(endpoint),
 })
