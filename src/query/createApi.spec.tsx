@@ -1,7 +1,7 @@
-import { mount } from '@cypress/vue'
 import { configureStore } from '@reduxjs/toolkit'
 import { fetchBaseQuery, setupListeners } from '@reduxjs/toolkit/query'
-import { defineComponent, h, ref } from 'vue-demi'
+import { mount } from 'cypress/vue'
+import { defineComponent, ref } from 'vue-demi'
 import { createApi } from '../'
 import { install } from '../install'
 

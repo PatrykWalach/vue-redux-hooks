@@ -1,4 +1,4 @@
-import { mount } from '@cypress/vue'
+import { mount } from 'cypress/vue'
 import { configureStore, createSlice, EnhancedStore } from '@reduxjs/toolkit'
 import { defineComponent, h, ref } from 'vue-demi'
 import { install, useDispatch, useSelector, useStore } from '../'
