@@ -8,8 +8,8 @@ import {
   ref,
   watchEffect,
 } from 'vue'
-import { install } from './install'
-import { createApi } from './query/createApi'
+import { install } from '../src'
+import { createApi } from '../src'
 let amount = 0
 
 function expectType<T>(value: T): T {

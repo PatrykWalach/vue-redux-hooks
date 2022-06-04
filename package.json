@@ -13,7 +13,7 @@
     "build": "rimraf dist typings && tsc --emitDeclarationOnly && rollup -c",
     "codecov": "codecov",
     "lint": "eslint --ext .js,.jsx,.vue,.ts,.tsx --fix src",
-    "test": "cypress run-ct",
+    "test": "cypress run --component",
     "cypress": "cypress open --component"
   },
   "repository": {

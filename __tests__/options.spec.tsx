@@ -1,7 +1,7 @@
 import { configureStore, createSlice, EnhancedStore } from '@reduxjs/toolkit'
 import { mount } from 'cypress/vue'
 import { defineComponent } from 'vue-demi'
-import { install, mapDispatch, mapState } from './'
+import { install, mapDispatch, mapState } from '../src'
 
 export const createCounter = (i: number) =>
   createSlice({
