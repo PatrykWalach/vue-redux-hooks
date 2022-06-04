@@ -536,7 +536,7 @@ describe('useQuery', () => {
     cy.get('.status')
       .should('contain', '2')
       .then(() => {
-        expect(loadingHist).to.have.ordered.members([true, false, false])
+        expect(loadingHist).to.have.ordered.members([true, false, false, false])
         expect(fetchingHist).to.have.ordered.members([
           true,
           false,
