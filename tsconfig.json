@@ -7,7 +7,7 @@
     "esModuleInterop": true,
     "moduleResolution": "node",
     "target": "es2020",
-    "types": ["cypress", "./cypress/support/component.d.ts"],
+    "types": ["cypress"],
     "jsx": "preserve"
   },
   "include": ["src/**/*"],
