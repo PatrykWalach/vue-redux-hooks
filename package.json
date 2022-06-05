@@ -2,15 +2,20 @@
   "name": "vue-redux-hooks",
   "version": "1.2.0",
   "description": "Redux hooks for Vue",
-  "types": "dist/index.d.ts",
-  "main": "dist/vue-redux-hooks.cjs.js",
-  "module": "dist/vue-redux-hooks.esm.js",
-  "unpkg": "dist/vue-redux-hooks.global.js",
-  "files": [
-    "dist/"
-  ],
+  "types": "./dist/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "scripts": {
-    "build": "rimraf dist typings && tsc --emitDeclarationOnly && rollup -c",
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "prepublishOnly": "pnpm run build",
+    "dev": "pnpm run build -- --watch src",
     "codecov": "codecov",
     "lint": "eslint --ext .js,.jsx,.vue,.ts,.tsx --fix src",
     "test": "cypress run --component",
@@ -50,7 +55,6 @@
   "devDependencies": {
     "@cypress/code-coverage": "^3.10.0",
     "@reduxjs/toolkit": "1.8.2",
-    "@rollup/plugin-typescript": "^8.3.2",
     "@typescript-eslint/eslint-plugin": "^5.27.0",
     "@typescript-eslint/parser": "^5.27.0",
     "@vitejs/plugin-vue": "^2.3.3",
@@ -65,9 +69,7 @@
     "lint-staged": "13.0.0",
     "prettier": "^2.6.2",
     "redux": "^4.2.0",
-    "rimraf": "^3.0.2",
-    "rollup": "^2.75.5",
-    "rollup-plugin-dts": "^4.2.2",
+    "tsup": "^6.0.1",
     "typescript": "^4.7.2",
     "vite": "^2.9.9",
     "vite-plugin-istanbul": "^2.7.3",
