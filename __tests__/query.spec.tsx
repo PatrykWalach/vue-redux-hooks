@@ -1,16 +1,15 @@
-import { mount } from '@cypress/vue'
 import { configureStore, SerializedError } from '@reduxjs/toolkit'
 import { QueryStatus } from '@reduxjs/toolkit/dist/query'
+import { mount } from 'cypress/vue'
 import {
-  Component,
   computed,
   defineComponent,
   onBeforeUpdate,
   ref,
   watchEffect,
 } from 'vue'
-import { install } from './install'
-import { createApi } from './query/createApi'
+import { install } from '../src'
+import { createApi } from '../src'
 let amount = 0
 
 function expectType<T>(value: T): T {
@@ -18,7 +17,9 @@ function expectType<T>(value: T): T {
 }
 
 const api = createApi({
-  baseQuery: async (arg: any) => {
+  baseQuery: async (arg: {
+    body?: { amount?: number; forceError?: unknown; name?: string }
+  }) => {
     await fetch('/request')
     if (arg?.body && 'amount' in arg.body) {
       amount += 1
@@ -50,7 +51,7 @@ const api = createApi({
         },
       }),
     }),
-    getIncrementedAmount: build.query<any, void>({
+    getIncrementedAmount: build.query<{ amount: number }, void>({
       query: () => ({
         url: '',
         body: {
@@ -62,7 +63,7 @@ const api = createApi({
       query: (update) => ({ body: update }),
     }),
     getError: build.query({
-      query: (query) => '/error',
+      query: () => ({}),
     }),
   }),
 })
@@ -94,18 +95,18 @@ afterEach(() => {
   count = 0
 })
 
-const withRemount = (cmp: Component) =>
-  defineComponent(() => {
-    const key = ref(0)
-    return () => (
-      <>
-        <cmp key={key.value}></cmp>
-        <button onClick={() => (key.value += 1)} id="remount">
-          Remount
-        </button>
-      </>
-    )
-  })
+const WithRemount = defineComponent((_, ctx) => {
+  const key = ref(0)
+
+  return () => (
+    <>
+      <div key={key.value}>{ctx.slots.default?.()}</div>
+      <button onClick={() => (key.value += 1)} id="remount">
+        Remount
+      </button>
+    </>
+  )
+})
 
 describe('useMutation', () => {
   it('useMutation hook sets and unsets the isLoading flag when running', () => {
@@ -535,7 +536,7 @@ describe('useQuery', () => {
     cy.get('.status')
       .should('contain', '2')
       .then(() => {
-        expect(loadingHist).to.have.ordered.members([true, false, false])
+        expect(loadingHist).to.have.ordered.members([true, false, false, false])
         expect(fetchingHist).to.have.ordered.members([
           true,
           false,
@@ -563,7 +564,10 @@ describe('useQuery', () => {
 
     cy.intercept('/request', { delay: 1500 }).as('request')
 
-    mount(withRemount(User), {
+    mount(WithRemount, {
+      slots: {
+        default: User,
+      },
       global: {
         plugins: [install(store)],
       },
@@ -601,7 +605,10 @@ describe('useQuery', () => {
 
     cy.intercept('/request', { delay: 150 }).as('request')
 
-    mount(withRemount(User), {
+    mount(WithRemount, {
+      slots: {
+        default: User,
+      },
       global: {
         plugins: [install(store)],
       },
@@ -635,7 +642,10 @@ describe('useQuery', () => {
 
     cy.intercept('/request', { delay: 150 }).as('request')
 
-    mount(withRemount(User), {
+    mount(WithRemount, {
+      slots: {
+        default: User,
+      },
       global: {
         plugins: [install(store)],
       },
@@ -724,7 +734,10 @@ describe('useQuery', () => {
       delay: 150,
     }).as('request')
 
-    mount(withRemount(User), {
+    mount(WithRemount, {
+      slots: {
+        default: User,
+      },
       global: {
         plugins: [install(store)],
       },

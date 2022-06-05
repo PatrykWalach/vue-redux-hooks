@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "declarationDir": "dist/dts",
+    "declarationDir": "dist/index.d.ts",
     "strict": true,
     "module": "esnext",
     "esModuleInterop": true,
@@ -11,5 +11,5 @@
     "jsx": "preserve"
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "**/__tests__/*", "src/**/*.spec.ts"]
+  "exclude": ["node_modules", "**/__tests__/*", "**/*.spec.{ts,tsx}"]
 }
