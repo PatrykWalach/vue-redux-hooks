@@ -1,4 +1,4 @@
-# vue-redux-hooks [![codecov](https://codecov.io/gh/PatrykWalach/vue-redux-hooks/branch/master/graph/badge.svg)](https://codecov.io/gh/PatrykWalach/vue-redux-hooks) [![](https://img.shields.io/npm/v/vue-redux-hooks)](https://www.npmjs.com/package/vue-redux-hooks) [![](https://img.shields.io/bundlephobia/minzip/vue-redux-hooks)](https://bundlephobia.com/result?p=vue-redux-hooks) ![](https://img.shields.io/npm/dependency-version/vue-redux-hooks/peer/vue) ![](https://img.shields.io/npm/dependency-version/vue-redux-hooks/peer/redux)
+# vue-redux-hooks [![codecov](https://codecov.io/gh/PatrykWalach/vue-redux-hooks/branch/main/graph/badge.svg?token=HuCorYSywG)](https://codecov.io/gh/PatrykWalach/vue-redux-hooks) [![](https://img.shields.io/npm/v/vue-redux-hooks)](https://www.npmjs.com/package/vue-redux-hooks) [![](https://img.shields.io/bundlephobia/minzip/vue-redux-hooks)](https://bundlephobia.com/result?p=vue-redux-hooks) ![](https://img.shields.io/npm/dependency-version/vue-redux-hooks/peer/vue) ![](https://img.shields.io/npm/dependency-version/vue-redux-hooks/peer/redux)
 
 ## Install
 
