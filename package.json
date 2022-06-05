@@ -13,8 +13,8 @@
     "build": "rimraf dist typings && tsc --emitDeclarationOnly && rollup -c",
     "codecov": "codecov",
     "lint": "eslint --ext .js,.jsx,.vue,.ts,.tsx --fix src",
-    "test": "cypress run-ct",
-    "cypress": "cypress open-ct"
+    "test": "cypress run --component",
+    "cypress": "cypress open --component"
   },
   "repository": {
     "type": "git",
@@ -48,32 +48,30 @@
     }
   },
   "devDependencies": {
-    "@cypress/code-coverage": "^3.9.12",
-    "@cypress/vite-dev-server": "^2.2.2",
-    "@cypress/vue": "^3.1.2",
-    "@reduxjs/toolkit": "1.8.1",
+    "@cypress/code-coverage": "^3.10.0",
+    "@reduxjs/toolkit": "1.8.2",
     "@rollup/plugin-typescript": "^8.3.2",
-    "@typescript-eslint/eslint-plugin": "^5.22.0",
-    "@typescript-eslint/parser": "^5.22.0",
-    "@vitejs/plugin-vue": "^2.3.2",
+    "@typescript-eslint/eslint-plugin": "^5.27.0",
+    "@typescript-eslint/parser": "^5.27.0",
+    "@vitejs/plugin-vue": "^2.3.3",
     "@vitejs/plugin-vue-jsx": "^1.3.10",
     "@vue/eslint-config-prettier": "^7.0.0",
     "@vue/eslint-config-typescript": "^10.0.0",
-    "cypress": "^9.6.0",
-    "eslint": "^8.14.0",
+    "cypress": "^10.0.1",
+    "eslint": "^8.16.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-vue": "^8.7.1",
+    "eslint-plugin-vue": "^9.1.0",
     "husky": "^4.3.8",
-    "lint-staged": "12.4.1",
+    "lint-staged": "13.0.0",
     "prettier": "^2.6.2",
     "redux": "^4.2.0",
     "rimraf": "^3.0.2",
-    "rollup": "^2.72.0",
-    "rollup-plugin-dts": "^4.2.1",
-    "typescript": "^4.6.4",
-    "vite": "^2.9.8",
+    "rollup": "^2.75.5",
+    "rollup-plugin-dts": "^4.2.2",
+    "typescript": "^4.7.2",
+    "vite": "^2.9.9",
     "vite-plugin-istanbul": "^2.7.3",
-    "vue": "^3.2.33"
+    "vue": "^3.2.36"
   },
   "lint-staged": {
     "*.{js,jsx,vue,ts,tsx}": "eslint --cache --fix"
@@ -84,6 +82,6 @@
     }
   },
   "dependencies": {
-    "vue-demi": "^0.12.5"
+    "vue-demi": "^0.13.1"
   }
 }
