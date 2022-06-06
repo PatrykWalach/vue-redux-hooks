@@ -3,10 +3,6 @@ import type { SubscriptionOptions } from '@reduxjs/toolkit/dist/query/core/apiSt
 import type { QueryActionCreatorResult } from '@reduxjs/toolkit/dist/query/core/buildInitiate'
 import type { QueryArgFrom } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
 import {
-  UninitializedValue,
-  UNINITIALIZED_VALUE,
-} from '@reduxjs/toolkit/dist/query/react/constants'
-import {
   computed,
   ComputedRef,
   ref,
@@ -18,6 +14,8 @@ import { useDispatch } from '../hooks/useDispatch'
 import { AnyQueryDef } from './useQueryState'
 import { ReactiveRecord } from './util'
 
+export const UNINITIALIZED_VALUE = Symbol('UNINITIALIZED_VALUE')
+export type UninitializedValue = typeof UNINITIALIZED_VALUE
 /**
  * A Vue hook similar to [`useQuerySubscription`](#usequerysubscription), but with manual control over when the data fetching occurs.
  *

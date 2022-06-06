@@ -1,12 +1,13 @@
 import type { SubscriptionOptions } from '@reduxjs/toolkit/dist/query/core/apiState'
 import type { QueryArgFrom } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
-import {
-  UninitializedValue,
-  UNINITIALIZED_VALUE,
-} from '@reduxjs/toolkit/dist/query/react/constants'
+
 import { skipToken } from '@reduxjs/toolkit/query'
 import { computed, ComputedRef, UnwrapRef } from 'vue-demi'
-import { createUseLazyQuerySubscription } from './useLazyQuerySubscription'
+import {
+  createUseLazyQuerySubscription,
+  UninitializedValue,
+  UNINITIALIZED_VALUE,
+} from './useLazyQuerySubscription'
 import {
   AnyQueryDef,
   createUseQueryState,
