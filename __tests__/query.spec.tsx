@@ -5,6 +5,7 @@ import {
   computed,
   defineComponent,
   onBeforeUpdate,
+  reactive,
   ref,
   watchEffect,
 } from 'vue'
@@ -108,6 +109,212 @@ const WithRemount = defineComponent((_, ctx) => {
   )
 })
 
+describe('useLazyQuery', () => {
+  it('useLazyQuery does not automatically fetch when mounted and has undefined data', async () => {
+    const User = defineComponent(() => {
+      const [fetchUser, { data, isFetching, isUninitialized }] =
+        api.endpoints.getUser.useLazyQuery()
+      useRenderCounter()
+
+      return () => (
+        <div>
+          <div id="isUninitialized">{String(isUninitialized)}</div>
+          <div id="isFetching">{String(isFetching)}</div>
+          <div id="data">{JSON.stringify(data)}</div>
+          <button id="fetchButton" onClick={() => fetchUser(1)}>
+            fetchUser
+          </button>
+          <div id="count">{count}</div>
+        </div>
+      )
+    })
+
+    mount(User, { global: { plugins: [install(store)] } })
+    cy.get('#count').should('contain', '1')
+    cy.get('#isUninitialized').should('contain', 'true')
+    cy.get('#data').should('contain', 'undefined')
+    cy.get('#fetchButton').click()
+    cy.get('#count').should('contain', '2')
+    cy.get('#isUninitialized').should('contain', 'false')
+    cy.get('#isFetching').should('contain', 'false')
+
+    cy.get('#count').should('contain', '3')
+    cy.get('#fetchButton').click()
+    cy.get('#isFetching').should('contain', 'true')
+    cy.get('#isFetching').should('contain', 'false')
+
+    cy.get('#count').should('contain', '5')
+  })
+
+  it('useLazyQuery accepts updated subscription options and only dispatches updateSubscriptionOptions when values are updated', async () => {
+    let interval = 1000
+    const User = defineComponent(() => {
+      const pollingInterval = ref<number>()
+      const [fetchUser, { data, isFetching, isUninitialized }] =
+        api.endpoints.getUser.useLazyQuery({
+          pollingInterval,
+        })
+
+      useRenderCounter()
+
+      return () => (
+        <div>
+          <div id="isUninitialized">{String(isUninitialized)}</div>
+          <div id="isFetching">{String(isFetching)}</div>
+          <div id="data">{JSON.stringify(data)}</div>
+          <div id="count">{count}</div>
+
+          <button id="fetchButton" onClick={() => fetchUser(1)}>
+            fetchUser
+          </button>
+          <button
+            id="updateOptions"
+            onClick={() => (pollingInterval.value = interval)}
+          >
+            updateOptions
+          </button>
+        </div>
+      )
+    })
+
+    mount(User, { global: { plugins: [install(store)] } })
+    cy.get('#count').should('contain', 1) // hook mount
+
+    cy.get('#isUninitialized').should('contain', 'true')
+
+    cy.get('#data').should('contain', 'undefined')
+    cy.get('#fetchButton').click()
+    cy.get('#count').should('contain', 2)
+    cy.get('#isFetching').should('contain', 'true')
+    cy.get('#isFetching').should('contain', 'false')
+
+    cy.get('#count').should('contain', 3)
+    cy.get('#updateOptions').click() // setState = 1
+    cy.get('#count').should('contain', 4)
+    cy.get('#fetchButton').click() // perform new request = 2
+    cy.get('#isFetching').should('contain', 'true')
+    cy.get('#isFetching').should('contain', 'false')
+
+    cy.get('#count').should('contain', 6)
+
+    interval = 1000
+    cy.get('#updateOptions').click() // setState = 1
+    cy.get('#count').should('contain', 7)
+    cy.get('#fetchButton').click()
+    cy.get('#isFetching').should('contain', 'true')
+    cy.get('#isFetching').should('contain', 'false')
+
+    cy.get('#count')
+      .should('contain', 9)
+      .should(() => {
+        expect(
+          store
+            .getState()
+            .actions.filter(
+              api.internalActions.updateSubscriptionOptions.match,
+            ),
+        ).to.have.length(1)
+      })
+  })
+
+  const WithUnmount = defineComponent((_, { slots }) => {
+    const mount = ref(true)
+    return () => (
+      <>
+        {mount.value && slots.default()}
+        <button id="unmount" onClick={() => (mount.value = false)}>
+          unmount
+        </button>
+      </>
+    )
+  })
+
+  it('useLazyQuery accepts updated args and unsubscribes the original query', async () => {
+    const User = defineComponent(() => {
+      const [fetchUser, { data, isFetching, isUninitialized }] =
+        api.endpoints.getUser.useLazyQuery()
+
+      return () => (
+        <div>
+          <div id="isUninitialized">{String(isUninitialized)}</div>
+          <div id="isFetching">{String(isFetching)}</div>
+          <div id="data">{JSON.stringify(data)}</div>
+
+          <button id="fetchUser1" onClick={() => fetchUser(1)}>
+            fetchUser1
+          </button>
+          <button id="fetchUser2" onClick={() => fetchUser(2)}>
+            fetchUser2
+          </button>
+        </div>
+      )
+    })
+
+    mount(WithUnmount, {
+      slots: { default: User },
+      global: { plugins: [install(store)] },
+    })
+
+    cy.get('#isUninitialized').should('contain', 'true')
+
+    cy.get('#data').should('contain', 'undefined')
+    cy.get('#fetchUser1').click()
+    cy.get('#isFetching').should('contain', 'true')
+    cy.get('#isFetching')
+      .should('contain', 'false')
+      .should(() => {
+        // Being that there is only the initial query, no unsubscribe should be dispatched
+        expect(
+          store
+            .getState()
+            .actions.filter(api.internalActions.unsubscribeQueryResult.match),
+        ).to.have.length(0)
+      })
+
+    cy.get('#fetchUser2').click()
+    cy.get('#isFetching').should('contain', 'true')
+    cy.get('#isFetching')
+      .should('contain', 'false')
+      .should(() => {
+        expect(
+          store
+            .getState()
+            .actions.filter(api.internalActions.unsubscribeQueryResult.match),
+        ).to.have.length(1)
+      })
+    cy.get('#fetchUser1')
+      .click()
+      .should(() => {
+        expect(
+          store
+            .getState()
+            .actions.filter(api.internalActions.unsubscribeQueryResult.match),
+        ).to.have.length(2)
+      })
+
+    // we always unsubscribe the original promise and create a new one
+    cy.get('#fetchUser1')
+      .click()
+      .should(() => {
+        expect(
+          store
+            .getState()
+            .actions.filter(api.internalActions.unsubscribeQueryResult.match),
+        ).to.have.length(3)
+      })
+
+    cy.get('#unmount')
+      .click()
+      .should(() => {
+        // We unsubscribe after the component unmounts
+        expect(
+          store
+            .getState()
+            .actions.filter(api.internalActions.unsubscribeQueryResult.match),
+        ).to.have.length(4)
+      })
+  })
+})
 describe('useMutation', () => {
   it('useMutation hook sets and unsets the isLoading flag when running', () => {
     const User = defineComponent(() => {
