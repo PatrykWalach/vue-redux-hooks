@@ -8,7 +8,7 @@ import type {
   ResultTypeFrom,
 } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
 import { QueryStatus, SkipToken, skipToken } from '@reduxjs/toolkit/query'
-import { computed, ComputedRef, ref, unref, watch } from 'vue-demi'
+import { ComputedRef, computed, ref, unref, watch } from 'vue-demi'
 import { useSelector } from '../hooks/useSelector'
 import { Reactive, ReactiveRecord } from './util'
 
@@ -37,7 +37,7 @@ export type UseQueryStateResult<D extends AnyQueryDef> = {
   readonly endpointName: ComputedRef<string | null | undefined>
 }
 
-export type UseQueryStateOptions<D extends AnyQueryDef> = {
+export type UseQueryStateOptions<_D extends AnyQueryDef> = {
   readonly skip?: boolean
 }
 
