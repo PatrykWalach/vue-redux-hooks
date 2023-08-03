@@ -99,7 +99,7 @@ export const createUseQuerySubscription =
         computed(() => unref(refetchOnMountOrArgChange)),
         stableSubscriptionOptions,
       ],
-      ([stableArg, forceRefetch, subscriptionOptions], _, onCleanup) => {
+      ([stableArg, forceRefetch, subscriptionOptions], _) => {
         const lastPromise = promiseRef.value
         if (stableArg === skipToken) {
           lastPromise?.unsubscribe()
