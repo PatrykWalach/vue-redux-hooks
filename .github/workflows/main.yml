@@ -32,4 +32,6 @@ jobs:
           command: pnpm test
           
       - uses: codecov/codecov-action@v2
+      - name: Publish to pkg.pr.new
+        run: pnpm run pkg-pr-new-publish
 

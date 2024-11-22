@@ -19,7 +19,8 @@
     "codecov": "codecov",
     "lint": "eslint --ext .js,.jsx,.vue,.ts,.tsx --fix src",
     "test": "cypress run --component",
-    "cypress": "cypress open --component"
+    "cypress": "cypress open --component",
+    "pkg-pr-new-publish": "pkg-pr-new publish"
   },
   "repository": {
     "type": "git",
