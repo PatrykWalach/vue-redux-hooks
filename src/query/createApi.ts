@@ -55,18 +55,18 @@ export type HooksWithUniqueNames<Definitions extends EndpointDefinitions> =
             >
           }
         : // &
-        //   {
-        //     [K in Keys as `useLazy${Capitalize<K>}Query`]: UseLazyQuery<
-        //       Extract<Definitions[K], QueryDefinition<any, any, any, any>>
-        //     >
-        //   }
-        Definitions[Keys] extends { type: DefinitionType.mutation }
-        ? {
-            [K in Keys as `use${Capitalize<K>}Mutation`]: UseMutation<
-              Extract<Definitions[K], MutationDefinition<any, any, any, any>>
-            >
-          }
-        : never
+          //   {
+          //     [K in Keys as `useLazy${Capitalize<K>}Query`]: UseLazyQuery<
+          //       Extract<Definitions[K], QueryDefinition<any, any, any, any>>
+          //     >
+          //   }
+          Definitions[Keys] extends { type: DefinitionType.mutation }
+          ? {
+              [K in Keys as `use${Capitalize<K>}Mutation`]: UseMutation<
+                Extract<Definitions[K], MutationDefinition<any, any, any, any>>
+              >
+            }
+          : never
       : never
     : never
 
@@ -94,8 +94,8 @@ declare module '@reduxjs/toolkit/dist/query/apiTypes' {
         >
           ? QueryHooks<Definitions[K]>
           : Definitions[K] extends MutationDefinition<any, any, any, any, any>
-          ? MutationHooks<Definitions[K]>
-          : never
+            ? MutationHooks<Definitions[K]>
+            : never
       }
     } & HooksWithUniqueNames<Definitions>
   }
