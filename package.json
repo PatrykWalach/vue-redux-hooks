@@ -28,6 +28,7 @@
   },
   "files": ["dist"],
   "scripts": {
+    "pkg-pr-new-publish": "pkg-pr-new publish",
     "build": "tsup src/index.ts src/query/index.ts --format cjs,esm --dts --clean",
     "prepublishOnly": "pnpm run build",
     "dev": "pnpm run build -- --watch src",
@@ -92,6 +93,7 @@
     }
   },
   "dependencies": {
+    "pkg-pr-new": "^0.0.30",
     "vue-demi": "^0.13.1"
   },
   "packageManager": "pnpm@9.14.2"
