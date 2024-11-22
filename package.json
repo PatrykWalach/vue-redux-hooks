@@ -1,5 +1,6 @@
 {
   "name": "vue-redux-hooks",
+  "type": "commonjs",
   "version": "1.2.0",
   "description": "Redux hooks for Vue",
   "types": "./dist/index.d.ts",
@@ -7,13 +8,29 @@
   "module": "./dist/index.mjs",
   "exports": {
     ".": {
-      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts",
+      "node": {
+        "module-sync": "./dist/index.mjs",
+        "default": "./dist/index.js"
+      },
       "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
+      "default": "./dist/index.js"
+    },
+    "./query": {
+      "types": "./dist/query/index.d.ts",
+      "node": {
+        "module-sync": "./dist/query/index.mjs",
+        "default": "./dist/query/index.js"
+      },
+      "import": "./dist/query/index.mjs",
+      "default": "./dist/query/index.js"
     }
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "build": "tsup src/index.ts src/query/index.ts --format cjs,esm --dts --clean",
     "prepublishOnly": "pnpm run build",
     "dev": "pnpm run build -- --watch src",
     "codecov": "codecov",
@@ -87,5 +104,5 @@
   "dependencies": {
     "vue-demi": "^0.13.1"
   },
-  "packageManager": "pnpm@6.20.3"
+  "packageManager": "pnpm@9.14.2"
 }
