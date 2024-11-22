@@ -9,7 +9,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Setup Biome
         uses: biomejs/setup-biome@v2
       - run: biome ci .
@@ -23,9 +23,9 @@ jobs:
 
     name: Component tests on Node v${{ matrix.node }}
     steps:
-      - uses: actions/checkout@v2
-      - uses: pnpm/action-setup@v3
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
           cache: pnpm
@@ -36,20 +36,20 @@ jobs:
         run: pnpm exec cypress install
 
       - name: Build app 🏗 and run Component tests 🧪
-        uses: cypress-io/github-action@v4
+        uses: cypress-io/github-action@v6
         with:
           install: false
           build: pnpm run build
           command: pnpm test
 
-      - uses: codecov/codecov-action@v2
+      - uses: codecov/codecov-action@v5
 
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: pnpm/action-setup@v3
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
           cache: pnpm
