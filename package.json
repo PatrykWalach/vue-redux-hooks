@@ -1,29 +1,29 @@
 {
   "name": "vue-redux-hooks",
-  "type": "commonjs",
+  "type": "module",
   "version": "1.2.0",
   "description": "Redux hooks for Vue",
   "types": "./dist/index.d.ts",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "node": {
-        "module-sync": "./dist/index.mjs",
-        "default": "./dist/index.js"
+        "module-sync": "./dist/index.js",
+        "default": "./dist/index.cjs"
       },
-      "import": "./dist/index.mjs",
-      "default": "./dist/index.js"
+      "import": "./dist/index.js",
+      "default": "./dist/index.cjs"
     },
     "./query": {
       "types": "./dist/query/index.d.ts",
       "node": {
-        "module-sync": "./dist/query/index.mjs",
-        "default": "./dist/query/index.js"
+        "module-sync": "./dist/query/index.js",
+        "default": "./dist/query/index.cjs"
       },
-      "import": "./dist/query/index.mjs",
-      "default": "./dist/query/index.js"
+      "import": "./dist/query/index.js",
+      "default": "./dist/query/index.cjs"
     }
   },
   "files": [
