@@ -1,21 +1,27 @@
 {
   "name": "vue-redux-hooks",
+  "type": "module",
   "version": "1.2.0",
   "description": "Redux hooks for Vue",
   "types": "./dist/index.d.ts",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "exports": {
-    ".": {
-      "require": "./dist/index.js",
-      "import": "./dist/index.mjs",
-      "types": "./dist/index.d.ts"
-    }
+    "types": "./dist/index.d.ts",
+    "node": {
+      "module-sync": "./dist/index.js",
+      "default": "./dist/index.cjs"
+    },
+    "import": "./dist/index.js",
+    "default": "./dist/index.cjs"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup src/index.ts --format cjs,esm --dts --clean",
-    "prepublishOnly": "pnpm run build",
-    "dev": "pnpm run build -- --watch src",
+    "prepublishOnly": "bun run build",
+    "dev": "bun run build -- --watch src",
     "codecov": "codecov",
     "lint": "eslint --ext .js,.jsx,.vue,.ts,.tsx --fix src",
     "test": "cypress run --component",

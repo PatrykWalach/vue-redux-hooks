@@ -8,23 +8,16 @@ on:
 jobs:
   component-tests:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node: [15, 16]
-
-    name: Component tests on Node v${{ matrix.node }}
+    name: Component tests on Bun
     steps:
       - uses: actions/checkout@v2
-      - uses: pnpm/action-setup@v2.0.1
+      - name: Install bun
+        uses: oven-sh/setup-bun@v2
         with:
-          version: 6.20.3
-      - uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node }}
-          cache: pnpm
+          bun-version-file: "package.json"
 
       - name: Install dependencies 📦
-        run: pnpm install --frozen-lockfile	
+        run: bun install --frozen-lockfile	
 
       - name: Build app 🏗 and run Component tests 🧪
         uses: cypress-io/github-action@v4
