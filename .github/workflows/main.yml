@@ -24,6 +24,8 @@ jobs:
 
       - name: Install dependencies 📦
         run: pnpm install --frozen-lockfile	
+      - name: Install cypress
+        run: pnpm exec cypress install
 
       - name: Build app 🏗 and run Component tests 🧪
         uses: cypress-io/github-action@v4
