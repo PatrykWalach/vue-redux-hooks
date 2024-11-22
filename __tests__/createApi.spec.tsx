@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import { fetchBaseQuery, setupListeners } from '@reduxjs/toolkit/query'
 import { mount } from 'cypress/vue'
 import { defineComponent, ref } from 'vue-demi'
-import { createApi } from '../src'
+import { createApi } from '../src/query'
 import { install } from '../src'
 
 interface Post {
