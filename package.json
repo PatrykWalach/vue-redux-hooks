@@ -26,9 +26,7 @@
       "default": "./dist/query/index.cjs"
     }
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "pkg-pr-new-publish": "pkg-pr-new publish",
     "build": "tsup src/index.ts src/query/index.ts --format cjs,esm --dts --clean",
