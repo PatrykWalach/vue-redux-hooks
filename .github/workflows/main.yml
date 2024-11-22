@@ -23,8 +23,8 @@ jobs:
         uses: cypress-io/github-action@v4
         with:
           install: false	
-          build: pnpm run build
-          command: pnpm test
+          build: bun run build
+          command: bun run test
           
       - uses: codecov/codecov-action@v2
 
