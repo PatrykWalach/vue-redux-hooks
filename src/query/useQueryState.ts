@@ -37,7 +37,7 @@ export type UseQueryStateResult<D extends AnyQueryDef> = {
   readonly endpointName: ComputedRef<string | null | undefined>
 }
 
-export type UseQueryStateOptions<D extends AnyQueryDef> = {
+export type UseQueryStateOptions<_D extends AnyQueryDef> = {
   readonly skip?: boolean
 }
 

@@ -29,7 +29,7 @@ export function mapState<This, S = GetState>() {
   }
 }
 
-import { AnyAction, Dispatch } from 'redux'
+import { AnyAction } from 'redux'
 import { GetAction } from './hooks/useDispatch'
 import { GetState } from './hooks/useSelector'
 
