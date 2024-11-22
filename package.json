@@ -85,5 +85,6 @@
   },
   "dependencies": {
     "vue-demi": "^0.13.1"
-  }
+  },
+  "packageManager": "pnpm@6.20.3"
 }
