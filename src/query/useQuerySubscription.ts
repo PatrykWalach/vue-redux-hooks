@@ -57,7 +57,7 @@ export interface UseQuerySubscriptionOptions extends SubscriptionOptions {
   readonly refetchOnMountOrArgChange?: boolean | number
 }
 
-export type UseQuerySubscriptionResult<D extends AnyQueryDef> = {
+export type UseQuerySubscriptionResult<_D extends AnyQueryDef> = {
   readonly refetch: () => void
 }
 
@@ -99,7 +99,7 @@ export const createUseQuerySubscription =
         computed(() => unref(refetchOnMountOrArgChange)),
         stableSubscriptionOptions,
       ],
-      ([stableArg, forceRefetch, subscriptionOptions], _, onCleanup) => {
+      ([stableArg, forceRefetch, subscriptionOptions]) => {
         const lastPromise = promiseRef.value
         if (stableArg === skipToken) {
           lastPromise?.unsubscribe()

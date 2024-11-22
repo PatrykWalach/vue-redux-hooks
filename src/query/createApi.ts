@@ -55,29 +55,29 @@ export type HooksWithUniqueNames<Definitions extends EndpointDefinitions> =
             >
           }
         : // &
-          //   {
-          //     [K in Keys as `useLazy${Capitalize<K>}Query`]: UseLazyQuery<
-          //       Extract<Definitions[K], QueryDefinition<any, any, any, any>>
-          //     >
-          //   }
-          Definitions[Keys] extends { type: DefinitionType.mutation }
-          ? {
-              [K in Keys as `use${Capitalize<K>}Mutation`]: UseMutation<
-                Extract<Definitions[K], MutationDefinition<any, any, any, any>>
-              >
-            }
-          : never
+        //   {
+        //     [K in Keys as `useLazy${Capitalize<K>}Query`]: UseLazyQuery<
+        //       Extract<Definitions[K], QueryDefinition<any, any, any, any>>
+        //     >
+        //   }
+        Definitions[Keys] extends { type: DefinitionType.mutation }
+        ? {
+            [K in Keys as `use${Capitalize<K>}Mutation`]: UseMutation<
+              Extract<Definitions[K], MutationDefinition<any, any, any, any>>
+            >
+          }
+        : never
       : never
     : never
 
 declare module '@reduxjs/toolkit/dist/query/apiTypes' {
   export interface ApiModules<
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // biome-ignore lint/correctness/noUnusedVariables: All declarations of 'ApiModules' must have identical type parameters.
     BaseQuery extends BaseQueryFn,
     Definitions extends EndpointDefinitions,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // biome-ignore lint/correctness/noUnusedVariables: All declarations of 'ApiModules' must have identical type parameters.
     ReducerPath extends string,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // biome-ignore lint/correctness/noUnusedVariables: All declarations of 'ApiModules' must have identical type parameters.
     TagTypes extends string,
   > {
     [vueHooksModuleName]: {
@@ -94,8 +94,8 @@ declare module '@reduxjs/toolkit/dist/query/apiTypes' {
         >
           ? QueryHooks<Definitions[K]>
           : Definitions[K] extends MutationDefinition<any, any, any, any, any>
-            ? MutationHooks<Definitions[K]>
-            : never
+          ? MutationHooks<Definitions[K]>
+          : never
       }
     } & HooksWithUniqueNames<Definitions>
   }

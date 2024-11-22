@@ -39,7 +39,7 @@ export type UseMutationResult<D extends AnyMutDef> = {
   readonly startedTimeStamp: ComputedRef<null | undefined | number>
 }
 
-export type UseMutationOptions<D> = {
+export type UseMutationOptions<_D> = {
   readonly fixedCacheKey?: string
 }
 
