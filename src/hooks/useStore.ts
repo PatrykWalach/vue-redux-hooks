@@ -1,8 +1,8 @@
-import { Action, Store } from 'redux'
+import type { Action, Store } from 'redux'
 import { inject } from 'vue-demi'
-import { DefaultReduxContext, ReduxContext } from '../install'
-import { GetAction } from './useDispatch'
-import { GetState } from './useSelector'
+import { DefaultReduxContext, type ReduxContext } from '../install'
+import type { GetAction } from './useDispatch'
+import type { GetState } from './useSelector'
 
 export function useStore<S = GetState, A extends Action = GetAction>(): Store<
   S,

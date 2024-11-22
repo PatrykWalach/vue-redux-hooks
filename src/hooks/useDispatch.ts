@@ -1,5 +1,5 @@
-import { Action, AnyAction, Dispatch } from 'redux'
-import { ComponentCustomProperties } from 'vue-demi'
+import type { Action, AnyAction, Dispatch } from 'redux'
+import type { ComponentCustomProperties } from 'vue-demi'
 import { useStore } from './useStore'
 
 export type GetAction = ComponentCustomProperties extends {

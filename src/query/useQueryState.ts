@@ -1,16 +1,20 @@
-import { SerializedError } from '@reduxjs/toolkit'
-import { BaseQueryError } from '@reduxjs/toolkit/dist/query/baseQueryTypes'
-import { ApiEndpointQuery } from '@reduxjs/toolkit/dist/query/core/module'
+import type { SerializedError } from '@reduxjs/toolkit'
+import type { BaseQueryError } from '@reduxjs/toolkit/dist/query/baseQueryTypes'
+import type { ApiEndpointQuery } from '@reduxjs/toolkit/dist/query/core/module'
 import type {
   EndpointDefinitions,
   QueryArgFrom,
   QueryDefinition,
   ResultTypeFrom,
 } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
-import { QueryStatus, SkipToken, skipToken } from '@reduxjs/toolkit/query'
-import { computed, ComputedRef, ref, unref, watch } from 'vue-demi'
+import {
+  type QueryStatus,
+  type SkipToken,
+  skipToken,
+} from '@reduxjs/toolkit/query'
+import { type ComputedRef, computed, ref, unref, watch } from 'vue-demi'
 import { useSelector } from '../hooks/useSelector'
-import { Reactive, ReactiveRecord } from './util'
+import type { Reactive, ReactiveRecord } from './util'
 
 export type AnyQueryDef = QueryDefinition<any, any, any, any>
 
@@ -37,7 +41,7 @@ export type UseQueryStateResult<D extends AnyQueryDef> = {
   readonly endpointName: ComputedRef<string | null | undefined>
 }
 
-export type UseQueryStateOptions<D extends AnyQueryDef> = {
+export type UseQueryStateOptions<_D extends AnyQueryDef> = {
   readonly skip?: boolean
 }
 

@@ -26,15 +26,13 @@
       "default": "./dist/query/index.cjs"
     }
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "scripts": {
     "build": "tsup src/index.ts src/query/index.ts --format cjs,esm --dts --clean",
     "prepublishOnly": "pnpm run build",
     "dev": "pnpm run build -- --watch src",
     "codecov": "codecov",
-    "lint": "eslint --ext .js,.jsx,.vue,.ts,.tsx --fix src",
+    "lint": "biome check",
     "test": "cypress run --component",
     "cypress": "cypress open --component"
   },
@@ -70,6 +68,7 @@
     }
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
     "@cypress/code-coverage": "^3.13.7",
     "@reduxjs/toolkit": "1.8.2",
     "@typescript-eslint/eslint-plugin": "^5.27.0",

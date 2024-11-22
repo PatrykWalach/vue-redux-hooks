@@ -1,16 +1,16 @@
-import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit'
+import type { AnyAction, ThunkDispatch } from '@reduxjs/toolkit'
 import type { SubscriptionOptions } from '@reduxjs/toolkit/dist/query/core/apiState'
 import type { QueryActionCreatorResult } from '@reduxjs/toolkit/dist/query/core/buildInitiate'
-import { ApiEndpointQuery } from '@reduxjs/toolkit/dist/query/core/module'
+import type { ApiEndpointQuery } from '@reduxjs/toolkit/dist/query/core/module'
 import type {
   EndpointDefinitions,
   QueryArgFrom,
 } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
-import { skipToken, SkipToken } from '@reduxjs/toolkit/query'
+import { type SkipToken, skipToken } from '@reduxjs/toolkit/query'
 import { computed, onBeforeUnmount, shallowRef, unref, watch } from 'vue-demi'
 import { useDispatch } from '../hooks/useDispatch'
-import { AnyQueryDef } from './useQueryState'
-import { Reactive, ReactiveRecord } from './util'
+import type { AnyQueryDef } from './useQueryState'
+import type { Reactive, ReactiveRecord } from './util'
 
 export interface UseQuerySubscriptionOptions extends SubscriptionOptions {
   /**
@@ -57,7 +57,7 @@ export interface UseQuerySubscriptionOptions extends SubscriptionOptions {
   readonly refetchOnMountOrArgChange?: boolean | number
 }
 
-export type UseQuerySubscriptionResult<D extends AnyQueryDef> = {
+export type UseQuerySubscriptionResult<_D extends AnyQueryDef> = {
   readonly refetch: () => void
 }
 
@@ -99,7 +99,7 @@ export const createUseQuerySubscription =
         computed(() => unref(refetchOnMountOrArgChange)),
         stableSubscriptionOptions,
       ],
-      ([stableArg, forceRefetch, subscriptionOptions], _, onCleanup) => {
+      ([stableArg, forceRefetch, subscriptionOptions]) => {
         const lastPromise = promiseRef.value
         if (stableArg === skipToken) {
           lastPromise?.unsubscribe()

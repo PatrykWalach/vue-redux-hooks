@@ -4,8 +4,16 @@ on:
     branches: [main]
   pull_request:
     types: [opened, synchronize]
-  
+
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Biome
+        uses: biomejs/setup-biome@v2
+      - run: biome ci .
+
   component-tests:
     runs-on: ubuntu-latest
     strategy:
@@ -30,9 +38,8 @@ jobs:
       - name: Build app 🏗 and run Component tests 🧪
         uses: cypress-io/github-action@v4
         with:
-          install: false	
+          install: false
           build: pnpm run build
           command: pnpm test
-          
-      - uses: codecov/codecov-action@v2
 
+      - uses: codecov/codecov-action@v2

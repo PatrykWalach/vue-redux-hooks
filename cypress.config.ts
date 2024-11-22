@@ -1,6 +1,6 @@
+import codeCoverage from '@cypress/code-coverage/task'
 import { defineConfig } from 'cypress'
 import viteConfig from './vite.config'
-import codeCoverage from '@cypress/code-coverage/task'
 
 export default defineConfig({
   component: {

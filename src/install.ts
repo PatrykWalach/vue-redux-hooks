@@ -2,18 +2,18 @@ export const DefaultReduxContext: InjectionKey<
   ReduxContext<GetState, GetAction>
 > = Symbol('redux-context')
 
-import { Action, AnyAction, Store } from 'redux'
+import type { Action, AnyAction, Store } from 'redux'
 import {
-  App,
+  type App,
+  type InjectionKey,
+  type Ref,
   computed,
-  InjectionKey,
   markRaw,
   reactive,
-  Ref,
   shallowRef,
 } from 'vue-demi'
-import { GetAction } from './hooks/useDispatch'
-import { GetState } from './hooks/useSelector'
+import type { GetAction } from './hooks/useDispatch'
+import type { GetState } from './hooks/useSelector'
 
 export type ReduxContext<S, A extends Action> = {
   store: Store<S, A>
