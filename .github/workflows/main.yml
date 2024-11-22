@@ -18,7 +18,7 @@ jobs:
 
       - name: Install dependencies 📦
         run: pnpm install --frozen-lockfile
-      - run: pnpm run lint --changed
+      - run: pnpm exec biome ci --changed --no-errors-on-unmatched
 
   component-tests:
     runs-on: ubuntu-latest
