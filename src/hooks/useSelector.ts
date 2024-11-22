@@ -1,7 +1,12 @@
-import { ComponentCustomProperties, computed, inject, unref } from 'vue-demi'
-import { DefaultReduxContext, ReduxContext } from '../install'
-import { Reactive } from '../query/util'
-import { GetAction } from './useDispatch'
+import {
+  type ComponentCustomProperties,
+  computed,
+  inject,
+  unref,
+} from 'vue-demi'
+import { DefaultReduxContext, type ReduxContext } from '../install'
+import type { Reactive } from '../query/util'
+import type { GetAction } from './useDispatch'
 import { assert } from './useStore'
 
 export type GetState = ComponentCustomProperties extends {

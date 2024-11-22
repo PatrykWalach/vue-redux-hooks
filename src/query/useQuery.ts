@@ -1,21 +1,21 @@
-import { ApiEndpointQuery } from '@reduxjs/toolkit/dist/query/core/module'
+import type { ApiEndpointQuery } from '@reduxjs/toolkit/dist/query/core/module'
 import type {
   EndpointDefinitions,
   QueryArgFrom,
 } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
-import { SkipToken } from '@reduxjs/toolkit/query'
+import type { SkipToken } from '@reduxjs/toolkit/query'
 import {
-  AnyQueryDef,
+  type AnyQueryDef,
+  type UseQueryStateOptions,
+  type UseQueryStateResult,
   createUseQueryState,
-  UseQueryStateOptions,
-  UseQueryStateResult,
 } from './useQueryState'
 import {
+  type UseQuerySubscriptionOptions,
+  type UseQuerySubscriptionResult,
   createUseQuerySubscription,
-  UseQuerySubscriptionOptions,
-  UseQuerySubscriptionResult,
 } from './useQuerySubscription'
-import { Reactive, ReactiveRecord } from './util'
+import type { Reactive, ReactiveRecord } from './util'
 
 export type UseQuery<D extends AnyQueryDef> = (
   arg: Reactive<QueryArgFrom<D> | SkipToken>,

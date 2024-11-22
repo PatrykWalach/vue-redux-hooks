@@ -3,16 +3,16 @@ import type {
   SerializedError,
   ThunkDispatch,
 } from '@reduxjs/toolkit'
-import { BaseQueryError } from '@reduxjs/toolkit/dist/query/baseQueryTypes'
+import type { BaseQueryError } from '@reduxjs/toolkit/dist/query/baseQueryTypes'
 import type { MutationActionCreatorResult } from '@reduxjs/toolkit/dist/query/core/buildInitiate'
-import { ApiEndpointMutation } from '@reduxjs/toolkit/dist/query/core/module'
+import type { ApiEndpointMutation } from '@reduxjs/toolkit/dist/query/core/module'
 import type {
   EndpointDefinitions,
   MutationDefinition,
   QueryArgFrom,
 } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
-import { Api } from '@reduxjs/toolkit/query'
-import { computed, ComputedRef, shallowRef, watchEffect } from 'vue-demi'
+import type { Api } from '@reduxjs/toolkit/query'
+import { type ComputedRef, computed, shallowRef, watchEffect } from 'vue-demi'
 import { useDispatch } from '../hooks/useDispatch'
 import { useSelector } from '../hooks/useSelector'
 
@@ -39,7 +39,7 @@ export type UseMutationResult<D extends AnyMutDef> = {
   readonly startedTimeStamp: ComputedRef<null | undefined | number>
 }
 
-export type UseMutationOptions<D> = {
+export type UseMutationOptions<_D> = {
   readonly fixedCacheKey?: string
 }
 

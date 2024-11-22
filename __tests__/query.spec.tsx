@@ -1,4 +1,4 @@
-import { configureStore, SerializedError } from '@reduxjs/toolkit'
+import { type SerializedError, configureStore } from '@reduxjs/toolkit'
 import { QueryStatus } from '@reduxjs/toolkit/dist/query'
 import { mount } from 'cypress/vue'
 import {
@@ -250,8 +250,8 @@ describe('useMutation', () => {
             {result.isUninitialized.value
               ? 'isUninitialized'
               : result.isSuccess.value
-              ? 'isSuccess'
-              : 'other'}
+                ? 'isSuccess'
+                : 'other'}
           </span>
           <span>{result.originalArgs.value?.name}</span>
           <button onClick={() => updateUser({ name: 'Yay' })}>trigger</button>

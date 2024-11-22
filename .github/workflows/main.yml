@@ -4,8 +4,16 @@ on:
     branches: [main]
   pull_request:
     types: [opened, synchronize]
-  
+
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Biome
+        uses: biomejs/setup-biome@v2
+      - run: biome ci .
+
   component-tests:
     runs-on: ubuntu-latest
     name: Component tests on Bun
@@ -17,14 +25,32 @@ jobs:
           bun-version-file: "package.json"
 
       - name: Install dependencies 📦
-        run: bun install --frozen-lockfile	
+        run: bun install --frozen-lockfile
+      - name: Install cypress
+        run: bun exec cypress install
 
       - name: Build app 🏗 and run Component tests 🧪
         uses: cypress-io/github-action@v4
         with:
-          install: false	
+          install: false
           build: bun run build
           command: bun run test
-          
+
       - uses: codecov/codecov-action@v2
 
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: pnpm/action-setup@v3
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node }}
+          cache: pnpm
+
+      - name: Install dependencies 📦
+        run: pnpm install --frozen-lockfile
+      - name: Build app 🏗
+        run: pnpm run build
+      - name: Publish to pkg.pr.new
+        run: pnpm run pkg-pr-new-publish
