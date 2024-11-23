@@ -32,6 +32,9 @@ jobs:
 
       - name: Install dependencies 📦
         run: pnpm install --frozen-lockfile
+      - name: Build dependencies 🏗
+        run: pnpm --filter "tests^..." build
+        
       - name: Install cypress
         run: pnpm exec cypress install
         working-directory: packages/tests
@@ -41,7 +44,6 @@ jobs:
         with:
           working-directory: packages/tests
           install: false
-          build: pnpm --filter "tests^..." build
           command: pnpm test
 
       - uses: codecov/codecov-action@v5
