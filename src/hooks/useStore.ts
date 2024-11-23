@@ -1,8 +1,7 @@
 import type { Action, Store } from 'redux'
 import { inject } from 'vue-demi'
 import { DefaultReduxContext, type ReduxContext } from '../install'
-import type { GetAction } from './useDispatch'
-import type { GetState } from './useSelector'
+import type { GetAction, GetState } from './types'
 
 export function useStore<S = GetState, A extends Action = GetAction>(): Store<
   S,
@@ -16,7 +15,7 @@ export function useStore<S = GetState, A extends Action = GetAction>(): Store<
   return ctx.store
 }
 
-export function assert(condition: any, message: string): asserts condition {
+export function assert(condition: unknown, message: string): asserts condition {
   if (!condition) {
     throw message
   }

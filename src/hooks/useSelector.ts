@@ -1,21 +1,10 @@
-import {
-  type ComponentCustomProperties,
-  computed,
-  inject,
-  unref,
-} from 'vue-demi'
+import { computed, inject, unref } from 'vue-demi'
 import { DefaultReduxContext, type ReduxContext } from '../install'
 import type { Reactive } from '../query/util'
-import type { GetAction } from './useDispatch'
+
+import type { Selector } from '@reduxjs/toolkit'
+import type { GetAction, GetState } from './types'
 import { assert } from './useStore'
-
-export type GetState = ComponentCustomProperties extends {
-  $redux: { state: infer U }
-}
-  ? U
-  : any
-
-export type Selector<S, R> = (state: S) => R
 
 export function useSelector<S = GetState, R = unknown>(
   select: Reactive<Selector<S, R>>,

@@ -1,15 +1,21 @@
 {
   "compilerOptions": {
-    "declaration": true,
-    "declarationDir": "dist/index.d.ts",
-    "strict": true,
     "module": "esnext",
-    "esModuleInterop": true,
-    "moduleResolution": "node",
-    "target": "es2020",
+    "lib": ["esnext", "dom", "dom.iterable"],
+    "target": "esnext",
+    "noEmit": true,
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "noEmitOnError": true,
+    "noErrorTruncation": true,
+    "allowSyntheticDefaultImports": true,
+    "verbatimModuleSyntax": true,
     "types": ["cypress"],
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "allowJs": true,
+    "checkJs": true,
     "jsx": "preserve"
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "**/__tests__/*", "**/*.spec.{ts,tsx}"]
+  "include": ["./**/*.{js,ts}"]
 }
