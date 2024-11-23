@@ -1,6 +1,9 @@
 {
-	"private": true,
-	"packageManager": "pnpm@9.14.2",
+  "private": true,
+  "scripts": {
+    "lint": "biome check"
+  },
+  "packageManager": "pnpm@9.14.2",
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "husky": "^4.3.8",
