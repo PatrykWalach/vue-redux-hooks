@@ -2,15 +2,14 @@ import { type SerializedError, configureStore } from '@reduxjs/toolkit'
 import { QueryStatus } from '@reduxjs/toolkit/dist/query'
 import { mount } from 'cypress/vue'
 import {
-  Fragment,
   computed,
   defineComponent,
   onBeforeUpdate,
   ref,
   watchEffect,
-} from 'vue-demi'
-import { install } from '../src'
-import { createApi } from '../src/query'
+} from 'vue'
+import { install } from 'vue-redux-hooks'
+import { createApi } from 'vue-redux-hooks/query'
 let amount = 0
 
 function expectType<T>(value: T): T {
@@ -100,12 +99,12 @@ const WithRemount = defineComponent((_, ctx) => {
   const key = ref(0)
 
   return () => (
-    <Fragment>
+    <>
       <div key={key.value}>{ctx.slots.default?.()}</div>
       <button onClick={() => (key.value += 1)} id="remount">
         Remount
       </button>
-    </Fragment>
+    </>
   )
 })
 
@@ -246,7 +245,7 @@ describe('useMutation', () => {
     const User = defineComponent(() => {
       const [updateUser, result] = api.endpoints.updateUser.useMutation()
       return () => (
-        <Fragment>
+        <>
           <span>
             {result.isUninitialized.value
               ? 'isUninitialized'
@@ -257,7 +256,7 @@ describe('useMutation', () => {
           <span>{result.originalArgs.value?.name}</span>
           <button onClick={() => updateUser({ name: 'Yay' })}>trigger</button>
           <button onClick={result.reset}>reset</button>
-        </Fragment>
+        </>
       )
     })
 
@@ -509,13 +508,13 @@ describe('useQuery', () => {
     const Render = defineComponent(() => {
       const id = ref(1)
       return () => (
-        <Fragment>
+        <>
           <User id={id.value}></User>
 
           <div onClick={() => (id.value += 1)} id="render">
             render
           </div>
-        </Fragment>
+        </>
       )
     })
 
