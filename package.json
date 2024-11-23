@@ -2,7 +2,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "pkg-pr-new-publish": "pkg-pr-new publish",
+    "pkg-pr-new-publish": "pkg-pr-new publish './packages/*'",
     "lint": "biome check"
   },
   "packageManager": "pnpm@9.14.2",
