@@ -15,39 +15,7 @@ import type { Api } from '@reduxjs/toolkit/query'
 import { type ComputedRef, computed, shallowRef, watchEffect } from 'vue-demi'
 import { useDispatch } from '../hooks/useDispatch'
 import { useSelector } from '../hooks/useSelector'
-
-export type MutationTrigger<D extends MutationDefinition<any, any, any, any>> =
-  (arg: QueryArgFrom<D>) => MutationActionCreatorResult<D>
-
-export type MutationError<D> =
-  | SerializedError
-  | (D extends MutationDefinition<any, infer BaseQuery, any, any>
-      ? BaseQueryError<BaseQuery>
-      : never)
-
-export type UseMutationResult<D extends AnyMutDef> = {
-  readonly data: ComputedRef<null | undefined | QueryArgFrom<D>>
-  readonly originalArgs: ComputedRef<null | undefined | QueryArgFrom<D>>
-  readonly reset: () => void
-  readonly endpointName: ComputedRef<null | undefined | string>
-  readonly error: ComputedRef<null | undefined | MutationError<D>>
-  readonly fulfilledTimeStamp: ComputedRef<null | undefined | number>
-  readonly isError: ComputedRef<boolean>
-  readonly isLoading: ComputedRef<boolean>
-  readonly isSuccess: ComputedRef<boolean>
-  readonly isUninitialized: ComputedRef<boolean>
-  readonly startedTimeStamp: ComputedRef<null | undefined | number>
-}
-
-export type UseMutationOptions<_D> = {
-  readonly fixedCacheKey?: string
-}
-
-export type UseMutation<D extends AnyMutDef> = (
-  options?: UseMutationOptions<D>,
-) => readonly [MutationTrigger<D>, UseMutationResult<D>]
-
-export type AnyMutDef = MutationDefinition<any, any, any, any>
+import type { AnyMutDef, UseMutation } from './types'
 
 export const createUseMutation =
   <D extends AnyMutDef>(

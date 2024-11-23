@@ -1,5 +1,5 @@
 /** @import { Action, AnyAction, Dispatch } from 'redux' */
-import { useStore } from './useStore';
+import { useStore } from './useStore'
 /**
  * @template {Action} [A=AnyAction]
  * @overload
@@ -11,5 +11,5 @@ import { useStore } from './useStore';
  * @returns {TDispatch}
  */
 export function useDispatch() {
-    return useStore().dispatch;
+  return useStore().dispatch
 }

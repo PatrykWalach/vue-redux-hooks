@@ -1,54 +1,9 @@
-import type { SerializedError } from '@reduxjs/toolkit'
-import type { BaseQueryError } from '@reduxjs/toolkit/dist/query/baseQueryTypes'
 import type { ApiEndpointQuery } from '@reduxjs/toolkit/dist/query/core/module'
-import type {
-  EndpointDefinitions,
-  QueryArgFrom,
-  QueryDefinition,
-  ResultTypeFrom,
-} from '@reduxjs/toolkit/dist/query/endpointDefinitions'
-import {
-  type QueryStatus,
-  type SkipToken,
-  skipToken,
-} from '@reduxjs/toolkit/query'
-import { type ComputedRef, computed, ref, unref, watch } from 'vue-demi'
+import type { EndpointDefinitions } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
+import { skipToken } from '@reduxjs/toolkit/query'
+import { computed, ref, unref, watch } from 'vue-demi'
 import { useSelector } from '../hooks/useSelector'
-import type { Reactive, ReactiveRecord } from './util'
-
-export type AnyQueryDef = QueryDefinition<any, any, any, any>
-
-export type QueryError<D> =
-  | SerializedError
-  | (D extends QueryDefinition<any, infer BaseQuery, any, any>
-      ? BaseQueryError<BaseQuery>
-      : never)
-
-export type UseQueryStateResult<D extends AnyQueryDef> = {
-  readonly isUninitialized: ComputedRef<boolean>
-  readonly isLoading: ComputedRef<boolean>
-  readonly isFetching: ComputedRef<boolean>
-  readonly isSuccess: ComputedRef<boolean>
-  readonly isError: ComputedRef<boolean>
-  readonly data: ComputedRef<ResultTypeFrom<D> | null | undefined>
-  readonly currentData: ComputedRef<ResultTypeFrom<D> | null | undefined>
-  readonly error: ComputedRef<QueryError<D> | null | undefined>
-  readonly status: ComputedRef<QueryStatus>
-  readonly startedTimeStamp: ComputedRef<number | null | undefined>
-  readonly requestId: ComputedRef<string | null | undefined>
-  readonly originalArgs: ComputedRef<QueryArgFrom<D> | null | undefined>
-  readonly fulfilledTimeStamp: ComputedRef<number | null | undefined>
-  readonly endpointName: ComputedRef<string | null | undefined>
-}
-
-export type UseQueryStateOptions<_D extends AnyQueryDef> = {
-  readonly skip?: boolean
-}
-
-export type UseQueryState<D extends AnyQueryDef> = (
-  arg: Reactive<QueryArgFrom<D> | SkipToken>,
-  options?: ReactiveRecord<UseQueryStateOptions<D>>,
-) => UseQueryStateResult<D>
+import type { AnyQueryDef, UseQueryState } from './types'
 
 export const createUseQueryState =
   <D extends AnyQueryDef>(

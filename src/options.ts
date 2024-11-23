@@ -1,9 +1,6 @@
 export function mapState<This, S = GetState>() {
   return <
-    M extends Record<
-      string,
-      ((this: This, state: S) => unknown) | keyof S
-    > = any,
+    M extends Record<string, ((this: This, state: S) => unknown) | keyof S>,
   >(
     map: M,
   ) => {

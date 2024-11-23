@@ -1,5 +1,5 @@
 /** @import { ReduxContext } from '../install' */
-/** @import { Reactive } from '../query/util' */
+/** @import { Reactive } from '../query/types' */
 /** @import { AnyAction, Selector } from '@reduxjs/toolkit' */
 /** @import { GetAction, GetState } from './types' */
 import { computed, inject, unref } from 'vue-demi'

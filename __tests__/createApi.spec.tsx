@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { fetchBaseQuery, setupListeners } from '@reduxjs/toolkit/query'
 import { mount } from 'cypress/vue'
-import { defineComponent, ref } from 'vue-demi'
+import { Fragment, defineComponent, ref } from 'vue-demi'
 import { install } from '../src'
 import { createApi } from '../src/query'
 
@@ -54,41 +54,43 @@ const App = defineComponent({
 
     const post = ref('New post')
 
-    return () => [
-      <button class="toggle" onClick={() => (fresh.value = !fresh.value)}>
-        Show fresh
-      </button>,
-      <hr />,
-      <input type="text" v-model={post.value} />,
-      <button
-        class="add"
-        onClick={async () => {
-          const newPost = post.value
-          post.value = ''
-          try {
-            await addPost(newPost).unwrap()
-          } catch {
-            post.value = newPost
-          }
-        }}
-        disabled={mutation.isLoading.value}
-      >
-        Add post
-      </button>,
-      isFetching.value ? (
-        <div class="loading">Loading...</div>
-      ) : // : isError
-      // ? h('div')
-      data.value?.length ? (
-        data.value?.map(({ body, id }) => (
-          <div class="post" key={id}>
-            {body}
-          </div>
-        ))
-      ) : (
-        <div class="no-results">No results</div>
-      ),
-    ]
+    return () => (
+      <Fragment>
+        <button class="toggle" onClick={() => (fresh.value = !fresh.value)}>
+          Show fresh
+        </button>
+        <hr />
+        <input type="text" v-model={post.value} />
+        <button
+          class="add"
+          onClick={async () => {
+            const newPost = post.value
+            post.value = ''
+            try {
+              await addPost(newPost).unwrap()
+            } catch {
+              post.value = newPost
+            }
+          }}
+          disabled={mutation.isLoading.value}
+        >
+          Add post
+        </button>
+        {isFetching.value ? (
+          <div class="loading">Loading...</div>
+        ) : // : isError
+        // ? h('div')
+        data.value?.length ? (
+          data.value?.map(({ body, id }) => (
+            <div class="post" key={id}>
+              {body}
+            </div>
+          ))
+        ) : (
+          <div class="no-results">No results</div>
+        )}
+      </Fragment>
+    )
   },
 })
 

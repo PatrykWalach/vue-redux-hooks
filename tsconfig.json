@@ -4,17 +4,18 @@
     "lib": ["esnext", "dom", "dom.iterable"],
     "target": "esnext",
     "noEmit": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "noEmitOnError": true,
-    "noErrorTruncation": true,
     "allowSyntheticDefaultImports": true,
+    "verbatimModuleSyntax": true,
     "types": ["cypress"],
+    "skipLibCheck": true,
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "allowJs": true,
     "checkJs": true,
     "jsx": "preserve"
   },
-  "include": ["./**/*.ts", "./**/*.tsx", "./**/*.js"]
+  "include": ["./*", "./__tests__**/*", "./src/**/*", "./cypress/**/*"]
 }

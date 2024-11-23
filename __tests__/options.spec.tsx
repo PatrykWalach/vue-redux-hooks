@@ -36,8 +36,8 @@ const App = defineComponent({
     return { index }
   },
   computed: {
-    ...mapState<{ index: keyof State }>()({
-      state(state: State) {
+    ...mapState<{ index: keyof State }, State>()({
+      state(state) {
         return state[this.index]
       },
     }),
