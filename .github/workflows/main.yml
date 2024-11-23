@@ -41,7 +41,7 @@ jobs:
         with:
           working-directory: packages/tests
           install: false
-          build: pnpm -r build
+          build: pnpm --filter "tests^..." build
           command: pnpm test
 
       - uses: codecov/codecov-action@v5
