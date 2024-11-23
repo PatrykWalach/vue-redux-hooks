@@ -12,8 +12,7 @@ import {
   reactive,
   shallowRef,
 } from 'vue-demi'
-import type { GetAction } from './hooks/useDispatch'
-import type { GetState } from './hooks/useSelector'
+import type { GetAction, GetState } from './hooks/types'
 
 export type ReduxContext<S, A extends Action> = {
   store: Store<S, A>

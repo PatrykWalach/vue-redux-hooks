@@ -29,9 +29,8 @@ export function mapState<This, S = GetState>() {
   }
 }
 
-import { type AnyAction, Dispatch } from 'redux'
-import type { GetAction } from './hooks/useDispatch'
-import type { GetState } from './hooks/useSelector'
+import { type AnyAction } from 'redux'
+import type { GetAction, GetState } from './hooks/types'
 
 export function mapDispatch<This, A extends AnyAction = GetAction>() {
   return <M extends Record<string, (...args: unknown[]) => A> = any>(
