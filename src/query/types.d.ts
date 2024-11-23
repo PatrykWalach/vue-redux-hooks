@@ -222,3 +222,14 @@ export type Reactive<T> = T | Ref<T>
 export type ReactiveRecord<T> = {
   [K in keyof T]: Reactive<T[K]>
 }
+
+import type { shallowRef } from 'vue-demi'
+import type { useDispatch } from '../hooks/useDispatch'
+
+export type ShallowPromiseRef<D> = typeof shallowRef<
+  undefined | QueryActionCreatorResult<D>
+>
+
+export type UseThunkDispatch = typeof useDispatch<
+  ThunkDispatch<any, any, AnyAction>
+>
