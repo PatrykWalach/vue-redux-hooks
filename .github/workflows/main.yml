@@ -38,6 +38,7 @@ jobs:
       - name: Build app 🏗 and run Component tests 🧪
         uses: cypress-io/github-action@v6
         with:
+          working-directory: packages/tests
           install: false
           build: pnpm run build
           command: pnpm test
