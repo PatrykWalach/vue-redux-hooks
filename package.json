@@ -1,5 +1,6 @@
 {
   "private": true,
+  "type": "module",
   "scripts": {
     "pkg-pr-new-publish": "pkg-pr-new publish",
     "lint": "biome check"
