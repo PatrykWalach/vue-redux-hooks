@@ -1,6 +1,6 @@
-/** @import { ApiEndpointQuery } from '@reduxjs/toolkit/dist/query/core/module' */
-/** @import { EndpointDefinitions } from '@reduxjs/toolkit/dist/query/endpointDefinitions' */
-/** @import { AnyQueryDef, UseQuery } from './types' */
+/** @import {ApiEndpointQuery} from '@reduxjs/toolkit/dist/query/core/module' */
+/** @import {EndpointDefinitions} from '@reduxjs/toolkit/dist/query/endpointDefinitions' */
+/** @import {AnyQueryDef, UseQuery} from './types' */
 import { createUseQueryState } from './useQueryState'
 import { createUseQuerySubscription } from './useQuerySubscription'
 /**

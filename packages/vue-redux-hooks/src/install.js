@@ -1,16 +1,17 @@
-/** @import { Action, AnyAction, Store } from 'redux' */
-/** @import { App, InjectionKey, Ref } from 'vue-demi' */
-/** @import { GetAction, GetState } from './hooks/types' */
-/** @import { ReduxContext } from './types' */
+/** @import {Action, AnyAction, Store} from 'redux' */
+/** @import {App, InjectionKey, Ref} from 'vue-demi' */
+/** @import {GetAction, GetState} from './hooks/types' */
+/** @import {ReduxContext} from './types' */
 import { computed, markRaw, reactive, shallowRef } from 'vue-demi'
 
-/** @type {InjectionKey<ReduxContext<GetState, GetAction>>}*/
+/** @type {InjectionKey<ReduxContext<GetState, GetAction>>} */
 export const DefaultReduxContext = Symbol('redux-context')
 /**
  * @template S
- * @template {Action} [A=AnyAction]
+ * @template {Action} [A=AnyAction] Default is `AnyAction`
  * @param {Store<S, A>} store
  * @param {InjectionKey<ReduxContext<S, A>>} [injectionKey=DefaultReduxContext]
+ *   Default is `DefaultReduxContext`
  * @returns {(app: App) => void}
  */
 export const install =

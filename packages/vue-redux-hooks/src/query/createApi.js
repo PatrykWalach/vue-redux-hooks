@@ -1,7 +1,7 @@
-/** @import { ApiEndpointQuery, CoreModule } from '@reduxjs/toolkit/dist/query/core/module' */
-/** @import { EndpointDefinitions } from '@reduxjs/toolkit/dist/query/endpointDefinitions' */
-/** @import { CreateApi, Module } from '@reduxjs/toolkit/query' */
-/** @import { AnyQueryDef, QueryHooks } from './types' */
+/** @import {ApiEndpointQuery, CoreModule} from '@reduxjs/toolkit/dist/query/core/module' */
+/** @import {EndpointDefinitions} from '@reduxjs/toolkit/dist/query/endpointDefinitions' */
+/** @import {CreateApi, Module} from '@reduxjs/toolkit/query' */
+/** @import {AnyQueryDef, QueryHooks} from './types' */
 import { buildCreateApi, coreModule } from '@reduxjs/toolkit/query'
 import { createUseMutation } from './useMutation'
 import { createUseQuery } from './useQuery'
@@ -13,9 +13,7 @@ export const vueHooksModuleName = Symbol('vueHooksModule')
  * @returns {string}
  */
 const capitalize = (str) => str[0]?.toUpperCase() + str.substring(1)
-/**
- * @returns {Module<typeof vueHooksModuleName>}
- */
+/** @returns {Module<typeof vueHooksModuleName>} */
 const vueHooksModule = () => ({
   name: vueHooksModuleName,
   init(api) {

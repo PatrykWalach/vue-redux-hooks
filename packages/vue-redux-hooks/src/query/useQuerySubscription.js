@@ -1,8 +1,8 @@
-/** @import { AnyAction, ThunkDispatch } from '@reduxjs/toolkit' */
-/** @import { QueryActionCreatorResult } from '@reduxjs/toolkit/dist/query/core/buildInitiate' */
-/** @import { ApiEndpointQuery } from '@reduxjs/toolkit/dist/query/core/module' */
-/** @import { AnyQueryDef, UseQuerySubscription, ShallowPromiseRef, UseThunkDispatch } from './types' */
-/** @import { EndpointDefinitions } from '@reduxjs/toolkit/dist/query/endpointDefinitions' */
+/** @import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit' */
+/** @import {QueryActionCreatorResult} from '@reduxjs/toolkit/dist/query/core/buildInitiate' */
+/** @import {ApiEndpointQuery} from '@reduxjs/toolkit/dist/query/core/module' */
+/** @import {AnyQueryDef, UseQuerySubscription, ShallowPromiseRef, UseThunkDispatch} from './types' */
+/** @import {EndpointDefinitions} from '@reduxjs/toolkit/dist/query/endpointDefinitions' */
 import { skipToken } from '@reduxjs/toolkit/query'
 import { computed, onBeforeUnmount, shallowRef, unref, watch } from 'vue-demi'
 import { useDispatch } from '../hooks/useDispatch'
@@ -28,10 +28,10 @@ export const createUseQuerySubscription =
       refetchOnFocus: unref(options.refetchOnFocus),
       pollingInterval: unref(pollingInterval),
     }))
-    /** @type {ShallowPromiseRef<D>}*/
+    /** @type {ShallowPromiseRef<D>} */
     let shallowPromiseRef = shallowRef
     const promiseRef = shallowPromiseRef(undefined)
-    /** @type {UseThunkDispatch}*/
+    /** @type {UseThunkDispatch} */
     let useThunkDispatch = useDispatch
     const dispatch = useThunkDispatch()
     watch(

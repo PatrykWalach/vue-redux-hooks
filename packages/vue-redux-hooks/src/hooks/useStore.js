@@ -1,18 +1,15 @@
-/** @import { ReduxContext } from '../install' */
-/** @import { Action, Store } from 'redux' */
-/** @import { GetState, GetAction } from './types' */
+/** @import {ReduxContext} from '../install' */
+/** @import {Action, Store} from 'redux' */
+/** @import {GetState, GetAction} from './types' */
 import { inject } from 'vue-demi'
 import { DefaultReduxContext } from '../install'
 /**
- * @template [S=GetState]
- * @template {Action} [A=GetAction]
- * @returns {Store<
- *   S,
- *   A
- * >}
+ * @template [S=GetState] Default is `GetState`
+ * @template {Action} [A=GetAction] Default is `GetAction`
+ * @returns {Store<S, A>}
  */
 export function useStore() {
-  /** @type {typeof inject<ReduxContext<S, A> | undefined>}*/
+  /** @type {typeof inject<ReduxContext<S, A> | undefined>} */
   const injectReduxContext = inject
   const ctx = injectReduxContext(DefaultReduxContext)
   assert(

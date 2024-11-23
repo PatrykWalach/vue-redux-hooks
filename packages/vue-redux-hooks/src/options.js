@@ -1,11 +1,15 @@
-/** @import { AnyAction } from 'redux' */
-/** @import { GetAction, GetState } from './hooks/types' */
-/** @import { MapDispatchResult, MapStateResult } from './types' */
+/** @import {AnyAction} from 'redux' */
+/** @import {GetAction, GetState} from './hooks/types' */
+/** @import {MapDispatchResult, MapStateResult} from './types' */
 
 /**
  * @template This
- * @template [S=GetState]
- * @returns {<M extends Record<string, ((this: This, state: S) => unknown) | keyof S>>(map: M) => MapStateResult<This, S, M>}
+ * @template [S=GetState] Default is `GetState`
+ * @returns {<
+ *   M extends Record<string, ((this: This, state: S) => unknown) | keyof S>,
+ * >(
+ *   map: M,
+ * ) => MapStateResult<This, S, M>}
  */
 export function mapState() {
   /**
@@ -19,15 +23,11 @@ export function mapState() {
         Object.entries(map).map(([key, value]) => {
           const computed =
             typeof value === 'function'
-              ? /**
-                 * @this {any}
-                 */
+              ? /** @this {any} */
                 function () {
                   return value.call(this, this.$redux.state)
                 }
-              : /**
-                 * @this {any}
-                 */
+              : /** @this {any} */
                 function () {
                   return this.$redux.state[value]
                 }
@@ -39,8 +39,10 @@ export function mapState() {
 }
 /**
  * @template This
- * @template {AnyAction} [A=GetAction]
- * @returns {<M extends Record<string, (...args: unknown[]) => A> = any>(map: M) => MapDispatchResult<This, M>}
+ * @template {AnyAction} [A=GetAction] Default is `GetAction`
+ * @returns {<M extends Record<string, (...args: unknown[]) => A> = any>(
+ *   map: M,
+ * ) => MapDispatchResult<This, M>}
  */
 export function mapDispatch() {
   /**
@@ -57,8 +59,8 @@ export function mapDispatch() {
           }
 
           /**
-           * @this {any}
            * @param {...unknown} args
+           * @this {any}
            */
           const computed = function (...args) {
             return this.$redux.store.dispatch(value.call(this, ...args))

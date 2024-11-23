@@ -1,13 +1,13 @@
-/** @import { Action, AnyAction, Dispatch } from 'redux' */
+/** @import {Action, AnyAction, Dispatch} from 'redux' */
 import { useStore } from './useStore'
 /**
- * @template {Action} [A=AnyAction]
  * @overload
+ * @template {Action} [A=AnyAction] Default is `AnyAction`
  * @returns {Dispatch<A>}
  */
 /**
- * @template [TDispatch=Dispatch<AnyAction>]
  * @overload
+ * @template [TDispatch=Dispatch<AnyAction>] Default is `Dispatch<AnyAction>`
  * @returns {TDispatch}
  */
 export function useDispatch() {

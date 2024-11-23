@@ -1,6 +1,6 @@
-/** @import { ApiEndpointQuery } from '@reduxjs/toolkit/dist/query/core/module' */
-/** @import { AnyQueryDef, UseQueryState } from './types' */
-/** @import { EndpointDefinitions } from '@reduxjs/toolkit/dist/query/endpointDefinitions' */
+/** @import {ApiEndpointQuery} from '@reduxjs/toolkit/dist/query/core/module' */
+/** @import {AnyQueryDef, UseQueryState} from './types' */
+/** @import {EndpointDefinitions} from '@reduxjs/toolkit/dist/query/endpointDefinitions' */
 import { skipToken } from '@reduxjs/toolkit/query'
 import { computed, ref, unref, watch } from 'vue-demi'
 import { useSelector } from '../hooks/useSelector'
