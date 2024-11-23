@@ -1,5 +1,5 @@
 {
-	"name": "tests",
+  "name": "tests",
   "private": true,
   "type": "module",
   "scripts": {
