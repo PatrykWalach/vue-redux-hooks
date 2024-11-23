@@ -2,7 +2,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "pkg-pr-new-publish": "pkg-pr-new publish './packages/*'",
+    "pkg-pr-new-publish": "pkg-pr-new publish './packages/vue-redux-hooks'",
     "lint": "biome check"
   },
   "packageManager": "pnpm@9.14.2",
