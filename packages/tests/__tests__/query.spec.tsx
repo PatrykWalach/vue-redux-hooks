@@ -8,8 +8,8 @@ import {
   ref,
   watchEffect,
 } from 'vue'
-import { install } from '../src'
-import { createApi } from '../src/query'
+import { install } from 'vue-redux-hooks'
+import { createApi } from 'vue-redux-hooks/query'
 let amount = 0
 
 function expectType<T>(value: T): T {

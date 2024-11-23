@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { fetchBaseQuery, setupListeners } from '@reduxjs/toolkit/query'
 import { mount } from 'cypress/vue'
-import { defineComponent, ref } from 'vue-demi'
-import { install } from '../src'
-import { createApi } from '../src/query'
+import { defineComponent, ref } from 'vue'
+import { install } from 'vue-redux-hooks'
+import { createApi } from 'vue-redux-hooks/query'
 
 interface Post {
   id: number
