@@ -33,9 +33,7 @@
     "prepublishOnly": "pnpm run build",
     "dev": "pnpm run build -- --watch src",
     "codecov": "codecov",
-    "lint": "biome check",
-    "test": "cypress run --component",
-    "cypress": "cypress open --component"
+    "lint": "biome check"
   },
   "repository": {
     "type": "git",
@@ -69,32 +67,12 @@
     }
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
-    "@cypress/code-coverage": "^3.13.7",
     "@reduxjs/toolkit": "1.8.2",
-    "@vitejs/plugin-vue": "^2.3.3",
-    "@vitejs/plugin-vue-jsx": "^1.3.10",
-    "cypress": "^13.16.0",
-    "husky": "^4.3.8",
-    "lint-staged": "13.0.0",
     "redux": "^4.2.0",
     "tsup": "^6.0.1",
-    "typescript": "^4.7.2",
-    "vite": "^5.4.11",
-    "vite-plugin-istanbul": "^6.0.2",
     "vue": "^3.2.36"
   },
-  "lint-staged": {
-    "*.{js,jsx,vue,ts,tsx}": "eslint --cache --fix"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
   "dependencies": {
-    "pkg-pr-new": "^0.0.30",
     "vue-demi": "^0.13.1"
-  },
-  "packageManager": "pnpm@9.14.2"
+  }
 }

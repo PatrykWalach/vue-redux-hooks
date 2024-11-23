@@ -1,0 +1,20 @@
+{
+	"private": true,
+	"scripts": {
+		"test": "cypress run --component",
+		"cypress": "cypress open --component"
+	},
+	"dependencies": {
+		"@reduxjs/toolkit": "1.8.2",
+		"redux": "^4.2.0",
+		"vue-redux-hooks": "workspace:*",
+		"vue": "^3.2.36"
+	},
+	"devDependencies": {
+		"@cypress/code-coverage": "^3.13.7",
+		"@vitejs/plugin-vue": "^2.3.3",
+		"@vitejs/plugin-vue-jsx": "^1.3.10",    "cypress": "^13.16.0",
+		"vite": "^5.4.11",
+		"vite-plugin-istanbul": "^6.0.2"
+	}
+}
