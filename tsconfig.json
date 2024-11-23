@@ -1,20 +1,20 @@
 {
-	"compilerOptions": {
-		"module": "esnext",
-		"lib": ["esnext", "dom", "dom.iterable"],
-		"target": "esnext",
-		"noEmit": true,
-		"moduleResolution": "node",
-		"resolveJsonModule": true,
-		"noEmitOnError": true,
-		"noErrorTruncation": true,
-		"allowSyntheticDefaultImports": true,
-		"types": ["cypress"],
-		"strict": true,
-		"noUncheckedIndexedAccess": true,
-		"allowJs": true,
-		"checkJs": true,
-		"jsx": "preserve"
-	},
-	"include": ["./**/*.ts", "./**/*.tsx", "./**/*.js"]
+  "compilerOptions": {
+    "module": "esnext",
+    "lib": ["esnext", "dom", "dom.iterable"],
+    "target": "esnext",
+    "noEmit": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "noEmitOnError": true,
+    "noErrorTruncation": true,
+    "allowSyntheticDefaultImports": true,
+    "types": ["cypress"],
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "allowJs": true,
+    "checkJs": true,
+    "jsx": "preserve"
+  },
+  "include": ["./**/*.ts", "./**/*.tsx", "./**/*.js"]
 }
