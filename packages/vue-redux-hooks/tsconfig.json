@@ -1,13 +1,16 @@
 {
   "compilerOptions": {
-    "declaration": true,
-    "declarationDir": "dist/index.d.ts",
+    "noEmit": true,
+    "noEmitOnError": true,
     "strict": true,
     "module": "esnext",
+    "verbatimModuleSyntax": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
     "target": "es2020",
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "allowJs": true,
+    "checkJs": true
   },
   "include": ["src/**/*"]
 }
