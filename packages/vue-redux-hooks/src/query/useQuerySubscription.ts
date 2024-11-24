@@ -1,16 +1,16 @@
-import type { AnyAction, ThunkDispatch } from '@reduxjs/toolkit'
+import type { ThunkDispatch } from '@reduxjs/toolkit'
 import type { SubscriptionOptions } from '@reduxjs/toolkit/dist/query/core/apiState'
 import type { QueryActionCreatorResult } from '@reduxjs/toolkit/dist/query/core/buildInitiate'
 import type { ApiEndpointQuery } from '@reduxjs/toolkit/dist/query/core/module'
 import type {
-  EndpointDefinitions,
-  QueryArgFrom,
+    EndpointDefinitions,
+    QueryArgFrom,
 } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
 import { type SkipToken, skipToken } from '@reduxjs/toolkit/query'
 import { computed, onBeforeUnmount, shallowRef, unref, watch } from 'vue-demi'
 import { useDispatch } from '../hooks/useDispatch'
 import type { AnyQueryDef } from './useQueryState'
-import type { Reactive, ReactiveRecord } from './util'
+import type { Reactive, ReactiveRecord, UnknownAction } from './util'
 
 export interface UseQuerySubscriptionOptions extends SubscriptionOptions {
   /**
@@ -91,7 +91,7 @@ export const createUseQuerySubscription =
       undefined,
     )
 
-    const dispatch = useDispatch<ThunkDispatch<any, any, AnyAction>>()
+    const dispatch = useDispatch<ThunkDispatch<any, any, UnknownAction>>()
 
     watch(
       [
