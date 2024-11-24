@@ -1,8 +1,4 @@
-import type {
-  AnyAction,
-  SerializedError,
-  ThunkDispatch,
-} from '@reduxjs/toolkit'
+import type { SerializedError, ThunkDispatch } from '@reduxjs/toolkit'
 import type { BaseQueryError } from '@reduxjs/toolkit/dist/query/baseQueryTypes'
 import type { MutationActionCreatorResult } from '@reduxjs/toolkit/dist/query/core/buildInitiate'
 import type { ApiEndpointMutation } from '@reduxjs/toolkit/dist/query/core/module'
@@ -15,6 +11,7 @@ import type { Api } from '@reduxjs/toolkit/query'
 import { type ComputedRef, computed, shallowRef, watchEffect } from 'vue-demi'
 import { useDispatch } from '../hooks/useDispatch'
 import { useSelector } from '../hooks/useSelector'
+import type { UnknownAction } from './util'
 
 export type MutationTrigger<D extends MutationDefinition<any, any, any, any>> =
   (arg: QueryArgFrom<D>) => MutationActionCreatorResult<D>
@@ -55,7 +52,7 @@ export const createUseMutation =
     endpoint: ApiEndpointMutation<D, EndpointDefinitions>,
   ): UseMutation<D> =>
   ({ fixedCacheKey } = {}) => {
-    const dispatch = useDispatch<ThunkDispatch<any, any, AnyAction>>()
+    const dispatch = useDispatch<ThunkDispatch<any, any, UnknownAction>>()
 
     const promiseRef = shallowRef<MutationActionCreatorResult<D>>()
 
