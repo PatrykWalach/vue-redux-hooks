@@ -1,7 +1,4 @@
-import type {
-  SerializedError,
-  ThunkDispatch,
-} from '@reduxjs/toolkit'
+import type { SerializedError, ThunkDispatch } from '@reduxjs/toolkit'
 import type { BaseQueryError } from '@reduxjs/toolkit/dist/query/baseQueryTypes'
 import type { MutationActionCreatorResult } from '@reduxjs/toolkit/dist/query/core/buildInitiate'
 import type { ApiEndpointMutation } from '@reduxjs/toolkit/dist/query/core/module'

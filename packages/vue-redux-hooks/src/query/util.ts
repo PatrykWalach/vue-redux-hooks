@@ -1,4 +1,4 @@
-import type { Action } from 'redux';
+import type { Action } from 'redux'
 import type { Ref } from 'vue-demi'
 
 export type Reactive<T> = T | Ref<T>
@@ -14,5 +14,5 @@ export type ReactiveRecord<T> = {
  * having an index signature.
  */
 export interface UnknownAction extends Action {
-  [extraProps: string]: unknown;
+  [extraProps: string]: unknown
 }

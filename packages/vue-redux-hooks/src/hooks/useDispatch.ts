@@ -1,7 +1,7 @@
 import type { Action, Dispatch } from 'redux'
 import type { ComponentCustomProperties } from 'vue-demi'
-import { useStore } from './useStore'
 import type { UnknownAction } from '../query/util'
+import { useStore } from './useStore'
 
 export type GetAction = ComponentCustomProperties extends {
   $redux: { store: { dispatch: Dispatch<infer U> } }

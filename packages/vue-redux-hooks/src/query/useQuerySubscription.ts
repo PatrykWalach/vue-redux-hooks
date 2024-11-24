@@ -3,8 +3,8 @@ import type { SubscriptionOptions } from '@reduxjs/toolkit/dist/query/core/apiSt
 import type { QueryActionCreatorResult } from '@reduxjs/toolkit/dist/query/core/buildInitiate'
 import type { ApiEndpointQuery } from '@reduxjs/toolkit/dist/query/core/module'
 import type {
-    EndpointDefinitions,
-    QueryArgFrom,
+  EndpointDefinitions,
+  QueryArgFrom,
 } from '@reduxjs/toolkit/dist/query/endpointDefinitions'
 import { type SkipToken, skipToken } from '@reduxjs/toolkit/query'
 import { computed, onBeforeUnmount, shallowRef, unref, watch } from 'vue-demi'
