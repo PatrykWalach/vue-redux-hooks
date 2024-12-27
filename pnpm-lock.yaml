@@ -58,8 +58,8 @@ importers:
         specifier: ^1.0.0-rc.1
         version: 1.7.2(vue@3.2.36)
       vue-demi:
-        specifier: ^0.13.1
-        version: 0.13.1(@vue/composition-api@1.7.2(vue@3.2.36))(vue@3.2.36)
+        specifier: ^0.14.0
+        version: 0.14.10(@vue/composition-api@1.7.2(vue@3.2.36))(vue@3.2.36)
     devDependencies:
       '@reduxjs/toolkit':
         specifier: 1.9.7
@@ -2871,8 +2871,8 @@ packages:
       terser:
         optional: true
 
-  vue-demi@0.13.1:
-    resolution: {integrity: sha512-xmkJ56koG3ptpLnpgmIzk9/4nFf4CqduSJbUM0OdPoU87NwRuZ6x49OLhjSa/fC15fV+5CbEnrxU4oyE022svg==}
+  vue-demi@0.14.10:
+    resolution: {integrity: sha512-nMZBOwuzabUO0nLgIcc6rycZEebF6eeUfaiQx9+WSk8e29IbLvPU9feI6tqW4kTo3hvoYAJkMh8n8D0fuISphg==}
     engines: {node: '>=12'}
     hasBin: true
     peerDependencies:
@@ -5876,7 +5876,7 @@ snapshots:
       fsevents: 2.3.3
       terser: 5.36.0
 
-  vue-demi@0.13.1(@vue/composition-api@1.7.2(vue@3.2.36))(vue@3.2.36):
+  vue-demi@0.14.10(@vue/composition-api@1.7.2(vue@3.2.36))(vue@3.2.36):
     dependencies:
       vue: 3.2.36
     optionalDependencies:

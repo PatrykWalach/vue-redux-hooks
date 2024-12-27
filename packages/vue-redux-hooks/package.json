@@ -71,6 +71,6 @@
     "vue": "^3.2.36"
   },
   "dependencies": {
-    "vue-demi": "^0.13.1"
+    "vue-demi": "^0.14.0"
   }
 }
