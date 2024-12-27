@@ -1,14 +1,5 @@
-import type { Action, AnyAction, Store } from 'redux'
-import {
-  type App,
-  type InjectionKey,
-  type Ref,
-  computed,
-  markRaw,
-  reactive,
-  shallowRef,
-} from 'vue-demi'
-import type { GetAction, GetState } from './hooks/types'
+import type { Action, Store } from 'redux'
+import { type Ref } from 'vue-demi'
 
 export type MapStateResult<This, S, M> = {
   [K in keyof M]: M[K] extends (state: S) => infer R

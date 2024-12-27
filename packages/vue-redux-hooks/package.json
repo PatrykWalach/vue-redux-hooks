@@ -30,7 +30,7 @@
   "scripts": {
     "build": "tsup src/index.ts src/query/index.ts --format cjs,esm --dts --clean",
     "prepublishOnly": "pnpm run build",
-    "dev": "pnpm run build -- --watch src",
+    "dev": "tsc --noEmit --watch",
     "codecov": "codecov"
   },
   "repository": {
@@ -65,12 +65,12 @@
     }
   },
   "devDependencies": {
-    "@reduxjs/toolkit": "1.8.2",
+    "@reduxjs/toolkit": "1.9.7",
     "redux": "^4.2.0",
     "tsup": "^6.0.1",
     "vue": "^3.2.36"
   },
   "dependencies": {
-    "vue-demi": "^0.13.1"
+    "vue-demi": "^0.14.0"
   }
 }

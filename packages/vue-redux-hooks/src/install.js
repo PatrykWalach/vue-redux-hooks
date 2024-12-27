@@ -1,14 +1,15 @@
-/** @import {Action, AnyAction, Store} from 'redux' */
+/** @import {Action, Store} from 'redux' */
 /** @import {App, InjectionKey, Ref} from 'vue-demi' */
 /** @import {GetAction, GetState} from './hooks/types' */
 /** @import {ReduxContext} from './types' */
+/** @import {UnknownAction} from './query/types' */
 import { computed, markRaw, reactive, shallowRef } from 'vue-demi'
 
 /** @type {InjectionKey<ReduxContext<GetState, GetAction>>} */
 export const DefaultReduxContext = Symbol('redux-context')
 /**
  * @template S
- * @template {Action} [A=AnyAction] Default is `AnyAction`
+ * @template {Action} [A=UnknownAction] Default is `UnknownAction`
  * @param {Store<S, A>} store
  * @param {InjectionKey<ReduxContext<S, A>>} [injectionKey=DefaultReduxContext]
  *   Default is `DefaultReduxContext`

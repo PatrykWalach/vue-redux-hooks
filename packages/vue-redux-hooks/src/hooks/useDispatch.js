@@ -1,15 +1,12 @@
-/** @import {Action, AnyAction, Dispatch} from 'redux' */
+/** @import {Action, Dispatch} from 'redux' */
+/** @import {UnknownAction} from '../query/types' */
 import { useStore } from './useStore'
 /**
- * @template {Action} [A=AnyAction] Default is `AnyAction`
- * @overload
- * @returns {Dispatch<A>}
+ * @type {{
+ * <A extends UnknownAction = UnknownAction>(): Dispatch<A>;
+ * <TDispatch = Dispatch<UnknownAction>>(): TDispatch;
+ * }}
  */
-/**
- * @template [TDispatch=Dispatch<AnyAction>] Default is `Dispatch<AnyAction>`
- * @overload
- * @returns {TDispatch}
- */
-export function useDispatch() {
+export const useDispatch = () => {
   return useStore().dispatch
 }

@@ -1,4 +1,4 @@
-import type { AnyAction, SerializedError, ThunkDispatch } from '@reduxjs/toolkit'
+import type { Action, SerializedError, ThunkDispatch } from '@reduxjs/toolkit'
 import type {
   BaseQueryError,
   BaseQueryFn,
@@ -7,7 +7,10 @@ import type {
   QueryStatus,
   SubscriptionOptions,
 } from '@reduxjs/toolkit/dist/query/core/apiState'
-import type { MutationActionCreatorResult, QueryActionCreatorResult } from '@reduxjs/toolkit/dist/query/core/buildInitiate'
+import type {
+  MutationActionCreatorResult,
+  QueryActionCreatorResult,
+} from '@reduxjs/toolkit/dist/query/core/buildInitiate'
 import type {
   EndpointDefinitions,
   MutationDefinition,
@@ -76,7 +79,7 @@ type MutationHooks<D extends MutationDefinition<any, any, any, any, any>> = {
 export type HooksWithUniqueNames<Definitions extends EndpointDefinitions> =
   keyof Definitions extends infer Keys
     ? Keys extends string
-      ? Definitions[Keys] extends { type: "query" }
+      ? Definitions[Keys] extends { type: 'query' }
         ? {
             [K in Keys as `use${Capitalize<K>}Query`]: UseQuery<
               Extract<Definitions[K], QueryDefinition<any, any, any, any>>
@@ -88,7 +91,7 @@ export type HooksWithUniqueNames<Definitions extends EndpointDefinitions> =
           //       Extract<Definitions[K], QueryDefinition<any, any, any, any>>
           //     >
           //   }
-          Definitions[Keys] extends { type: "mutation" }
+          Definitions[Keys] extends { type: 'mutation' }
           ? {
               [K in Keys as `use${Capitalize<K>}Mutation`]: UseMutation<
                 Extract<Definitions[K], MutationDefinition<any, any, any, any>>
@@ -241,10 +244,17 @@ export type ReactiveRecord<T> = {
 import type { shallowRef } from 'vue-demi'
 import type { useDispatch } from '../hooks/useDispatch'
 
-export type ShallowPromiseRef<D extends QueryDefinition<any, any, any, any>> = typeof shallowRef<
-  undefined | QueryActionCreatorResult<D>
->
+export type ShallowPromiseRef<D extends QueryDefinition<any, any, any, any>> =
+  typeof shallowRef<undefined | QueryActionCreatorResult<D>>
 
-export type UseThunkDispatch = typeof useDispatch<
-  ThunkDispatch<any, any, AnyAction>
->
+export type UseThunkDispatch = () => ThunkDispatch<any, any, UnknownAction>
+
+/**
+ * An Action type which accepts any other properties.
+ * This is mainly for the use of the `Reducer` type.
+ * This is not part of `Action` itself to prevent types that extend `Action` from
+ * having an index signature.
+ */
+export interface UnknownAction extends Action {
+  [extraProps: string]: unknown
+}

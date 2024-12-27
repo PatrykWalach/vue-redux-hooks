@@ -1,4 +1,4 @@
-/** @import {ReduxContext} from '../install' */
+/** @import {ReduxContext} from '../types' */
 /** @import {Action, Store} from 'redux' */
 /** @import {GetState, GetAction} from './types' */
 import { inject } from 'vue-demi'

@@ -1,7 +1,8 @@
-/** @import {ReduxContext} from '../install' */
+/** @import {ReduxContext} from '../types' */
 /** @import {Reactive} from '../query/types' */
-/** @import {AnyAction, Selector} from '@reduxjs/toolkit' */
-/** @import {GetAction, GetState} from './types' */
+/** @import {Selector} from '@reduxjs/toolkit' */
+/** @import {GetState} from './types' */
+/** @import {UnknownAction} from '../query/types' */
 import { computed, inject, unref } from 'vue-demi'
 import { DefaultReduxContext } from '../install'
 import { assert } from './useStore'
@@ -12,7 +13,7 @@ import { assert } from './useStore'
  * @returns {any}
  */
 export function useSelector(select) {
-  /** @type {typeof inject<ReduxContext<S, AnyAction> | undefined>} */
+  /** @type {typeof inject<ReduxContext<S, UnknownAction> | undefined>} */
   const injectReduxContext = inject
   const context = injectReduxContext(DefaultReduxContext)
   assert(

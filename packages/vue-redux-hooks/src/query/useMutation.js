@@ -1,11 +1,7 @@
-/** @import {AnyAction, SerializedError, ThunkDispatch} from '@reduxjs/toolkit' */
-/** @import {BaseQueryError} from '@reduxjs/toolkit/dist/query/baseQueryTypes' */
-/** @import {MutationActionCreatorResult} from '@reduxjs/toolkit/dist/query/core/buildInitiate' */
 /** @import {ApiEndpointMutation} from '@reduxjs/toolkit/dist/query/core/module' */
-/** @import {EndpointDefinitions, MutationDefinition, QueryArgFrom} from '@reduxjs/toolkit/dist/query/endpointDefinitions' */
+/** @import {EndpointDefinitions} from '@reduxjs/toolkit/dist/query/endpointDefinitions' */
 /** @import {Api} from '@reduxjs/toolkit/query' */
-/** @import {AnyMutDef, UseMutation} from './types' */
-/** @import {ComputedRef} from 'vue-demi' */
+/** @import {AnyMutDef, UseMutation, MutationTrigger} from './types' */
 import { computed, shallowRef, watchEffect } from 'vue-demi'
 import { useDispatch } from '../hooks/useDispatch'
 import { useSelector } from '../hooks/useSelector'
@@ -28,6 +24,7 @@ export const createUseMutation =
         }
       })
     })
+    /** @type {MutationTrigger<D>}*/ 
     const triggerMutation = (arg) => {
       const promise = dispatch(endpoint.initiate(arg, { fixedCacheKey }))
       promiseRef.value = promise

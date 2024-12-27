@@ -1,6 +1,6 @@
-/** @import {ApiEndpointQuery, CoreModule} from '@reduxjs/toolkit/dist/query/core/module' */
+/** @import {ApiEndpointQuery} from '@reduxjs/toolkit/dist/query/core/module' */
 /** @import {EndpointDefinitions} from '@reduxjs/toolkit/dist/query/endpointDefinitions' */
-/** @import {CreateApi, Module} from '@reduxjs/toolkit/query' */
+/** @import {Module} from '@reduxjs/toolkit/query' */
 /** @import {AnyQueryDef, QueryHooks} from './types' */
 import { buildCreateApi, coreModule } from '@reduxjs/toolkit/query'
 import { createUseMutation } from './useMutation'

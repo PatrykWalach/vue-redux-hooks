@@ -1,5 +1,6 @@
-import type { AnyAction, Dispatch } from 'redux'
+import type { Dispatch } from 'redux'
 import type { ComponentCustomProperties } from 'vue-demi'
+import { UnknownAction } from '../query/types'
 
 export type GetState = ComponentCustomProperties extends {
   $redux: { state: infer U }
@@ -13,4 +14,4 @@ export type GetAction = ComponentCustomProperties extends {
   $redux: { store: { dispatch: Dispatch<infer U> } }
 }
   ? U
-  : AnyAction
+  : UnknownAction

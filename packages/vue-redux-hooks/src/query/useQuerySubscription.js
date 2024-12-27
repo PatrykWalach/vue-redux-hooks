@@ -1,8 +1,7 @@
-/** @import {AnyAction, ThunkDispatch} from '@reduxjs/toolkit' */
-/** @import {QueryActionCreatorResult} from '@reduxjs/toolkit/dist/query/core/buildInitiate' */
 /** @import {ApiEndpointQuery} from '@reduxjs/toolkit/dist/query/core/module' */
 /** @import {AnyQueryDef, UseQuerySubscription, ShallowPromiseRef, UseThunkDispatch} from './types' */
 /** @import {EndpointDefinitions} from '@reduxjs/toolkit/dist/query/endpointDefinitions' */
+
 import { skipToken } from '@reduxjs/toolkit/query'
 import { computed, onBeforeUnmount, shallowRef, unref, watch } from 'vue-demi'
 import { useDispatch } from '../hooks/useDispatch'

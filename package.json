@@ -5,12 +5,10 @@
     "pkg-pr-new-publish": "pkg-pr-new publish './packages/vue-redux-hooks'",
     "lint": "biome check"
   },
-  "packageManager": "pnpm@9.14.2",
+  "packageManager": "pnpm@9.15.1",
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "husky": "^4.3.8",
-    "lint-staged": "13.0.0",
-    "pkg-pr-new": "^0.0.30",
+    "pkg-pr-new": "^0.0.39",
     "typescript": "^5.7.2"
   }
 }

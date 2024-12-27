@@ -1,4 +1,4 @@
-/** @import {AnyAction} from 'redux' */
+/** @import {UnknownAction} from './query/types' */
 /** @import {GetAction, GetState} from './hooks/types' */
 /** @import {MapDispatchResult, MapStateResult} from './types' */
 
@@ -39,7 +39,7 @@ export function mapState() {
 }
 /**
  * @template This
- * @template {AnyAction} [A=GetAction] Default is `GetAction`
+ * @template {UnknownAction} [A=GetAction] Default is `GetAction`
  * @returns {<M extends Record<string, (...args: unknown[]) => A> = any>(
  *   map: M,
  * ) => MapDispatchResult<This, M>}
