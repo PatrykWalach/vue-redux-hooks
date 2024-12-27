@@ -4,8 +4,8 @@ import {
   createSlice,
 } from '@reduxjs/toolkit'
 import { mount } from 'cypress/vue'
-import { defineComponent } from 'vue-demi'
-import { install, mapDispatch, mapState } from '../src'
+import { defineComponent } from 'vue'
+import { install, mapDispatch, mapState } from 'vue-redux-hooks'
 
 export const createCounter = (i: number) =>
   createSlice({
