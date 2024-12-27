@@ -16,9 +16,9 @@ yarn add redux vue-redux-hooks
 
 ```typescript
 // store.ts
-import { createStore, AnyAction } from 'redux'
+import { createStore, UnknownAction } from 'redux'
 
-function todos(state: string[] = [], action: AnyAction) {
+function todos(state: string[] = [], action: UnknownAction) {
   switch (action.type) {
     case 'ADD_TODO':
       return state.concat([action.text])
