@@ -1,9 +1,8 @@
 name: main
 on:
-  push:
-    branches: [main]
+  merge_group:
   pull_request:
-    types: [opened, synchronize]
+  push:
 
 jobs:
   lint:
@@ -34,7 +33,7 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Build dependencies 🏗
         run: pnpm --filter "tests^..." build
-        
+
       - name: Install cypress
         run: pnpm exec cypress install
         working-directory: packages/tests
