@@ -12,10 +12,10 @@ importers:
         specifier: 1.9.4
         version: 1.9.4
       pkg-pr-new:
-        specifier: ^0.0.41
+        specifier: 0.0.41
         version: 0.0.41
       typescript:
-        specifier: ^5.0.0
+        specifier: 5.8.2
         version: 5.8.2
 
   packages/tests:
@@ -65,13 +65,13 @@ importers:
         specifier: 1.9.7
         version: 1.9.7
       redux:
-        specifier: ^5.0.0
+        specifier: 5.0.1
         version: 5.0.1
       tsup:
-        specifier: ^8.0.0
+        specifier: 8.4.0
         version: 8.4.0(postcss@8.4.49)(typescript@5.8.2)
       vue:
-        specifier: ^3.2.36
+        specifier: 3.2.36
         version: 3.2.36
 
 packages:
