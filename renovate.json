@@ -1,14 +1,10 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"],
+  "configMigration": true,
+  "extends": ["config:recommended", ":pinDevDependencies", ":automergeMinor"],
   "lockFileMaintenance": {
     "enabled": true,
     "automerge": true
   },
-  "packageRules": [
-    {
-      "matchDepTypes": ["devDependencies"],
-      "automerge": true
-    }
-  ]
+  "automergeType": "branch"
 }
