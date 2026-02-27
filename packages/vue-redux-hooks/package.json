@@ -68,7 +68,7 @@
     "@reduxjs/toolkit": "1.9.7",
     "redux": "5.0.1",
     "tsup": "8.5.1",
-    "vue": "3.2.36"
+    "vue": "3.5.29"
   },
   "dependencies": {
     "vue-demi": "^0.14.0"
