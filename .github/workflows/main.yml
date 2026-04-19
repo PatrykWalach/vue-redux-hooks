@@ -39,7 +39,7 @@ jobs:
         working-directory: packages/tests
 
       - name: Build app 🏗 and run Component tests 🧪
-        uses: cypress-io/github-action@v6
+        uses: cypress-io/github-action@v7
         with:
           working-directory: packages/tests
           install: false
