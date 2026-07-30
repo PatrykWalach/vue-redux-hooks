@@ -8,7 +8,7 @@
   "packageManager": "pnpm@10.34.5",
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "pkg-pr-new": "0.0.82",
+    "pkg-pr-new": "0.0.86",
     "typescript": "5.9.3"
   }
 }
